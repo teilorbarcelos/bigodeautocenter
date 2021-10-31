@@ -1,0 +1,73 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Roboto, sans-serif;
+  color: var(--COLOR_BLACK_LIGHT);
+  background: var(--COLOR_WHITE_LIGHT);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+// COLORS
+
+:root {
+  --COLOR_PRIMARY_DARK: #1173FF;
+  --COLOR_PRIMARY_NORMAL: #2DADFF;
+  --COLOR_PRIMARY_LIGHT: #4BDDFF;
+
+  --COLOR_WHITE_DARK: #EEEEEE;
+  --COLOR_WHITE_NORMAL: #F4F4F4;
+  --COLOR_WHITE_LIGHT: #F9F9F9;
+
+  --COLOR_GRAY_DARK: #242422;
+  --COLOR_GRAY_NORMAL: #585B57;
+  --COLOR_GRAY_LIGHT: #8C918D;
+
+  --COLOR_BLACK_DARK: #090500;
+  --COLOR_BLACK_NORMAL: #110700;
+  --COLOR_BLACK_LIGHT: #190500;
+
+  --FONT_COLOR_DARK: var(--COLOR_BLACK_DARK);
+  --FONT_COLOR_NORMAL: var(--COLOR_GRAY_DARK);
+  --FONT_COLOR_LIGHT: var(--COLOR_WHITE_NORMAL);
+}
+
+// TIPOGRAPHY
+
+h1 {
+  font-size: 6rem;
+  margin: 0;
+}
+
+h2 {
+  font-size: 5rem;
+  margin: 0;
+}
+
+h3 {
+  font-size: 4rem;
+  margin: 0;
+}
+
+h4 {
+  font-size: 3rem;
+  margin: 0;
+}
+
+h5 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+h6 {
+  font-size: 1rem;
+  margin: 0;
+}

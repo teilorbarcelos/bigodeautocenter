@@ -1,0 +1,32 @@
+.login {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  
+
+  .box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    border-radius: 1rem;
+    
+    border: var(--COLOR_PRIMARY_NORMAL) solid 2px;
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+
+      div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+    }
+  }
+}
