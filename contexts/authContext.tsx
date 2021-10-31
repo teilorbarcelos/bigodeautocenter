@@ -12,7 +12,7 @@ export interface ICredentials {
   password: string
 }
 
-interface IUser {
+export interface IUser {
   id: number
   name: string
   login: string

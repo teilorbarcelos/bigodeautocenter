@@ -1,0 +1,26 @@
+.header {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.logo {
+  line-height: 1.5rem;
+  height: min-content;
+}
+
+.links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}

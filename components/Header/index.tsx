@@ -1,30 +1,23 @@
 import Link from 'next/link'
 import styles from './styles.module.css'
+import globals from '../../styles/globals.module.css'
 import Logo from '../Logo'
-import { useAuth } from '../../hooks/useAuth'
 
-export default function Navbar() {
-  const { user } = useAuth()
-
+export default function Header() {
   return (
-    <nav className={styles.nav}>
+    <header className={styles.header} id="header">
       <div className={styles.container}>
         <div className={styles.logo}>
           <Logo href="/" />
         </div>
         <ul className={styles.links}>
           <li>
-            <Link href={"/client/list"}>
-              <a>Clientes</a>
-            </Link>
-          </li>
-          <li>
-            <Link href={"/user/profile"}>
-              <a>{user.name}</a>
+            <Link href={"/dashboard"}>
+              <a>Sistema Interno</a>
             </Link>
           </li>
         </ul>
       </div>
-    </nav>
+    </header>
   )
 }
