@@ -5,9 +5,11 @@ import { useAuth } from '../../../hooks/useAuth'
 import styles from './styles.module.scss'
 import globals from '../../../styles/globals.module.scss'
 import Button1 from '../../../components/Button1'
-import { useForm } from 'react-hook-form'
-import { api } from '../../api'
 import Login from '../../../components/Login'
+import Modal from '../../../components/Modal'
+import { useState } from 'react'
+import NewClientForm from '../../../components/NewClientForm'
+import ClientTable from '../../../components/ClientTable'
 
 export interface IUserUpdate {
   user_id?: string
@@ -19,10 +21,7 @@ export interface IUserUpdate {
 
 const ClientList: NextPage = () => {
   const { user } = useAuth()
-
-  async function openNewClientModal() {
-    alert('abrir modal de novo cliente')
-  }
+  const [newClientModalOpen, setNewClientModalOpen] = useState(false)
 
   return (
 
@@ -38,7 +37,13 @@ const ClientList: NextPage = () => {
           <>
             <Navbar />
 
-            <Button1 onClick={openNewClientModal} title="Cadastrar Cliente" />
+            <Button1 onClick={() => setNewClientModalOpen(true)} title="Cadastrar Cliente" />
+
+            <ClientTable />
+
+            <Modal closeModal={() => setNewClientModalOpen(false)} visible={newClientModalOpen} >
+              <NewClientForm closeModal={() => setNewClientModalOpen(false)} />
+            </Modal>
           </>
           :
           <Login />

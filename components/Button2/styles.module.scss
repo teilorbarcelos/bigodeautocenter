@@ -1,0 +1,15 @@
+.button2 {
+  border: none;
+  background: var(--COLOR_GRAY_LIGHT);
+  border-radius: 0.5rem;
+  color: var(--COLOR_WHITE_DARK);
+  transition: 0.3s;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  transition: 0.3s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
