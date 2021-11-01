@@ -52,7 +52,7 @@ const Profile: NextPage = () => {
             <Navbar />
 
             <form className={styles.form} onSubmit={handleSubmit(userUpdate)}>
-              <h5>Atualização de perfil</h5>
+              <h5>Alterar cadastro</h5>
               <h5>login: {user.login}</h5>
               <div>
                 <label htmlFor="name">Nome:</label>

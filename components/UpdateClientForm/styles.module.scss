@@ -1,0 +1,17 @@
+.updateClientForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .buttons {
+    flex-direction: row;
+    gap: 1rem;
+  }
+}

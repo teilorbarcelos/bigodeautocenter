@@ -6,9 +6,7 @@ import styles from './styles.module.scss'
 import globals from '../../../styles/globals.module.scss'
 import Button1 from '../../../components/Button1'
 import Login from '../../../components/Login'
-import Modal from '../../../components/Modal'
 import { useState } from 'react'
-import NewClientForm from '../../../components/NewClientForm'
 import ClientTable from '../../../components/ClientTable'
 
 export interface IUserUpdate {
@@ -21,7 +19,6 @@ export interface IUserUpdate {
 
 const ClientList: NextPage = () => {
   const { user } = useAuth()
-  const [newClientModalOpen, setNewClientModalOpen] = useState(false)
 
   return (
 
@@ -37,13 +34,7 @@ const ClientList: NextPage = () => {
           <>
             <Navbar />
 
-            <Button1 onClick={() => setNewClientModalOpen(true)} title="Cadastrar Cliente" />
-
             <ClientTable />
-
-            <Modal closeModal={() => setNewClientModalOpen(false)} visible={newClientModalOpen} >
-              <NewClientForm closeModal={() => setNewClientModalOpen(false)} />
-            </Modal>
           </>
           :
           <Login />

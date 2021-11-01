@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form'
 import Button1 from '../Button1'
 import ReactInputMask from 'react-input-mask'
 import { api } from '../../pages/api'
-import { useState } from 'react'
 import Button2 from '../Button2'
+import { useEffect, useState } from 'react'
 
 export interface IClient {
   id?: string
@@ -20,9 +20,10 @@ export interface IClient {
 
 interface Props {
   closeModal: () => void
+  client: IClient
 }
 
-export default function NewClientForm(props: Props) {
+export default function UpdateClientForm(props: Props) {
   const { register, handleSubmit } = useForm()
   const [name, setName] = useState('')
   const [contact, setContact] = useState('')
@@ -30,13 +31,23 @@ export default function NewClientForm(props: Props) {
   const [birthday, setBirthday] = useState('')
   const [info, setInfo] = useState('')
 
-  async function newClient(data: IClient) {
-    const response = await api.post<IClient>('/client/create', {
-      birthday: data.birthday,
-      contact: data.contact,
-      cpf: data.cpf,
-      info: data.info,
-      name: data.name
+  useEffect(() => {
+    setName(props.client.name)
+    setContact(props.client.contact)
+    setCpf(props.client.cpf)
+    setBirthday(props.client.birthday?.toString().replace('T00:00:00.000Z', ''))
+    setInfo(props.client.info)
+    console.log(props.client)
+  }, [props.client])
+
+  async function updateClient(data: IClient) {
+    const response = await api.post<IClient>('/client/update', {
+      id: props.client.id,
+      birthday,
+      contact,
+      cpf,
+      info,
+      name
     })
 
     if (response.data.error) {
@@ -44,34 +55,23 @@ export default function NewClientForm(props: Props) {
       return
     }
 
-    setBirthday('')
-    setContact('')
-    setCpf('')
-    setInfo('')
-    setName('')
-
-    alert('Cliente cadastrado com sucesso!')
+    alert('Cadastro atualizado com sucesso!')
 
     props.closeModal()
   }
 
   async function cancel(event: Event) {
     event.preventDefault()
-    setBirthday('')
-    setContact('')
-    setCpf('')
-    setInfo('')
-    setName('')
 
     props.closeModal()
   }
 
   return (
     <form
-      className={styles.newclientform}
-      onSubmit={handleSubmit(newClient)}
+      className={styles.updateClientForm}
+      onSubmit={handleSubmit(updateClient)}
     >
-      <h5>Cadastrar cliente</h5>
+      <h5>{props.client?.name}</h5>
       <div>
         <label htmlFor="name">Nome:</label>
         <input
