@@ -6,7 +6,7 @@ import Button1 from '../Button1'
 import ReactInputMask from 'react-input-mask'
 import { api } from '../../pages/api'
 import Button2 from '../Button2'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export interface IClient {
   id?: string
@@ -20,7 +20,18 @@ export interface IClient {
 
 interface Props {
   closeModal: () => void
-  client: IClient
+  clientId: string
+}
+
+interface IClientResponseData {
+  id: string
+  name: string
+  contact: string
+  cpf: string
+  info: string
+  birthday: Date
+  sales: [{}]
+  reminder: [{}]
 }
 
 export default function UpdateClientForm(props: Props) {
@@ -32,17 +43,27 @@ export default function UpdateClientForm(props: Props) {
   const [info, setInfo] = useState('')
 
   useEffect(() => {
-    setName(props.client.name)
-    setContact(props.client.contact)
-    setCpf(props.client.cpf)
-    setBirthday(props.client.birthday?.toString().replace('T00:00:00.000Z', ''))
-    setInfo(props.client.info)
-    console.log(props.client)
-  }, [props.client])
+    async function getClientData() {
+      const clientResponse = await api.post<IClientResponseData>('/client/getData', {
+        id: props.clientId
+      })
+
+      const client = clientResponse.data
+
+      setName(client.name)
+      setContact(client.contact)
+      setCpf(client.cpf)
+      setBirthday(client.birthday?.toString().replace('T00:00:00.000Z', ''))
+      setInfo(client.info)
+      // console.log(client.sales)
+    }
+
+    getClientData()
+  }, [props.clientId])
 
   async function updateClient(data: IClient) {
     const response = await api.post<IClient>('/client/update', {
-      id: props.client.id,
+      id: props.clientId,
       birthday,
       contact,
       cpf,
@@ -60,18 +81,19 @@ export default function UpdateClientForm(props: Props) {
     props.closeModal()
   }
 
-  async function cancel(event: Event) {
-    event.preventDefault()
-
-    props.closeModal()
+  async function escapeKey(e: string) {
+    if (e === 'Escape') {
+      props.closeModal()
+    }
   }
 
   return (
     <form
       className={styles.updateClientForm}
       onSubmit={handleSubmit(updateClient)}
+      onKeyDown={(e) => escapeKey(e.key)}
     >
-      <h5>{props.client?.name}</h5>
+      <h5>{name}</h5>
       <div>
         <label htmlFor="name">Nome:</label>
         <input
@@ -134,7 +156,7 @@ export default function UpdateClientForm(props: Props) {
       <div className={styles.buttons}>
         <Button1 title="Salvar" />
 
-        <Button2 onClick={() => cancel(event)} title="Cancelar" />
+        <Button2 type="button" onClick={() => props.closeModal()} title="Cancelar" />
       </div>
     </form>
   )

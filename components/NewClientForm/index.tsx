@@ -55,21 +55,35 @@ export default function NewClientForm(props: Props) {
     props.closeModal()
   }
 
-  async function cancel(event: Event) {
-    event.preventDefault()
+  async function clearFields() {
     setBirthday('')
     setContact('')
     setCpf('')
     setInfo('')
     setName('')
+  }
+
+  async function cancel(event: Event) {
+    event.preventDefault()
+
+    clearFields()
 
     props.closeModal()
+  }
+
+  async function escapeKey(e: string) {
+    if (e === 'Escape') {
+      clearFields()
+
+      props.closeModal()
+    }
   }
 
   return (
     <form
       className={styles.newclientform}
       onSubmit={handleSubmit(newClient)}
+      onKeyDown={(e) => escapeKey(e.key)}
     >
       <h5>Cadastrar cliente</h5>
       <div>

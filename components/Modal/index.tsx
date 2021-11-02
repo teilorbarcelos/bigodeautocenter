@@ -9,8 +9,13 @@ interface Props {
 }
 
 export default function Modal(props: Props) {
+  async function keyPressed(e) {
+    if (e.keyCode === 27) {
+      props.closeModal()
+    }
+  }
   return (
-    <section className={`${styles.modal} ${props.visible && styles.visible}`} id="modal">
+    <section onKeyDown={(e) => console.log(e.key)} className={`${styles.modal} ${props.visible && styles.visible}`} id="modal">
       <p className={styles.close} onClick={props.closeModal}>X</p>
 
       <div className={styles.children}>

@@ -5,9 +5,16 @@ import { useAuth } from '../../hooks/useAuth'
 import styles from './styles.module.scss'
 import globals from '../../styles/globals.module.scss'
 import InitialPage from '../../components/InitialPage'
+import LoadingScreen from '../../components/LoadingScreen'
+import { useEffect, useState } from 'react'
 
 const Dashboard: NextPage = () => {
+  const [loading, setLoading] = useState(true)
   const { user } = useAuth()
+
+  useEffect(() => {
+    setLoading(false)
+  }, [])
 
   return (
     <div className={globals.container}>
@@ -19,6 +26,8 @@ const Dashboard: NextPage = () => {
 
       <main className={globals.main}>
         {!user ? <Login /> : <InitialPage />}
+
+        <LoadingScreen visible={loading} />
       </main>
     </div>
   )

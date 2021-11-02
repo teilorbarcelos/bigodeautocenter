@@ -85,7 +85,7 @@ export default function ClientTable() {
       </Modal>
 
       <Modal closeModal={() => setUpdateClientModalOpen(false)} visible={updateClientModalOpen} >
-        <UpdateClientForm client={selectedClient} closeModal={newClientRegistered} />
+        <UpdateClientForm clientId={selectedClient.id} closeModal={newClientRegistered} />
       </Modal>
     </section>
   )
