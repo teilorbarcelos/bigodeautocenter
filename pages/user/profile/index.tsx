@@ -8,6 +8,8 @@ import Button1 from '../../../components/Button1'
 import { useForm } from 'react-hook-form'
 import { api } from '../../api'
 import Login from '../../../components/Login'
+import LoadingScreen from '../../../components/LoadingScreen'
+import { useEffect, useState } from 'react'
 
 export interface IUserUpdate {
   user_id?: string
@@ -18,8 +20,13 @@ export interface IUserUpdate {
 }
 
 const Profile: NextPage = () => {
+  const [loading, setLoading] = useState(true)
   const { user, logOut } = useAuth()
   const { register, handleSubmit } = useForm()
+
+  useEffect(() => {
+    setLoading(false)
+  }, [])
 
   async function userUpdate(data: IUserUpdate) {
 
@@ -47,6 +54,7 @@ const Profile: NextPage = () => {
       </Head>
 
       <main className={globals.main}>
+        <LoadingScreen visible={loading} />
         {user ?
           <>
             <Navbar />

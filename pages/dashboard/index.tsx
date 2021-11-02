@@ -25,9 +25,9 @@ const Dashboard: NextPage = () => {
       </Head>
 
       <main className={globals.main}>
-        {!user ? <Login /> : <InitialPage />}
-
         <LoadingScreen visible={loading} />
+
+        {!user ? <Login /> : <InitialPage />}
       </main>
     </div>
   )

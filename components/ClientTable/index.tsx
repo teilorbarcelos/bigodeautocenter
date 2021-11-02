@@ -1,25 +1,38 @@
 import { useForm } from 'react-hook-form'
-import { useEffect, useState } from 'react'
+import { ReactElement, ReactNode, useEffect, useState } from 'react'
 
 import styles from './styles.module.scss'
 import globals from '../../styles/globals.module.scss'
 import { api } from '../../pages/api'
-import NewClientForm, { IClient } from '../NewClientForm'
+import NewClientForm from '../NewClientForm'
 import Button1 from '../Button1'
 import Modal from '../Modal'
 import UpdateClientForm from '../UpdateClientForm'
+import LoadingScreen from '../LoadingScreen'
+
+export interface IClient {
+  id?: string
+  name: string
+  contact: string
+  cpf: string
+  info: string
+  birthday: Date
+  sales?: [{}]
+  reminder?: [{}]
+  error?: string
+}
 
 export default function ClientTable() {
+  const [loading, setLoading] = useState(true)
   const { handleSubmit } = useForm()
-  const [selectedClient, setSelectedClient] = useState<IClient>({} as IClient)
-  const [newClientModalOpen, setNewClientModalOpen] = useState(false)
-  const [updateClientModalOpen, setUpdateClientModalOpen] = useState(false)
+  const [form, setForm] = useState<ReactElement | null>(null)
+  const [modalOpen, setModalOpen] = useState(false)
   const [filter, setFilter] = useState('')
   const [clients, setClients] = useState<IClient[]>([])
 
   async function newClientRegistered() {
-    setUpdateClientModalOpen(false)
-    setNewClientModalOpen(false)
+    setModalOpen(false)
+    setForm(null)
     getClientList()
   }
 
@@ -30,63 +43,84 @@ export default function ClientTable() {
     setClients(response.data)
   }
 
-  async function viewClientData(client: IClient) {
-    setSelectedClient(client)
+  async function openNewClientModal() {
+    setForm(<NewClientForm closeModal={newClientRegistered} />)
 
-    setUpdateClientModalOpen(true)
+    setModalOpen(true)
+  }
 
+  async function openUpdateClientModal(clientId: string) {
+    setLoading(true)
+
+    try {
+
+      const clientResponse = await api.post<IClient>('/client/getData', {
+        id: clientId
+      })
+
+      const client = clientResponse.data
+
+      setForm(<UpdateClientForm closeModal={newClientRegistered} client={client} />)
+
+      setLoading(false)
+
+    } catch (error) {
+      alert(error)
+    } finally {
+      setModalOpen(true)
+    }
   }
 
   useEffect(() => {
     getClientList()
+    setLoading(false)
   }, [])
 
   return (
-    <section className={styles.clienttable} id="clientlist">
-      <div className={styles.filter}>
+    <>
+      <LoadingScreen visible={loading} />
+      <section className={styles.clienttable} id="clientlist">
+        <div className={styles.filter}>
 
-        <form
-          className={styles.searchInput}
-          onSubmit={handleSubmit(getClientList)}
-        >
-          <input
-            id="filter"
-            type="text"
-            onChange={e => setFilter(e.target.value)}
-            value={filter}
-            className={globals.input}
-          />
+          <form
+            className={styles.searchInput}
+            onSubmit={handleSubmit(getClientList)}
+          >
+            <input
+              id="filter"
+              type="text"
+              onChange={e => setFilter(e.target.value)}
+              value={filter}
+              className={globals.input}
+            />
 
-          <Button1 onClick={getClientList} title="Buscar" />
-        </form>
+            <Button1 onClick={getClientList} title="Buscar" />
+          </form>
 
-        <Button1 onClick={() => setNewClientModalOpen(true)} title="Cadastrar Cliente" />
-      </div>
-      <div className={styles.list}>
+          <Button1 onClick={openNewClientModal} title="Cadastrar Cliente" />
+        </div>
+        <div className={styles.list}>
 
-        {clients.map(client => {
-          return (
-            <div
-              key={client.id}
-              title={`Visualizar cadastro do cliente ${client.name}`}
-              className={styles.client}
-              onClick={() => viewClientData(client)}
-            >
-              <p>{client.name}</p>
-              <p>{client.contact}</p>
-            </div>
-          )
-        })}
+          {clients.map(client => {
+            return (
+              <div
+                key={client.id}
+                title={`Visualizar cadastro do cliente ${client.name}`}
+                className={styles.client}
+                onClick={() => openUpdateClientModal(client.id)}
+              >
+                <p>{client.name}</p>
+                <p>{client.contact}</p>
+              </div>
+            )
+          })}
 
-      </div>
+        </div>
 
-      <Modal closeModal={() => setNewClientModalOpen(false)} visible={newClientModalOpen} >
-        <NewClientForm closeModal={newClientRegistered} />
-      </Modal>
-
-      <Modal closeModal={() => setUpdateClientModalOpen(false)} visible={updateClientModalOpen} >
-        <UpdateClientForm clientId={selectedClient.id} closeModal={newClientRegistered} />
-      </Modal>
-    </section>
+        <Modal closeModal={() => setModalOpen(false)} visible={modalOpen} >
+          {form}
+        </Modal>
+      </section>
+    </>
   )
 }

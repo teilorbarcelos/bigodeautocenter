@@ -7,19 +7,10 @@ import ReactInputMask from 'react-input-mask'
 import { api } from '../../pages/api'
 import { useState } from 'react'
 import Button2 from '../Button2'
-
-export interface IClient {
-  id?: string
-  error?: string
-  birthday: Date
-  contact: string
-  cpf: string
-  info: string
-  name: string
-}
+import { IClient } from '../ClientTable'
 
 interface Props {
-  closeModal: () => void
+  closeModal?: () => void
 }
 
 export default function NewClientForm(props: Props) {
