@@ -8,6 +8,8 @@ import { api } from '../../pages/api'
 import Button1 from '../Button1'
 import Button2 from '../Button2'
 import { IClient } from '../ClientTable'
+import Modal from '../Modal'
+import Link from 'next/link'
 
 interface Props {
   closeModal: () => void
@@ -49,7 +51,7 @@ export default function UpdateClientForm(props: Props) {
   }
 
   return (
-    <div>
+    <>
       <form
         className={styles.updateClientForm}
         onSubmit={handleSubmit(updateClient)}
@@ -117,32 +119,46 @@ export default function UpdateClientForm(props: Props) {
         </div>
       </form>
 
+      {/* SALES */}
+
       <div className={styles.sales}>
         {props.client.sales.map((sale) => {
           const stringDate = sale.createdAt.split('T')[0].split('-')
           const date = `${stringDate[2]}/${stringDate[1]}/${stringDate[0]}`
           return (
-            <div key={sale.id} title="Ver detalhes" className={styles.sale}>
-              <p>{date}</p>
-              <div className={styles.preview}>
-                <div>
-                  <p>Placa:</p>
-                  <p>{sale.plate}</p>
+            <Link href={`/sale/id/${sale.id}`}>
+              <a target="_blank">
+                <div
+                  key={sale.id}
+                  title="Ver detalhes"
+                  className={styles.sale}
+                >
+                  <p>{date}</p>
+                  <div className={styles.preview}>
+                    <div>
+                      <p>Placa:</p>
+                      <p>{sale.plate}</p>
+                    </div>
+                    <div>
+                      <p>Total:</p>
+                      <p>R$ {sale.total}</p>
+                    </div>
+                    <div>
+                      <p>Status:</p>
+                      <p
+                        className={`${sale.paid && styles.paid} ${styles.status}`}
+                      >
+                        {sale.paid ? 'Pago' : 'Pendente'}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <p>Total:</p>
-                  <p>R$ {sale.total}</p>
-                </div>
-                <div>
-                  <p>Status:</p>
-                  <p className={sale.paid ? styles.paid : styles.notPaid}>{sale.paid ? 'Pago' : 'Pendente'}</p>
-                </div>
-              </div>
-            </div>
+              </a>
+            </Link>
           )
         })}
 
       </div>
-    </div>
+    </>
   )
 }

@@ -63,13 +63,12 @@ export function AuthProvider(props: AuthProvider) {
   }
 
   useEffect(() => {
-
     try {
       const token = localStorage.getItem('@bigodeAutoCenter:token')
 
       if (token) {
         api.defaults.headers.common.authorization = `Bearer ${token}`
-        api.get<IUser>('/user/profile').then(user => {
+        api.post<IUser>('/user/profile').then(user => {
           setUser(user.data)
         })
       }

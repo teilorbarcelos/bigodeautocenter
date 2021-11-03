@@ -30,6 +30,7 @@ const ClientList: NextPage = () => {
 
       <main className={globals.main}>
         <LoadingScreen visible={loading} />
+
         {user ?
           <>
             <Navbar />
@@ -37,6 +38,7 @@ const ClientList: NextPage = () => {
             <ClientTable />
           </>
           :
+          !loading &&
           <Login />
         }
       </main>

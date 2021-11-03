@@ -14,7 +14,7 @@ export interface ISale {
   id?: string
   createdAt: string
   car?: string
-  clientId: string
+  client: IClient
   info?: string
   paid: boolean
   plate?: string

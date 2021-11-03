@@ -12,6 +12,7 @@ const Dashboard: NextPage = () => {
 
   return (
     <div className={globals.container}>
+      <LoadingScreen visible={loading} />
       <Head>
         <title>Bigode Internal Sales System</title>
         <meta name="description" content="Sistema interno restrito a funcionários" />
@@ -19,9 +20,8 @@ const Dashboard: NextPage = () => {
       </Head>
 
       <main className={globals.main}>
-        <LoadingScreen visible={loading} />
 
-        {!user ? <Login /> : <InitialPage />}
+        {user ? <InitialPage /> : !loading && <Login />}
       </main>
     </div>
   )

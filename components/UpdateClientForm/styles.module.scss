@@ -39,12 +39,15 @@
       gap: 2rem;
     }
 
-    .paid {
-      color: green;
+    .status {
+      background: var(--COLOR_WHITE_DARK);
+      padding: 0 1rem;
+      border-radius: 0.3rem;
+      color: red;
     }
 
-    .notPaid {
-      color: red;
+    .paid {
+      color: green;
     }
 
     &:hover {
