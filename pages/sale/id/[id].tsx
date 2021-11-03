@@ -9,9 +9,9 @@ import { ISale } from '../../../components/ClientTable'
 import { api } from '../../api'
 
 const Sale: NextPage = () => {
+  const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [sale, setSale] = useState<ISale | null>(null)
-  const router = useRouter()
 
   useEffect(() => {
     try {
@@ -34,7 +34,7 @@ const Sale: NextPage = () => {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [router.query])
 
   return (
     <div className={globals.container}>
