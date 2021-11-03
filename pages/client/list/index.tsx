@@ -4,10 +4,9 @@ import Navbar from '../../../components/Navbar'
 import { useAuth } from '../../../hooks/useAuth'
 import styles from './styles.module.scss'
 import globals from '../../../styles/globals.module.scss'
-import Button1 from '../../../components/Button1'
 import Login from '../../../components/Login'
-import { useState } from 'react'
 import ClientTable from '../../../components/ClientTable'
+import LoadingScreen from '../../../components/LoadingScreen'
 
 export interface IUserUpdate {
   user_id?: string
@@ -18,7 +17,7 @@ export interface IUserUpdate {
 }
 
 const ClientList: NextPage = () => {
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
 
   return (
 
@@ -30,6 +29,7 @@ const ClientList: NextPage = () => {
       </Head>
 
       <main className={globals.main}>
+        <LoadingScreen visible={loading} />
         {user ?
           <>
             <Navbar />

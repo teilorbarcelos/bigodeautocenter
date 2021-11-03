@@ -6,15 +6,9 @@ import styles from './styles.module.scss'
 import globals from '../../styles/globals.module.scss'
 import InitialPage from '../../components/InitialPage'
 import LoadingScreen from '../../components/LoadingScreen'
-import { useEffect, useState } from 'react'
 
 const Dashboard: NextPage = () => {
-  const [loading, setLoading] = useState(true)
-  const { user } = useAuth()
-
-  useEffect(() => {
-    setLoading(false)
-  }, [])
+  const { user, loading } = useAuth()
 
   return (
     <div className={globals.container}>

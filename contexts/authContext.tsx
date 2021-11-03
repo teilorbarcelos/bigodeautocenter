@@ -5,6 +5,7 @@ interface IAuthContext {
   user: IUser | null
   signIn: ({ login, password }: ICredentials) => Promise<void>
   logOut: () => void
+  loading: boolean
 }
 
 export interface ICredentials {
@@ -34,6 +35,7 @@ export const AuthContext = createContext({} as IAuthContext)
 
 export function AuthProvider(props: AuthProvider) {
   const [user, setUser] = useState<IUser | null>(null)
+  const [loading, setLoading] = useState(true)
 
   async function signIn({ login, password }: ICredentials) {
     const response = await api.post<AuthResponse>('/user/authenticate', {
@@ -61,18 +63,25 @@ export function AuthProvider(props: AuthProvider) {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('@bigodeAutoCenter:token')
 
-    if (token) {
-      api.defaults.headers.common.authorization = `Bearer ${token}`
-      api.get<IUser>('/user/profile').then(user => {
-        setUser(user.data)
-      })
+    try {
+      const token = localStorage.getItem('@bigodeAutoCenter:token')
+
+      if (token) {
+        api.defaults.headers.common.authorization = `Bearer ${token}`
+        api.get<IUser>('/user/profile').then(user => {
+          setUser(user.data)
+        })
+      }
+    } catch (error) {
+      alert(error)
+    } finally {
+      setLoading(false)
     }
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, signIn, logOut }}>
+    <AuthContext.Provider value={{ user, signIn, logOut, loading }}>
       {props.children}
     </AuthContext.Provider>
   )

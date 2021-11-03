@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form'
-import { ReactElement, ReactNode, useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 
 import styles from './styles.module.scss'
 import globals from '../../styles/globals.module.scss'
@@ -10,6 +10,19 @@ import Modal from '../Modal'
 import UpdateClientForm from '../UpdateClientForm'
 import LoadingScreen from '../LoadingScreen'
 
+export interface ISale {
+  id?: string
+  createdAt: string
+  car?: string
+  clientId: string
+  info?: string
+  paid: boolean
+  plate?: string
+  products?: [{}]
+  total?: number
+  userId: string
+}
+
 export interface IClient {
   id?: string
   name: string
@@ -17,7 +30,7 @@ export interface IClient {
   cpf: string
   info: string
   birthday: Date
-  sales?: [{}]
+  sales?: ISale[]
   reminder?: [{}]
   error?: string
 }

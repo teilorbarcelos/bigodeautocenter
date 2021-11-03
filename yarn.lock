@@ -2899,6 +2899,11 @@ supports-color@^8.0.0:
   dependencies:
     has-flag "^4.0.0"
 
+svg-loaders@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/svg-loaders/-/svg-loaders-0.2.0.tgz#3e3072f4f643e55c98d79b1ca1f15bf65aac701d"
+  integrity sha512-yE4UtCqr8L45QKhZX6p4B07iZfFrDPXmDLfxqJN+uOeJ1gAxpTXA4qOIVvjv1JsguDFanrph1k9fF1jciB1NeQ==
+
 table@^6.0.9:
   version "6.7.2"
   resolved "https://registry.yarnpkg.com/table/-/table-6.7.2.tgz#a8d39b9f5966693ca8b0feba270a78722cbaf3b0"

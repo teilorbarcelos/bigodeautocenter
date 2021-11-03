@@ -1,5 +1,5 @@
 .loadingscreen {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   opacity: 0;
@@ -9,7 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--COLOR_WHITE_LIGHT);
+  background: var(--COLOR_GRAY_LIGHT);
   visibility: hidden;
   transition: 0.5s;
 }
