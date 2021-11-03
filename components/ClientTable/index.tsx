@@ -85,12 +85,13 @@ export default function ClientTable() {
   }
 
   useEffect(() => {
-    async function qqr() {
-
-      await getClientList()
-
+    async function getClientList2() {
+      const response = await api.post<IClient[]>('/client/list', {
+        filter
+      })
+      setClients(response.data)
     }
-    qqr()
+    getClientList2()
     setLoading(false)
   }, [])
 

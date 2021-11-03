@@ -11,7 +11,7 @@ interface Props {
 export default function LoadingScreen({ visible = false }: Props) {
   return (
     <div className={`${styles.loadingscreen} ${visible && styles.visible}`} id="loadingscreen">
-      <Image className={styles.loadingFill} src={LoadingImg} />
+      <Image className={styles.loadingFill} src={LoadingImg} alt="Loading screen image" />
     </div>
   )
 }
