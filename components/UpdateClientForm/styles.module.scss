@@ -5,7 +5,7 @@
   align-items: center;
   gap: 1rem;
 
-  div {
+  >div {
     display: flex;
     flex-direction: column;
   }
@@ -13,5 +13,42 @@
   .buttons {
     flex-direction: row;
     gap: 1rem;
+  }
+}
+
+.sales {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .sale {
+    cursor: pointer;
+    border: 1px solid var(--COLOR_PRIMARY_NORMAL);
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0;
+    gap: 1rem;
+
+    .preview {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .paid {
+      color: green;
+    }
+
+    .notPaid {
+      color: red;
+    }
+
+    &:hover {
+      background: var(--COLOR_GRAY_LIGHT);
+    }
   }
 }
