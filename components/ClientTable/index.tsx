@@ -85,7 +85,12 @@ export default function ClientTable() {
   }
 
   useEffect(() => {
-    getClientList()
+    async function qqr() {
+
+      await getClientList()
+
+    }
+    qqr()
     setLoading(false)
   }, [])
 

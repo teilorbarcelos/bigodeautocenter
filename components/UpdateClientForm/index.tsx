@@ -126,10 +126,12 @@ export default function UpdateClientForm(props: Props) {
           const stringDate = sale.createdAt.split('T')[0].split('-')
           const date = `${stringDate[2]}/${stringDate[1]}/${stringDate[0]}`
           return (
-            <Link href={`/sale/id/${sale.id}`}>
+            <Link
+              key={sale.id}
+              href={`/sale/id/${sale.id}`}
+            >
               <a target="_blank">
                 <div
-                  key={sale.id}
                   title="Ver detalhes"
                   className={styles.sale}
                 >
