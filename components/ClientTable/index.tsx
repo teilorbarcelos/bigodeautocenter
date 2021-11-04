@@ -85,7 +85,12 @@ export default function ClientTable() {
             <Button1 onClick={getClientList} title="Buscar" />
           </form>
 
-          <Button1 onClick={() => setModalOpen(true)} title="Cadastrar Cliente" />
+          <Link href="/client/create">
+            <a>
+              <Button1 title="Cadastrar Cliente" />
+            </a>
+          </Link>
+
         </div>
 
         <div className={styles.list}>
@@ -110,9 +115,6 @@ export default function ClientTable() {
           })}
 
         </div>
-        <Modal closeModal={newClientRegistered} visible={modalOpen}>
-          <NewClientForm closeModal={newClientRegistered} />
-        </Modal>
       </section>
     </>
   )

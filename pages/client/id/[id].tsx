@@ -1,19 +1,30 @@
 import type { NextPage } from 'next'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styles from './styles.module.scss'
 import globals from '../../../styles/globals.module.scss'
 import LoadingScreen from '../../../components/LoadingScreen'
 import { useEffect, useState } from 'react'
-import { IClient } from '../../../components/ClientTable'
+import { IClient, ISale } from '../../../components/ClientTable'
 import { api } from '../../api'
 import BasicPage from '../../../components/BasicPage'
-import UpdateClientForm from '../../../components/UpdateClientForm'
 import Navbar from '../../../components/Navbar'
+import { useForm } from 'react-hook-form'
+import ReactInputMask from 'react-input-mask'
+import Button1 from '../../../components/Button1'
 
 const Client: NextPage = () => {
+  const { handleSubmit } = useForm()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
-  const [client, setClient] = useState<IClient | null>(null)
+  const [id, setId] = useState('')
+  const [originalName, setOriginalName] = useState('')
+  const [name, setName] = useState('')
+  const [contact, setContact] = useState('')
+  const [cpf, setCpf] = useState('')
+  const [birthday, setBirthday] = useState('')
+  const [info, setInfo] = useState('')
+  const [sales, setSales] = useState<ISale[]>([])
 
   useEffect(() => {
     try {
@@ -25,7 +36,14 @@ const Client: NextPage = () => {
           id
         })
 
-        setClient(clientResponse.data)
+        setId(id as string)
+        setOriginalName(clientResponse.data.name)
+        setName(clientResponse.data.name)
+        setContact(clientResponse.data.contact)
+        setCpf(clientResponse.data.cpf)
+        setBirthday(clientResponse.data.birthday.toString().replace('T00:00:00.000Z', ''))
+        setInfo(clientResponse.data.info)
+        setSales(clientResponse.data.sales)
 
       }
 
@@ -38,6 +56,24 @@ const Client: NextPage = () => {
     }
   }, [router.query])
 
+  async function updateClient() {
+    const response = await api.post<IClient>('/client/update', {
+      id,
+      birthday,
+      contact,
+      cpf,
+      info,
+      name
+    })
+
+    if (response.data.error) {
+      alert(response.data.error)
+      return
+    }
+
+    alert('Cadastro atualizado com sucesso!')
+  }
+
   return (
     <BasicPage
       title="Cadastro de cliente"
@@ -45,10 +81,121 @@ const Client: NextPage = () => {
       <>
         <LoadingScreen visible={loading} />
 
-        {client &&
+        {!loading &&
           <>
             <Navbar />
-            <UpdateClientForm client={client} />
+
+            <form
+              className={styles.updateClientForm}
+              onSubmit={handleSubmit(updateClient)}
+            >
+              <h5>{originalName}</h5>
+              <div>
+                <label htmlFor="name">Nome:</label>
+                <input
+                  id="name"
+                  type="text"
+                  className={globals.input}
+                  onChange={e => setName(e.target.value)}
+                  value={name}
+                  placeholder="Nome do cliente"
+                />
+              </div>
+              <div>
+                <label htmlFor="contact">Contato:</label>
+                <input
+                  id="contact"
+                  type="text"
+                  className={globals.input}
+                  onChange={e => setContact(e.target.value)}
+                  value={contact}
+                  placeholder="Dados de contato"
+                />
+              </div>
+              <div className={styles.smallInput}>
+                <div>
+                  <label htmlFor="cpf">CPF:</label>
+                  <ReactInputMask
+                    mask="999.999.999-99"
+                    id="cpf"
+                    type="text"
+                    className={globals.input}
+                    onChange={e => setCpf(e.target.value)}
+                    value={cpf}
+                    placeholder="123.456.789-10"
+                  />
+                </div>
+              </div>
+              <div className={styles.smallInput}>
+                <div>
+                  <label htmlFor="birthday">Data de nascimento:</label>
+                  <input
+                    id="birthday"
+                    type="date"
+                    className={globals.input}
+                    onChange={e => setBirthday(e.target.value)}
+                    value={birthday}
+                  />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="info">Info. adicional:</label>
+                <textarea
+                  id="info"
+                  className={globals.textarea}
+                  onChange={e => setInfo(e.target.value)}
+                  value={info}
+                  placeholder="Informações adicionais."
+                />
+              </div>
+              <div className={styles.buttons}>
+                <Button1 title="Salvar" />
+              </div>
+            </form>
+
+            {/* SALES */}
+
+            <div className={styles.sales}>
+              {sales.map((sale) => {
+                const stringDate = sale.createdAt.split('T')[0].split('-')
+                const date = `${stringDate[2]}/${stringDate[1]}/${stringDate[0]}`
+                return (
+                  <Link
+                    key={sale.id}
+                    href={`/sale/id/${sale.id}`}
+                  >
+                    <a>
+                      <div
+                        title="Ver detalhes"
+                        className={styles.sale}
+                      >
+                        <p>{date}</p>
+                        <div className={styles.preview}>
+                          <div>
+                            <p>Placa:</p>
+                            <p>{sale.plate}</p>
+                          </div>
+                          <div>
+                            <p>Total:</p>
+                            <p>R$ {sale.total}</p>
+                          </div>
+                          <div>
+                            <p>Status:</p>
+                            <p
+                              className={`${sale.paid && styles.paid} ${styles.status}`}
+                            >
+                              {sale.paid ? 'Pago' : 'Pendente'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </Link>
+                )
+              })}
+
+            </div>
+
           </>
         }
       </>
