@@ -5,9 +5,7 @@ import Link from 'next/link'
 import styles from './styles.module.scss'
 import globals from '../../styles/globals.module.scss'
 import { api } from '../../pages/api'
-import NewClientForm from '../NewClientForm'
 import Button1 from '../Button1'
-import Modal from '../Modal'
 import LoadingScreen from '../LoadingScreen'
 
 export interface ISale {
@@ -38,16 +36,10 @@ export interface IClient {
 export default function ClientTable() {
   const [loading, setLoading] = useState(true)
   const { handleSubmit } = useForm()
-  const [modalOpen, setModalOpen] = useState(false)
   const [filter, setFilter] = useState('')
   const [clients, setClients] = useState<IClient[]>([])
 
-  async function newClientRegistered() {
-    setModalOpen(false)
-    getClientList()
-  }
-
-  async function getClientList() {
+  async function filterClientList() {
     const response = await api.post<IClient[]>('/client/list', {
       filter
     })
@@ -72,7 +64,7 @@ export default function ClientTable() {
 
           <form
             className={styles.searchInput}
-            onSubmit={handleSubmit(getClientList)}
+            onSubmit={handleSubmit(filterClientList)}
           >
             <input
               id="filter"
@@ -82,7 +74,7 @@ export default function ClientTable() {
               className={globals.input}
             />
 
-            <Button1 onClick={getClientList} title="Buscar" />
+            <Button1 onClick={filterClientList} title="Buscar" />
           </form>
 
           <Link href="/client/create">

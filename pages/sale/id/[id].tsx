@@ -44,10 +44,10 @@ const Sale: NextPage = () => {
     >
       <>
         <LoadingScreen visible={loading} />
+        <Navbar />
 
         {sale &&
           <>
-            <Navbar />
             <p>{sale.id}</p>
             <p>{sale.createdAt}</p>
             <p>{sale.client.name}</p>
