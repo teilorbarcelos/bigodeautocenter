@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
 import Navbar from '../../../components/Navbar'
 import { useAuth } from '../../../hooks/useAuth'
 import styles from './styles.module.scss'
@@ -7,6 +6,7 @@ import globals from '../../../styles/globals.module.scss'
 import Login from '../../../components/Login'
 import ClientTable from '../../../components/ClientTable'
 import LoadingScreen from '../../../components/LoadingScreen'
+import BasicPage from '../../../components/BasicPage'
 
 export interface IUserUpdate {
   user_id?: string
@@ -21,14 +21,10 @@ const ClientList: NextPage = () => {
 
   return (
 
-    <div className={globals.container}>
-      <Head>
-        <title>Lista de Clientes</title>
-        <meta name="description" content="Lista de Clientes" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={globals.main}>
+    <BasicPage
+      title="Lista de Clientes"
+    >
+      <>
         <LoadingScreen visible={loading} />
 
         {user ?
@@ -41,8 +37,8 @@ const ClientList: NextPage = () => {
           !loading &&
           <Login />
         }
-      </main>
-    </div>
+      </>
+    </BasicPage>
   )
 }
 

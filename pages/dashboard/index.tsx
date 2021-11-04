@@ -1,29 +1,25 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
 import Login from '../../components/Login'
 import { useAuth } from '../../hooks/useAuth'
 import styles from './styles.module.scss'
 import globals from '../../styles/globals.module.scss'
 import InitialPage from '../../components/InitialPage'
 import LoadingScreen from '../../components/LoadingScreen'
+import BasicPage from '../../components/BasicPage'
 
 const Dashboard: NextPage = () => {
   const { user, loading } = useAuth()
 
   return (
-    <div className={globals.container}>
-      <LoadingScreen visible={loading} />
-      <Head>
-        <title>Bigode Internal Sales System</title>
-        <meta name="description" content="Sistema interno restrito a funcionários" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={globals.main}>
-
+    <BasicPage
+      title="Bigode Internal Sales System"
+      content="Sistema interno restrito a funcionários"
+    >
+      <>
+        <LoadingScreen visible={loading} />
         {user ? <InitialPage /> : !loading && <Login />}
-      </main>
-    </div>
+      </>
+    </BasicPage>
   )
 }
 

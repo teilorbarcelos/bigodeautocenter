@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form'
-import { ReactElement, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 import styles from './styles.module.scss'
 import globals from '../../styles/globals.module.scss'
@@ -7,7 +8,6 @@ import { api } from '../../pages/api'
 import NewClientForm from '../NewClientForm'
 import Button1 from '../Button1'
 import Modal from '../Modal'
-import UpdateClientForm from '../UpdateClientForm'
 import LoadingScreen from '../LoadingScreen'
 
 export interface ISale {
@@ -38,14 +38,12 @@ export interface IClient {
 export default function ClientTable() {
   const [loading, setLoading] = useState(true)
   const { handleSubmit } = useForm()
-  const [form, setForm] = useState<ReactElement | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [filter, setFilter] = useState('')
   const [clients, setClients] = useState<IClient[]>([])
 
   async function newClientRegistered() {
     setModalOpen(false)
-    setForm(null)
     getClientList()
   }
 
@@ -56,40 +54,13 @@ export default function ClientTable() {
     setClients(response.data)
   }
 
-  async function openNewClientModal() {
-    setForm(<NewClientForm closeModal={newClientRegistered} />)
-
-    setModalOpen(true)
-  }
-
-  async function openUpdateClientModal(clientId: string) {
-    setLoading(true)
-
-    try {
-
-      const clientResponse = await api.post<IClient>('/client/getData', {
-        id: clientId
-      })
-
-      const client = clientResponse.data
-
-      setForm(<UpdateClientForm closeModal={newClientRegistered} client={client} />)
-
-      setLoading(false)
-
-    } catch (error) {
-      alert(error)
-    } finally {
-      setModalOpen(true)
-    }
-  }
-
   useEffect(() => {
-    async function getClientList2() {
+    async function populateInitialClientList() {
       const response = await api.post<IClient[]>('/client/list')
       setClients(response.data)
     }
-    getClientList2()
+    populateInitialClientList()
+
     setLoading(false)
   }, [])
 
@@ -114,28 +85,33 @@ export default function ClientTable() {
             <Button1 onClick={getClientList} title="Buscar" />
           </form>
 
-          <Button1 onClick={openNewClientModal} title="Cadastrar Cliente" />
+          <Button1 onClick={() => setModalOpen(true)} title="Cadastrar Cliente" />
         </div>
+
         <div className={styles.list}>
 
           {clients.map(client => {
             return (
-              <div
+              <Link
                 key={client.id}
-                title={`Visualizar cadastro do cliente ${client.name}`}
-                className={styles.client}
-                onClick={() => openUpdateClientModal(client.id)}
+                href={`/client/id/${client.id}`}
               >
-                <p>{client.name}</p>
-                <p>{client.contact}</p>
-              </div>
+                <a>
+                  <div
+                    title={`Visualizar cadastro do cliente ${client.name}`}
+                    className={styles.client}
+                  >
+                    <p>{client.name}</p>
+                    <p>{client.contact}</p>
+                  </div>
+                </a>
+              </Link>
             )
           })}
 
         </div>
-
-        <Modal closeModal={() => setModalOpen(false)} visible={modalOpen} >
-          {form}
+        <Modal closeModal={newClientRegistered} visible={modalOpen}>
+          <NewClientForm closeModal={newClientRegistered} />
         </Modal>
       </section>
     </>

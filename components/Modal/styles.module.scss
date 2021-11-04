@@ -11,7 +11,6 @@
   visibility: hidden;
   background: var(--COLOR_GRAY_DARK);
   opacity: 0;
-  transform: translateY(100vh);
   transition: 0.6s;
   padding: 1rem;
   overflow: auto;
@@ -45,5 +44,4 @@
 .visible {
   visibility: visible;
   opacity: 1;
-  transform: translateY(0);
 }

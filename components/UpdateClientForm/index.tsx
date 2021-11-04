@@ -6,13 +6,10 @@ import styles from './styles.module.scss'
 import globals from '../../styles/globals.module.scss'
 import { api } from '../../pages/api'
 import Button1 from '../Button1'
-import Button2 from '../Button2'
 import { IClient } from '../ClientTable'
-import Modal from '../Modal'
 import Link from 'next/link'
 
 interface Props {
-  closeModal: () => void
   client: IClient
 }
 
@@ -40,14 +37,6 @@ export default function UpdateClientForm(props: Props) {
     }
 
     alert('Cadastro atualizado com sucesso!')
-
-    props.closeModal()
-  }
-
-  async function escapeKey(e: string) {
-    if (e === 'Escape') {
-      props.closeModal()
-    }
   }
 
   return (
@@ -55,7 +44,6 @@ export default function UpdateClientForm(props: Props) {
       <form
         className={styles.updateClientForm}
         onSubmit={handleSubmit(updateClient)}
-        onKeyDown={(e) => escapeKey(e.key)}
       >
         <h5>{props.client.name}</h5>
         <div>
@@ -114,8 +102,6 @@ export default function UpdateClientForm(props: Props) {
         </div>
         <div className={styles.buttons}>
           <Button1 title="Salvar" />
-
-          <Button2 type="button" onClick={() => props.closeModal()} title="Cancelar" />
         </div>
       </form>
 

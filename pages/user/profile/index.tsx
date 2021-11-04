@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
 import Navbar from '../../../components/Navbar'
 import { useAuth } from '../../../hooks/useAuth'
 import styles from './styles.module.scss'
@@ -9,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import { api } from '../../api'
 import Login from '../../../components/Login'
 import LoadingScreen from '../../../components/LoadingScreen'
+import BasicPage from '../../../components/BasicPage'
 
 export interface IUserUpdate {
   user_id?: string
@@ -40,14 +40,10 @@ const Profile: NextPage = () => {
 
   return (
 
-    <div className={globals.container}>
-      <Head>
-        <title>Perfil de usuário</title>
-        <meta name="description" content="Perfil de usuário" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={globals.main}>
+    <BasicPage
+      title="Perfil de usuário"
+    >
+      <>
         <LoadingScreen visible={loading} />
         {user ?
           <>
@@ -92,8 +88,8 @@ const Profile: NextPage = () => {
           :
           <Login />
         }
-      </main>
-    </div>
+      </>
+    </BasicPage>
   )
 }
 
