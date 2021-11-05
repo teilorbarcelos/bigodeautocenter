@@ -8,6 +8,12 @@ import { api } from '../../pages/api'
 import Button1 from '../Button1'
 import LoadingScreen from '../LoadingScreen'
 
+export interface IProduct {
+  name: string
+  cost: number
+  value: number
+}
+
 export interface ISale {
   id?: string
   createdAt: string
@@ -16,7 +22,7 @@ export interface ISale {
   info?: string
   paid: boolean
   plate?: string
-  products?: [{}]
+  products?: IProduct[]
   total?: number
   userId: string
 }
