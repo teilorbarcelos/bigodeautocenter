@@ -9,17 +9,17 @@ import { IClient, IProduct, ISale } from '../../../components/ClientTable'
 import { api } from '../../api'
 import BasicPage from '../../../components/BasicPage'
 import Navbar from '../../../components/Navbar'
-import ReactInputMask from 'react-input-mask'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import Button1 from '../../../components/Button1'
+import { ICost } from '../create'
 import Button2 from '../../../components/Button2'
 
-const Sale: NextPage = () => {
-  const { register, control, handleSubmit } = useForm()
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'product'
-  })
+const SaleUpdate: NextPage = () => {
+  const [products, setProducts] = useState<IProduct[]>([])
+  const [totalCost, setTotalCost] = useState(0)
+  const [totalValue, setTotalValue] = useState(0)
+
+  const { register, handleSubmit } = useForm()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState<string | string[]>('')
@@ -27,10 +27,26 @@ const Sale: NextPage = () => {
   const [client, setClient] = useState<IClient | null>(null)
   const [car, setCar] = useState('')
   const [plate, setPlate] = useState('')
-  const [info, setInfo] = useState('')
   const [paid, setPaid] = useState(false)
-  const [products, setProducts] = useState<IProduct[]>([])
-  const [total, setTotal] = useState(0.0)
+  const [info, setInfo] = useState('')
+  const [cost, setCost] = useState<ICost>({} as ICost)
+
+  useEffect(() => {
+    let somaCost = 0
+    let somaValue = 0
+
+    products.map(product => {
+      somaCost += parseFloat(product.cost.toString())
+    })
+
+    products.map(product => {
+      somaValue += parseFloat(product.value.toString())
+    })
+
+    setTotalCost(somaCost)
+    setTotalValue(somaValue)
+
+  }, [products])
 
   useEffect(() => {
     try {
@@ -43,17 +59,19 @@ const Sale: NextPage = () => {
         })
 
         const data = saleResponse.data
+        // console.log(data)
 
         const date = data.createdAt.toString().split('T')[0].split('-')
-        const products = JSON.parse(data.products.toString()) as IProduct[]
+        setProducts(JSON.parse(data.products.toString()) as IProduct[])
 
         setId(id)
         setClient(data.client)
         setDate(`${date[2]}/${date[1]}/${date[0]}`)
         setCar(data.car)
         setPlate(data.plate)
-        setProducts(products)
-
+        setPaid(data.paid)
+        setInfo(data.info)
+        setCost(data.cost)
       }
 
       getSale()
@@ -65,18 +83,40 @@ const Sale: NextPage = () => {
     }
   }, [router.query])
 
-  async function updateSale(data) {
-    console.log(data)
-    // const response = await api.post<IClient>('/sale/update', {
-    //   id,
-    // })
+  async function updateSale(data: any) {
 
-    // if (response.data.error) {
-    //   alert(response.data.error)
-    //   return
-    // }
+    if (!totalCost || !totalValue) {
+      alert('Valores de produtos inválidos, insira apenas números e não deixe nenhum em branco!')
+      return
+    }
 
-    // alert('Registro atualizado com sucesso!')
+    const saleResponse = await api.post<ISale>('/sale/update', {
+      id,
+      car,
+      plate,
+      products,
+      info,
+      total: totalValue,
+      paid
+    })
+
+    if (saleResponse.data.error) {
+      alert(saleResponse.data.error)
+      return
+    }
+
+    const costResponse = await api.post<ICost>(`/cost/${cost ? 'update' : 'create'}`, {
+      id: cost && cost.id,
+      value: totalCost,
+      saleId: saleResponse.data.id
+    })
+
+    if (costResponse.data.error) {
+      alert(costResponse.data.error)
+      return
+    }
+
+    alert('Venda atualizada com sucesso!')
   }
 
   return (
@@ -91,7 +131,7 @@ const Sale: NextPage = () => {
         {id &&
           <>
             <form
-              className={styles.updateSaleForm}
+              className={styles.saleForm}
               onSubmit={handleSubmit(updateSale)}
             >
               <h5>Cliente: <Link href={`/client/id/${client?.id}`}><a>{client?.name}</a></Link></h5>
@@ -127,92 +167,116 @@ const Sale: NextPage = () => {
 
               <div className={styles.products}>
                 <h6>Produtos:</h6>
+
+                {/* PRODUCTS FORM */}
                 <div>
 
-                  {/* {products.length > 0 && products.map((product, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={styles.product}
-                      >
-                        <div>
-                          <input
-                            {...register(`product-name-${index}`)}
-                            id="name"
-                            type="text"
-                            className={`${globals.input} ${styles.productName}`}
-                            defaultValue={product.name}
-                            placeholder="Nome do produto"
-                          />
-                        </div>
-                        <div>
-                          <label>Custo: </label>
-                          <input
-                            {...register(`product-cost-${index}`)}
-                            type="number"
-                            defaultValue={product.cost}
-                            className={`${globals.input} ${styles.productCost}`}
-                          />
-                        </div>
-                        <div>
-                          <label>Valor: </label>
-                          <input
-                            {...register(`product-value-${index}`)}
-                            type="number"
-                            defaultValue={product.value}
-                            className={`${globals.input} ${styles.productValue}`}
-                          />
-                        </div>
-                        <div>
-                          <Button2 type="button" title="Remover" onClick={() => remove(index)} />
-                        </div>
-                      </div>
-                    )
-                  })} */}
-
                   {
-                    fields.map(({ id }, index) => {
+                    products.map((product, index) => {
                       return (
                         <div
-                          key={id}
+                          key={index}
                           className={styles.product}
                         >
                           <div>
                             <input
-                              {...register(`product-name-${index}`)}
-                              id="name"
                               type="text"
                               className={`${globals.input} ${styles.productName}`}
                               placeholder="Nome do produto"
+                              onChange={(e) => setProducts(() => {
+                                let newProducts = [...products]
+                                newProducts[index].name = e.target.value
+                                return newProducts
+                              })}
+                              value={products[index].name}
                             />
                           </div>
                           <div>
                             <label>Custo: </label>
                             <input
-                              {...register(`product-cost-${index}`)}
                               type="number"
+                              min="0"
                               className={`${globals.input} ${styles.productCost}`}
+                              onChange={(e) => setProducts(() => {
+                                let newProducts = [...products]
+                                newProducts[index].cost = parseFloat(e.target.value)
+                                return newProducts
+                              })}
+                              value={products[index].cost}
                             />
                           </div>
                           <div>
                             <label>Valor: </label>
                             <input
-                              {...register(`product-value-${index}`)}
                               type="number"
+                              min="0"
                               className={`${globals.input} ${styles.productValue}`}
+                              onChange={(e) => setProducts(() => {
+                                let newProducts = [...products]
+                                newProducts[index].value = parseFloat(e.target.value)
+                                return newProducts
+                              })}
+                              value={products[index].value}
                             />
                           </div>
                           <div>
-                            <Button2 type="button" title="Remover" onClick={() => remove(index)} />
+                            <Button2
+                              type="button"
+                              title="Remover"
+                              onClick={() =>
+                                setProducts(
+                                  () => {
+                                    let newProducts = [...products]
+                                    newProducts.splice(index, 1)
+                                    return newProducts
+                                  }
+                                )
+                              }
+                            />
                           </div>
                         </div>
                       )
                     })
                   }
-                  <div>
-                    <Button1 type="button" title="Adicionar" onClick={() => append({})} />
-                  </div>
+
                 </div>
+
+                <div className={styles.addProduct}>
+                  <Button1
+                    type="button"
+                    title="Adicionar Produto"
+                    onClick={() => setProducts(
+                      () => {
+                        let newProducts = [...products]
+                        newProducts.push(
+                          {
+                            name: '',
+                            cost: 0,
+                            value: 0
+                          }
+                        )
+                        return newProducts
+                      }
+                    )}
+                  />
+                </div>
+
+                <div className={styles.totals}>
+                  <p>Custo Total: {totalCost}</p>
+                  <p>Valor Total: {totalValue}</p>
+                </div>
+              </div>
+
+              <div className={styles.paid}>
+                <label htmlFor="paid">Já está pago?</label>
+                <input
+                  {...register('paid')}
+                  id="paid"
+                  type="checkbox"
+                  onChange={e => setPaid(e.target.checked)}
+                  checked={paid}
+                />
+                <span className={paid ? styles.green : styles.red}>{paid ? 'Sim.' : 'Não.'}</span>
               </div>
 
               <div>
@@ -244,4 +308,4 @@ const Sale: NextPage = () => {
   )
 }
 
-export default Sale
+export default SaleUpdate

@@ -14,17 +14,25 @@ export interface IProduct {
   value: number
 }
 
+export interface ICost {
+  id?: string
+  saleId?: string
+  value: number
+}
+
 export interface ISale {
   id?: string
   createdAt: string
   car?: string
   client: IClient
+  cost?: ICost
   info?: string
   paid: boolean
   plate?: string
   products?: IProduct[]
   total?: number
   userId: string
+  error?: string
 }
 
 export interface IClient {

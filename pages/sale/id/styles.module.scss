@@ -1,4 +1,4 @@
-.updateSaleForm {
+.saleForm {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -59,6 +59,31 @@
           }
         }
       }
+    }
+
+    .addProduct {
+      padding-top: 1rem;
+      max-width: 100%;
+    }
+
+    .totals {
+      padding-top: 1rem;
+    }
+  }
+
+  .paid {
+    display: inline;
+    label,
+    input {
+      margin-right: 1rem;
+    }
+
+    .green {
+      color: green;
+    }
+
+    .red {
+      color: red;
     }
   }
 
