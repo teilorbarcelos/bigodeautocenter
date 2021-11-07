@@ -19,6 +19,14 @@ export interface ICost {
   error?: string
 }
 
+export interface ISaleDataFormProps {
+  clientId: string
+  car: string,
+  plate: string,
+  info: string,
+  total: number
+}
+
 const SaleCreate: NextPage = () => {
   const [products, setProducts] = useState<IProduct[]>([])
   const [totalCost, setTotalCost] = useState(0)
@@ -56,7 +64,7 @@ const SaleCreate: NextPage = () => {
     }
   }, [loading])
 
-  async function createSale(data: any) {
+  async function createSale(data: ISaleDataFormProps) {
 
     if (data.clientId === '') {
       alert('Selecione o cliente!')
@@ -71,7 +79,7 @@ const SaleCreate: NextPage = () => {
     const saleResponse = await api.post<ISale>('/sale/create', {
       clientId: data.clientId,
       car: data.car,
-      plate: data.plate,
+      plate: data.plate.toUpperCase(),
       products,
       info: data.info,
       total: totalValue,

@@ -11,8 +11,9 @@ import BasicPage from '../../../components/BasicPage'
 import Navbar from '../../../components/Navbar'
 import { useForm } from 'react-hook-form'
 import Button1 from '../../../components/Button1'
-import { ICost } from '../create'
+import { ICost, ISaleDataFormProps } from '../create'
 import Button2 from '../../../components/Button2'
+import DebitSaleList from '../../../components/DebitSaleList'
 
 const SaleUpdate: NextPage = () => {
   const [products, setProducts] = useState<IProduct[]>([])
@@ -22,7 +23,7 @@ const SaleUpdate: NextPage = () => {
   const { register, handleSubmit } = useForm()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
-  const [id, setId] = useState<string | string[]>('')
+  const [id, setId] = useState('') //Sale ID
   const [date, setDate] = useState('')
   const [client, setClient] = useState<IClient | null>(null)
   const [car, setCar] = useState('')
@@ -64,7 +65,7 @@ const SaleUpdate: NextPage = () => {
         const date = data.createdAt.toString().split('T')[0].split('-')
         setProducts(JSON.parse(data.products.toString()) as IProduct[])
 
-        setId(id)
+        setId(id as string)
         setClient(data.client)
         setDate(`${date[2]}/${date[1]}/${date[0]}`)
         setCar(data.car)
@@ -83,7 +84,7 @@ const SaleUpdate: NextPage = () => {
     }
   }, [router.query])
 
-  async function updateSale(data: any) {
+  async function updateSale(data: ISaleDataFormProps) {
 
     if (!totalCost || !totalValue) {
       alert('Valores de produtos inválidos, insira apenas números e não deixe nenhum em branco!')
@@ -93,7 +94,7 @@ const SaleUpdate: NextPage = () => {
     const saleResponse = await api.post<ISale>('/sale/update', {
       id,
       car,
-      plate,
+      plate: plate.toUpperCase(),
       products,
       info,
       total: totalValue,
@@ -129,7 +130,7 @@ const SaleUpdate: NextPage = () => {
         <Navbar />
 
         {id &&
-          <>
+          <div className={styles.content}>
             <form
               className={styles.saleForm}
               onSubmit={handleSubmit(updateSale)}
@@ -295,13 +296,10 @@ const SaleUpdate: NextPage = () => {
               </div>
             </form>
 
-            {/* SALES */}
+            {/* DEBITS LIST */}
 
-            <div className={styles.sales}>
-              <p>debidos pendentes aqui</p>
-
-            </div>
-          </>
+            <DebitSaleList saleId={id} />
+          </div>
         }
       </>
     </BasicPage>
