@@ -44,8 +44,8 @@ const SaleUpdate: NextPage = () => {
       somaValue += parseFloat(product.value.toString())
     })
 
-    setTotalCost(somaCost)
-    setTotalValue(somaValue)
+    setTotalCost(parseFloat(somaCost.toFixed(2)))
+    setTotalValue(parseFloat(somaValue.toFixed(2)))
 
   }, [products])
 
@@ -130,7 +130,7 @@ const SaleUpdate: NextPage = () => {
         <Navbar />
 
         {id &&
-          <div className={styles.content}>
+          <>
             <form
               className={styles.saleForm}
               onSubmit={handleSubmit(updateSale)}
@@ -193,10 +193,11 @@ const SaleUpdate: NextPage = () => {
                             />
                           </div>
                           <div>
-                            <label>Custo: </label>
+                            <label>Custo (R$): </label>
                             <input
                               type="number"
-                              min="0"
+                              step="0.01"
+                              min={0}
                               className={`${globals.input} ${styles.productCost}`}
                               onChange={(e) => setProducts(() => {
                                 let newProducts = [...products]
@@ -207,10 +208,11 @@ const SaleUpdate: NextPage = () => {
                             />
                           </div>
                           <div>
-                            <label>Valor: </label>
+                            <label>Valor (R$): </label>
                             <input
                               type="number"
-                              min="0"
+                              step="0.01"
+                              min={0}
                               className={`${globals.input} ${styles.productValue}`}
                               onChange={(e) => setProducts(() => {
                                 let newProducts = [...products]
@@ -263,8 +265,8 @@ const SaleUpdate: NextPage = () => {
                 </div>
 
                 <div className={styles.totals}>
-                  <p>Custo Total: {totalCost}</p>
-                  <p>Valor Total: {totalValue}</p>
+                  <p>Custo Total (R$): {totalCost}</p>
+                  <p>Valor Total (R$): {totalValue}</p>
                 </div>
               </div>
 
@@ -299,7 +301,7 @@ const SaleUpdate: NextPage = () => {
             {/* DEBITS LIST */}
 
             <DebitSaleList saleId={id} />
-          </div>
+          </>
         }
       </>
     </BasicPage>

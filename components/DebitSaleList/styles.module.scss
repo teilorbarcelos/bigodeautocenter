@@ -1,3 +1,68 @@
 .debitsalelist {
-  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+
+  .debitsList {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 850px;
+    padding: 1rem 0;
+    gap: 0.5rem;
+
+    .expired {
+      background: var(--COLOR_RED);
+    }
+
+    .paid {
+      background: var(--COLOR_GREEN);
+    }
+
+    div {
+      display: flex;
+      justify-content: space-between;
+      border: 1px solid var(--COLOR_PRIMARY_NORMAL);
+      padding: 1rem;
+      border-radius: 0.5rem;
+
+      @media screen and (max-width: 400px) {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+      }
+    }
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 850px;
+    gap: 1rem;
+
+    .dateValue {
+      flex-direction: row;
+      justify-content: space-between;
+      max-width: 100%;
+
+      .smallInput {
+        max-width: fit-content;
+      }
+
+      @media screen and (max-width: 400px) {
+        flex-direction: column;
+        
+      }
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 0.5rem;
+    }
+  }
 }

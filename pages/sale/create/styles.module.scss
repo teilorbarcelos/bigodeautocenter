@@ -11,7 +11,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 800px;
+    max-width: 850px;
   }
 
   .smallInput {
@@ -46,6 +46,11 @@
           display: flex;
           align-items: center;
           gap: 0.5rem;
+
+          label {
+            min-width: max-content;
+          }
+
           .productName {
             min-width: 20rem;
           }
@@ -74,47 +79,5 @@
   .buttons {
     flex-direction: row;
     gap: 1rem;
-  }
-}
-
-.sales {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  margin: 1rem 0;
-
-  .sale {
-    cursor: pointer;
-    border: 1px solid var(--COLOR_PRIMARY_NORMAL);
-    border-radius: 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem 2rem;
-    gap: 1rem;
-
-    .preview {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-    }
-
-    .status {
-      background: var(--COLOR_WHITE_LIGHT);
-      padding: 0 1rem;
-      border-radius: 0.3rem;
-      color: red;
-    }
-
-    .paid {
-      color: green;
-    }
-
-    &:hover {
-      background: var(--COLOR_GRAY_LIGHT);
-    }
   }
 }
