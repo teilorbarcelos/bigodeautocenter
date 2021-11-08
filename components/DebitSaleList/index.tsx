@@ -29,6 +29,9 @@ export interface IDebitResponse {
 
 export default function DebitSaleList({ saleId }: IDebitListProps) {
   const { register, handleSubmit } = useForm()
+  const [debitValue, setDebitValue] = useState(0)
+  const [debitInfo, setDebitInfo] = useState('')
+  const [debitsList, setDebitsList] = useState<IDebitResponse[]>([])
   const [dueDate, setDueDate] = useState(
     new Date(
       new Date(
@@ -38,11 +41,24 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
           Date.now()
         ).getMonth() + 1
       )
-    ).toISOString().split('T')[0].toString()
+    ).toISOString()
+      .split('T')[0]
+      .toString()
   )
-  const [debitValue, setDebitValue] = useState(0)
-  const [debitInfo, setDebitInfo] = useState('')
-  const [debitsList, setDebitsList] = useState<IDebitResponse[]>([])
+
+  async function paidSwitch(id: string, paid: boolean) {
+    alert(`Recurso em desenvolvimento!`)
+    return
+    const response = await api.post<IDebitResponse>('/debit/paidSwitch', { id, paid })
+
+    if (response.data.error) {
+      alert(response.data.error)
+      return
+    }
+
+    alert('Débito marcado como "Pago" com sucesso!')
+    populateDebitsList()
+  }
 
   async function populateDebitsList() {
     const debits = await api.post<IDebitResponse[]>('/debit/list', {
@@ -105,31 +121,45 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
 
       <div className={styles.debitsList}>
         {
-          debitsList.map(debit => {
+          debitsList.map((debit, index) => {
             const dueDateSplit = debit.dueDate.toString().replace('T00:00:00.000Z', '').split('-')
             const dueDate = `${dueDateSplit[2]}/${dueDateSplit[1]}/${dueDateSplit[0]}`
             return (
-              <Link href={`/debit/id/${debit.id}`}>
-                <a>
-                  <div
-                    key={debit.id}
-                    className={new Date(debit.dueDate) < new Date(Date.now()) && !debit.paid ? styles.expired
-                      :
-                      debit.paid && styles.paid
-                    }
-                  >
-                    <p>
-                      Vencimento: {dueDate}
-                    </p>
-                    <p>
-                      Valor: R$ {debit.value}
-                    </p>
-                    <p>
-                      Status: {debit.paid ? 'Pago' : 'Pendente'}
-                    </p>
-                  </div>
-                </a>
-              </Link>
+              <div
+                key={debit.id}
+                className={new Date(debit.dueDate) < new Date(Date.now()) &&
+                  !debit.paid ? styles.expired
+                  :
+                  debit.paid && styles.paid
+                }
+              >
+                <p>{index + 1}</p>
+                <p>
+                  Vencimento: {dueDate}
+                </p>
+                <p>
+                  Valor: R$ {debit.value}
+                </p>
+                <p>
+                  Status: {debit.paid ? 'Pago' : 'Pendente'}
+                </p>
+                <Link href={`/debit/id/${debit.id}`}>
+                  <a>
+                    <Button1
+                      type="button"
+                      title="Alterar"
+                      onClick={() => alert('pago/pendente')}
+                    />
+                  </a>
+                </Link>
+                <Button1
+                  type="button"
+                  title={debit.paid ? 'Pendente' : 'Pago'}
+                  onClick={() => {
+                    paidSwitch(debit.id, debit.paid ? false : true)
+                  }}
+                />
+              </div>
             )
           })
         }
