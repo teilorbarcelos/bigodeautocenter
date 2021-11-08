@@ -46,17 +46,17 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
       .toString()
   )
 
-  async function paidSwitch(id: string, paid: boolean) {
-    alert(`Recurso em desenvolvimento!`)
-    return
-    const response = await api.post<IDebitResponse>('/debit/paidSwitch', { id, paid })
+  async function paidSwitch(id: string, status: boolean) {
+    // alert(`Recurso em desenvolvimento!`)
+    // return
+    const response = await api.post<IDebitResponse>('/debit/paidSwitch', { id, status })
 
     if (response.data.error) {
       alert(response.data.error)
       return
     }
 
-    alert('Débito marcado como "Pago" com sucesso!')
+    // alert(`Débito marcado como ${status ? '"Pago"' : '"Pendente"'} com sucesso!`)
     populateDebitsList()
   }
 
