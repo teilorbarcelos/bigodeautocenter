@@ -55,6 +55,10 @@ const SaleUpdate: NextPage = () => {
 
         const { id } = await router.query // necessary "await" here
 
+        if (!id) {
+          return
+        }
+
         const saleResponse = await api.post<ISale>('/sale/getData', {
           id
         })

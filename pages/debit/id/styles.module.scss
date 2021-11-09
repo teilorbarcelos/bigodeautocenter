@@ -1,0 +1,35 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 850px;
+  gap: 1rem;
+  // padding-top: 7rem;
+  margin: auto;
+
+  .dateValue {
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 100%;
+
+    .smallInput {
+      max-width: fit-content;
+    }
+
+    @media screen and (max-width: 400px) {
+      flex-direction: column;
+      
+    }
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .saleLink {
+    text-align: center;
+  }
+}

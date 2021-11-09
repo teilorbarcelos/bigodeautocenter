@@ -1,6 +1,12 @@
 .dropdown {
   position: relative;
   cursor: pointer;
+  background: var(--COLOR_WHITE_NORMAL);
+  user-select: none;
+
+  &:hover {
+    background: var(--COLOR_GRAY_LIGHT);
+  }
 }
 
 .options {
@@ -8,7 +14,7 @@
   flex-direction: column;
   z-index: 1;
   position: absolute;
-  transform: translate(-27%, 0);
+  transform: translate(-27%, 75%);
   background: var(--COLOR_WHITE_DARK);
   gap: 1rem;
   opacity: 0;
@@ -16,16 +22,11 @@
   transition: 0.5s;
 
   @media screen and (max-width: 400px) {
-    transform: translate(0, 0);
+    transform: translate(0, 40%);
   }
 }
 
 .visible {
   visibility: visible;
   opacity: 1;
-  transform: translate(-27%, 75%);
-
-  @media screen and (max-width: 400px) {
-    transform: translate(0, 40%);
-  }
 }

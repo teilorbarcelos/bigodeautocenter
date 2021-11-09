@@ -32,6 +32,10 @@ const Client: NextPage = () => {
 
         const { id } = await router.query // necessary "await" here
 
+        if (!id) {
+          return
+        }
+
         const clientResponse = await api.post<IClient>('/client/getData', {
           id
         })
@@ -156,6 +160,9 @@ const Client: NextPage = () => {
             {/* SALES */}
 
             <div className={styles.sales}>
+              <div className={styles.salesTitle}>
+                <h5>Vendas:</h5>
+              </div>
               {sales.map((sale) => {
                 const stringDate = sale.createdAt.split('T')[0].split('-')
                 const date = `${stringDate[2]}/${stringDate[1]}/${stringDate[0]}`
@@ -169,15 +176,18 @@ const Client: NextPage = () => {
                         title="Ver detalhes"
                         className={styles.sale}
                       >
-                        <p>{date}</p>
+                        <div className={styles.head}>
+                          <p>{date}</p>
+                          <p>Carro: {sale.car}</p>
+                        </div>
                         <div className={styles.preview}>
                           <div>
                             <p>Placa:</p>
                             <p>{sale.plate}</p>
                           </div>
                           <div>
-                            <p>Total:</p>
-                            <p>R$ {sale.total}</p>
+                            <p>Total R$:</p>
+                            <p>{sale.total}</p>
                           </div>
                           <div>
                             <p>Status:</p>

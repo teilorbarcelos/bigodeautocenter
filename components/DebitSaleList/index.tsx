@@ -1,12 +1,11 @@
 import styles from './styles.module.scss'
 import globals from '../../styles/globals.module.scss'
 import { useForm } from 'react-hook-form'
-import Link from 'next/link'
 import Button1 from '../Button1'
 import { api } from '../../pages/api'
 import { useEffect, useState } from 'react'
 import DropDown from '../DropDown'
-import router from 'next/router'
+import { useRouter } from 'next/router'
 
 interface IDebitFormData {
   dueDate: Date
@@ -30,6 +29,7 @@ export interface IDebitResponse {
 }
 
 export default function DebitSaleList({ saleId }: IDebitListProps) {
+  const router = useRouter()
   const { register, handleSubmit } = useForm()
   const [debitValue, setDebitValue] = useState(0)
   const [debitInfo, setDebitInfo] = useState('')
@@ -49,8 +49,6 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
   )
 
   async function paidSwitch(id: string, status: boolean) {
-    // alert(`Recurso em desenvolvimento!`)
-    // return
     const response = await api.post<IDebitResponse>('/debit/paidSwitch', { id, status })
 
     if (response.data.error) {
@@ -117,15 +115,21 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
   }
 
   async function debitEdit(id: string) {
-    // router.push(`/debit/id/${id}`)
+    router.push(`/debit/id/${id}`)
 
-    alert(`Ir para a página de alteração do débito ID: "${id}"!`)
+    // alert(`Ir para a página de alteração do débito ID: "${id}"!`)
   }
 
   async function debitDelete(id: string) {
-    // await api.post(`/debit/delete/${id}`)
+    const response = await api.post('/debit/delete', { id })
 
-    alert(`Debito ID: "${id}" deletado com sucesso!`)
+    if (response.data.error) {
+      alert(response.data.error)
+      return
+    }
+
+    alert(`Debito ID: "${response.data.id}" deletado com sucesso!`)
+    populateDebitsList()
   }
 
   return (
@@ -171,15 +175,6 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
                   ]}
                 />
 
-                {/* <Link href={`/debit/id/${debit.id}`}>
-                  <a>
-                    <Button1
-                      type="button"
-                      title="Alterar"
-                      onClick={() => alert('pago/pendente')}
-                    />
-                  </a>
-                </Link> */}
                 <Button1
                   type="button"
                   title={debit.paid ? 'Pendente' : 'Pago'}
