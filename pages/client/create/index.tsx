@@ -71,6 +71,7 @@ const ClientCreate: NextPage = () => {
             <div>
               <label htmlFor="cpf">CPF:</label>
               <ReactInputMask
+                {...register('cpf')}
                 mask="999.999.999-99"
                 id="cpf"
                 type="text"
@@ -83,6 +84,7 @@ const ClientCreate: NextPage = () => {
             <div>
               <label htmlFor="birthday">Data de nascimento:</label>
               <input
+                {...register('birthday')}
                 id="birthday"
                 type="date"
                 className={globals.input}
