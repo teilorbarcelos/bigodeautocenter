@@ -5,6 +5,8 @@ import Link from 'next/link'
 import Button1 from '../Button1'
 import { api } from '../../pages/api'
 import { useEffect, useState } from 'react'
+import DropDown from '../DropDown'
+import router from 'next/router'
 
 interface IDebitFormData {
   dueDate: Date
@@ -56,7 +58,6 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
       return
     }
 
-    // alert(`Débito marcado como ${status ? '"Pago"' : '"Pendente"'} com sucesso!`)
     populateDebitsList()
   }
 
@@ -115,6 +116,18 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
 
   }
 
+  async function debitEdit(id: string) {
+    // router.push(`/debit/id/${id}`)
+
+    alert(`Ir para a página de alteração do débito ID: "${id}"!`)
+  }
+
+  async function debitDelete(id: string) {
+    // await api.post(`/debit/delete/${id}`)
+
+    alert(`Debito ID: "${id}" deletado com sucesso!`)
+  }
+
   return (
     <section className={styles.debitsalelist} id="debitsalelist">
       <h5>Debitos desta venda</h5>
@@ -143,7 +156,22 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
                 <p>
                   Status: {debit.paid ? 'Pago' : 'Pendente'}
                 </p>
-                <Link href={`/debit/id/${debit.id}`}>
+
+                <DropDown
+                  title="Opções"
+                  options={[
+                    {
+                      title: "Alterar",
+                      action: () => debitEdit(debit.id)
+                    },
+                    {
+                      title: "Deletar",
+                      action: () => debitDelete(debit.id)
+                    }
+                  ]}
+                />
+
+                {/* <Link href={`/debit/id/${debit.id}`}>
                   <a>
                     <Button1
                       type="button"
@@ -151,7 +179,7 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
                       onClick={() => alert('pago/pendente')}
                     />
                   </a>
-                </Link>
+                </Link> */}
                 <Button1
                   type="button"
                   title={debit.paid ? 'Pendente' : 'Pago'}
