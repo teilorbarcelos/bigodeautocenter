@@ -38,11 +38,12 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
     new Date(
       new Date(
         Date.now()
-      ).setMonth(
-        new Date(
-          Date.now()
-        ).getMonth() + 1
       )
+      // .setMonth(
+      //   new Date(
+      //     Date.now()
+      //   ).getMonth() + 1
+      // )
     ).toISOString()
       .split('T')[0]
       .toString()
@@ -170,7 +171,8 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
                     },
                     {
                       title: "Deletar",
-                      action: () => debitDelete(debit.id)
+                      action: () => debitDelete(debit.id),
+                      disabled: debit.paid
                     }
                   ]}
                 />

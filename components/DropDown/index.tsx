@@ -6,6 +6,7 @@ import Button1 from '../Button1'
 interface IOption {
   title: string
   action: () => void
+  disabled?: boolean
 }
 
 interface Props {
@@ -43,6 +44,7 @@ export default function DropDown({ title = 'Opções', options }: Props) {
                   type="button"
                   onClick={option.action}
                   title={option.title}
+                  disabled={option.disabled || false}
                 />
               )
             })

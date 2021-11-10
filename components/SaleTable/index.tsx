@@ -8,29 +8,42 @@ import { api } from '../../pages/api'
 import Button1 from '../Button1'
 import LoadingScreen from '../LoadingScreen'
 import { ISale } from '../ClientTable'
+import { allowedNodeEnvironmentFlags } from 'process'
+
+interface IInterval {
+  initialDate?: Date
+  finalDate?: Date
+}
 
 export default function SaleTable() {
   const [loading, setLoading] = useState(true)
   const { handleSubmit } = useForm()
-  const [filter, setFilter] = useState('')
+  const [filterType, setFilterType] = useState('today')
+  const [initialDateConst, setInitialDate] = useState(new Date(Date.now()))
+  const [finalDateConst, setFinalDate] = useState(new Date(Date.now()))
   const [sales, setSales] = useState<ISale[]>([])
 
-  async function filterSaleList() {
-    const response = await api.post<ISale[]>('/client/list', {
-      filter
+  async function filterSaleList({ initialDate, finalDate }: IInterval) {
+    const response = await api.post<ISale[]>('/sale/list', {
+      initialDate: initialDate ? initialDate.toISOString().split('T')[0] : '',
+      finalDate: finalDate ? finalDate.toISOString().split('T')[0] : ''
     })
     setSales(response.data)
   }
 
   useEffect(() => {
-    async function populateInitialSaleList() {
-      const response = await api.post<ISale[]>('/sale/list')
-      setSales(response.data)
-    }
-    populateInitialSaleList()
 
+    if (filterType === 'today') {
+      filterSaleList({})
+    } else {
+      filterSaleList({
+        initialDate: new Date(initialDateConst.toISOString().split('T')[0]),
+        finalDate: new Date(finalDateConst.toISOString().split('T')[0])
+      })
+    }
+    // console.log(initialDateConst.toISOString().split('T')[0])
     setLoading(false)
-  }, [])
+  }, [filterType, initialDateConst, finalDateConst])
 
   return (
     <>
@@ -38,19 +51,43 @@ export default function SaleTable() {
       <section className={styles.saletable} id="salelist">
         <div className={styles.filter}>
 
-          <form
-            className={styles.searchInput}
-            onSubmit={handleSubmit(filterSaleList)}
-          >
-            <input
-              id="filter"
-              type="text"
-              onChange={e => setFilter(e.target.value)}
-              value={filter}
-              className={globals.input}
-            />
+          <form className={styles.filterType}>
+            <div>
+              <label htmlFor="today">Hoje: </label>
+              <input type="radio" id="today" defaultChecked name="period" onChange={() => setFilterType('today')} />
+            </div>
 
-            <Button1 onClick={filterSaleList} title="Buscar" />
+            <div>
+              <label htmlFor="interval">Intervalo: </label>
+              <input type="radio" id="interval" name="period" onChange={() => setFilterType('interval')} />
+            </div>
+
+            <div>
+              <label htmlFor="initialDate">Data inicial: </label>
+              <input
+                type="date"
+                name="initialDate"
+                className={globals.input}
+                onChange={(e) => {
+                  console.log(e.target.value)
+                  if (new Date(e.target.value)) {
+                    setInitialDate(new Date(e.target.value))
+                  }
+                }}
+                value={initialDateConst.toISOString().split('T')[0]}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="finalDate">Data final: </label>
+              <input
+                type="date"
+                name="finalDate"
+                className={globals.input}
+                onChange={(e) => setFinalDate(new Date(e.target.value))}
+                value={finalDateConst.toISOString().split('T')[0]}
+              />
+            </div>
           </form>
 
           <Link href="/sale/create">
@@ -58,7 +95,6 @@ export default function SaleTable() {
               <Button1 title="Nova venda" />
             </a>
           </Link>
-
         </div>
 
         <div className={styles.list}>

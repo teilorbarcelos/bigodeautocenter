@@ -4,15 +4,19 @@
     position: fixed;
     display: flex;
     width: 100%;
-    gap: 1rem;
+    max-width: 1200px;
+    justify-content: space-between;
+    align-items: center;
     padding: 1rem 0;
     padding-right: 2rem;
-    justify-content: center;
     background: var(--COLOR_WHITE_LIGHT);
 
-    .searchInput {
+    .filterType {
       display: flex;
+      justify-content: space-between;
+      align-items: center;
       gap: 1rem;
+
     }
 
     @media screen and (max-width: 360px) {
