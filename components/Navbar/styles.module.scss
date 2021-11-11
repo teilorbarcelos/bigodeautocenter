@@ -1,5 +1,6 @@
 .nav {
   position: fixed;
+  z-index: 1;
   display: flex;
   width: 100%;
   max-width: 1200px;
@@ -17,15 +18,32 @@
   max-width: 1200px;
   width: 100%;
   padding-right: 1rem;
+
+  .sandwich {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+
+    div {
+      width: 2rem;
+      height: 4px;
+      background: var(--COLOR_PRIMARY_DARK);
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    .desktop {
+      display: none;
+    }
+
+    .sandwich {
+      display: flex;
+    }
+  }
+
 }
 
 .logo {
   line-height: 1.5rem;
   height: min-content;
-}
-
-.links {
-  list-style: none;
-  display: flex;
-  gap: 1.5rem;
 }

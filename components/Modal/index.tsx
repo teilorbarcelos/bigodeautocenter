@@ -15,7 +15,12 @@ export default function Modal(props: Props) {
     }
   }
   return (
-    <section onKeyDown={(e) => console.log(e.key)} className={`${styles.modal} ${props.visible && styles.visible}`} id="modal">
+    <section
+      onKeyDown={(e) => console.log(e.key)}
+      className={`${styles.modal} ${props.visible && styles.visible}`}
+      id="modal"
+      onClick={props.closeModal}
+    >
       <p className={styles.close} onClick={props.closeModal}>X</p>
 
       <div className={styles.children}>

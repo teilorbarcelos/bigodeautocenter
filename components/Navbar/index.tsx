@@ -1,9 +1,13 @@
 import Link from 'next/link'
-import styles from './styles.module.css'
+import styles from './styles.module.scss'
 import Logo from '../Logo'
 import { useAuth } from '../../hooks/useAuth'
+import NavLinks from '../NavLinks'
+import Modal from '../Modal'
+import { useState } from 'react'
 
 export default function Navbar() {
+  const [modalMenuOpen, setModalMenuOpen] = useState(false)
   const { user } = useAuth()
 
   return (
@@ -14,24 +18,23 @@ export default function Navbar() {
             <div className={styles.logo}>
               <Logo href="/" />
             </div>
-            <ul className={styles.links}>
-              <li>
-                <Link href={"/sale/list"}>
-                  <a>Vendas</a>
-                </Link>
-              </li>
-              <li>
-                <Link href={"/client/list"}>
-                  <a>Clientes</a>
-                </Link>
-              </li>
-              <li>
-                <Link href={"/user/profile"}>
-                  <a>{user.name}</a>
-                </Link>
-              </li>
-            </ul>
+
+            <div className={styles.desktop}>
+              <NavLinks user={user} />
+            </div>
+
+            <div
+              className={styles.sandwich}
+              onClick={() => setModalMenuOpen(true)}
+            >
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           </div>
+          <Modal closeModal={() => setModalMenuOpen(false)} visible={modalMenuOpen}>
+            <NavLinks user={user} />
+          </Modal>
         </nav>
       }
     </>

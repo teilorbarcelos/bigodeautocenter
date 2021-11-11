@@ -1,5 +1,4 @@
 .dropdown {
-  position: relative;
   cursor: pointer;
   background: var(--COLOR_WHITE_NORMAL);
   user-select: none;
@@ -12,7 +11,6 @@
 .options {
   display: flex;
   flex-direction: column;
-  z-index: 1;
   position: absolute;
   transform: translate(-27%, 75%);
   background: var(--COLOR_WHITE_DARK);

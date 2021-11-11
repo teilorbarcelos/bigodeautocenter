@@ -89,10 +89,7 @@ const SaleList: NextPage = () => {
                     name="initialDate"
                     className={globals.input}
                     onChange={(e) => {
-                      console.log(e.target.value)
-                      if (new Date(e.target.value)) {
-                        setInitialDate(new Date(e.target.value))
-                      }
+                      setInitialDate(new Date(e.target.value))
                     }}
                     value={initialDateConst.toISOString().split('T')[0]}
                   />
