@@ -17,7 +17,7 @@ interface IDebitListProps {
   saleId: string
 }
 
-export interface IDebitResponse {
+export interface IDebit {
   dueDate: Date
   id: string
   info: string
@@ -33,7 +33,7 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
   const { register, handleSubmit } = useForm()
   const [debitValue, setDebitValue] = useState(0)
   const [debitInfo, setDebitInfo] = useState('')
-  const [debitsList, setDebitsList] = useState<IDebitResponse[]>([])
+  const [debitsList, setDebitsList] = useState<IDebit[]>([])
   const [dueDate, setDueDate] = useState(
     new Date(
       new Date(
@@ -50,7 +50,7 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
   )
 
   async function paidSwitch(id: string, status: boolean) {
-    const response = await api.post<IDebitResponse>('/debit/paidSwitch', { id, status })
+    const response = await api.post<IDebit>('/debit/paidSwitch', { id, status })
 
     if (response.data.error) {
       alert(response.data.error)
@@ -61,7 +61,7 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
   }
 
   async function populateDebitsList() {
-    const debits = await api.post<IDebitResponse[]>('/debit/list', {
+    const debits = await api.post<IDebit[]>('/debit/list', {
       saleId
     })
     setDebitsList(debits.data)
@@ -83,7 +83,7 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
       return
     }
 
-    const newDebitResponse = await api.post<IDebitResponse>('/debit/create', {
+    const newDebitResponse = await api.post<IDebit>('/debit/create', {
       saleId,
       dueDate: data.dueDate,
       value: parseFloat(data.value.toString()),
@@ -166,7 +166,7 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
                   title="Opções"
                   options={[
                     {
-                      title: "Alterar",
+                      title: "Detalhes",
                       action: () => debitEdit(debit.id)
                     },
                     {

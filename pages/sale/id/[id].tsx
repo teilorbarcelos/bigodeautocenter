@@ -269,8 +269,9 @@ const SaleUpdate: NextPage = () => {
                 </div>
 
                 <div className={styles.totals}>
-                  <p>Custo Total (R$): {totalCost}</p>
-                  <p>Valor Total (R$): {totalValue}</p>
+                  <p>Custo Total (R$): {totalCost.toFixed(2)}</p>
+                  <p>Valor Total (R$): {totalValue.toFixed(2)}</p>
+                  <p>Lucro líquido (R$): {(totalValue - totalCost).toFixed(2)}</p>
                 </div>
               </div>
 

@@ -37,7 +37,7 @@ export default function SaleTable({ sales }: Props) {
                     </div>
                     <div>
                       <p>Total R$:</p>
-                      <p>{sale.total}</p>
+                      <p>{sale.total.toFixed(2)}</p>
                     </div>
                     <div>
                       <p>Status:</p>

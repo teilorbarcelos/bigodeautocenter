@@ -9,7 +9,7 @@ import BasicPage from '../../../components/BasicPage'
 import Navbar from '../../../components/Navbar'
 import { useForm } from 'react-hook-form'
 import Button1 from '../../../components/Button1'
-import { IDebitResponse } from '../../../components/DebitSaleList'
+import { IDebit } from '../../../components/DebitSaleList'
 import { useRouter } from 'next/router'
 
 const DebitUpdate: NextPage = () => {
@@ -44,7 +44,7 @@ const DebitUpdate: NextPage = () => {
           return
         }
 
-        const debitResponse = await api.post<IDebitResponse>('/debit/getData', {
+        const debitResponse = await api.post<IDebit>('/debit/getData', {
           id
         })
 
@@ -71,7 +71,7 @@ const DebitUpdate: NextPage = () => {
   }, [router.query])
 
   async function updateDebit() {
-    const response = await api.post<IDebitResponse>('/debit/update', {
+    const response = await api.post<IDebit>('/debit/update', {
       id: debitId,
       value: debitValue,
       dueDate: new Date(debitDueDate),

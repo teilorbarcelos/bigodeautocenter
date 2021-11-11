@@ -1,44 +1,74 @@
 import type { NextPage } from 'next'
-import Link from 'next/link'
-import Navbar from '../../../components/Navbar'
-import { useAuth } from '../../../hooks/useAuth'
 import styles from './styles.module.scss'
-import globals from '../../../styles/globals.module.scss'
-import Login from '../../../components/Login'
-import LoadingScreen from '../../../components/LoadingScreen'
-import BasicPage from '../../../components/BasicPage'
-import SaleTable from '../../../components/SaleTable'
+import globals from '../../styles/globals.module.scss'
 import { useEffect, useState } from 'react'
-import { ISale } from '../../../components/ClientTable'
-import Button1 from '../../../components/Button1'
-import { api } from '../../api'
+import { ICost, ISale } from '../../components/ClientTable'
+import { api } from '../api'
+import BasicPage from '../../components/BasicPage'
+import Navbar from '../../components/Navbar'
+import { useAuth } from '../../hooks/useAuth'
+import Login from '../../components/Login'
+import { IDebit } from '../../components/DebitSaleList'
 
 interface IInterval {
   initialDate?: Date
   finalDate?: Date
 }
 
-const SaleList: NextPage = () => {
+export interface IIncome {
+  createdAt: Date
+  debitId: string
+  id: string
+  info: string | null
+  saleId: string
+  userId: string
+  value: number
+}
+
+const Reports: NextPage = () => {
   const { user, loading } = useAuth()
   const [filterType, setFilterType] = useState('today')
   const [initialDateConst, setInitialDate] = useState(new Date(Date.now()))
   const [finalDateConst, setFinalDate] = useState(new Date(Date.now()))
-  const [sales, setSales] = useState<ISale[]>([])
+  const [totalCosts, setTotalCosts] = useState(0)
+  const [totalIncomes, setTotalIncomes] = useState(0)
+  const [pendingDebits, setPendingDebits] = useState<IDebit[]>([])
 
-  async function filterSaleList({ initialDate, finalDate }: IInterval) {
-    const response = await api.post<ISale[]>('/sale/list', {
+  interface IEntity {
+    entity: ICost[] | IIncome[]
+  }
+
+  async function sumValues({ entity }: IEntity) {
+    let total = 0
+
+    entity.map((item: IIncome | ICost) => {
+      total += item.value
+    })
+
+    return total
+  }
+
+  async function filterReportList({ initialDate, finalDate }: IInterval) {
+    const costsResponse = await api.post<ICost[]>('/cost/list', {
       initialDate: initialDate ? initialDate.toISOString().split('T')[0] : '',
       finalDate: finalDate ? finalDate.toISOString().split('T')[0] : ''
     })
-    setSales(response.data)
+
+    const incomeResponse = await api.post<IIncome[]>('/income/list', {
+      initialDate: initialDate ? initialDate.toISOString().split('T')[0] : '',
+      finalDate: finalDate ? finalDate.toISOString().split('T')[0] : ''
+    })
+
+    setTotalIncomes(await sumValues({ entity: incomeResponse.data }))
+    setTotalCosts(await sumValues({ entity: costsResponse.data }))
   }
 
   useEffect(() => {
     if (!loading) {
       if (filterType === 'today') {
-        filterSaleList({})
+        filterReportList({})
       } else {
-        filterSaleList({
+        filterReportList({
           initialDate: new Date(initialDateConst.toISOString().split('T')[0]),
           finalDate: new Date(finalDateConst.toISOString().split('T')[0])
         })
@@ -49,10 +79,9 @@ const SaleList: NextPage = () => {
   return (
 
     <BasicPage
-      title="Lista de Vendas"
+      title="Relatórios por período"
     >
       <>
-        <LoadingScreen visible={loading} />
         <Navbar />
 
         {user ?
@@ -104,16 +133,12 @@ const SaleList: NextPage = () => {
                   />
                 </div>
               </form>
-
-              <Link href="/sale/create">
-                <a>
-                  <Button1 type="button" title="Nova venda" />
-                </a>
-              </Link>
             </div>
 
-            <div className={styles.saleTable}>
-              <SaleTable sales={sales} />
+            <div className={styles.report}>
+              <p>Total de entradas (R$): {totalIncomes.toFixed(2)}</p>
+              <p>Total de custos (R$): {totalCosts.toFixed(2)}</p>
+              <p>Total líquido (R$): {(totalIncomes - totalCosts).toFixed(2)}</p>
             </div>
           </>
           :
@@ -125,4 +150,4 @@ const SaleList: NextPage = () => {
   )
 }
 
-export default SaleList
+export default Reports

@@ -21,6 +21,11 @@ export default function NavLinks({ user }: Props) {
         </Link>
       </li>
       <li>
+        <Link href={"/reports"}>
+          <a>Relatórios</a>
+        </Link>
+      </li>
+      <li>
         <Link href={"/user/profile"}>
           <a>{user.name}</a>
         </Link>
