@@ -1,59 +1,40 @@
-.saletable {
-  padding-top: 3rem;
-  .filter {
-    position: fixed;
-    display: flex;
-    width: 100%;
-    max-width: 1200px;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 0;
-    padding-right: 2rem;
-    background: var(--COLOR_WHITE_LIGHT);
+.sales {
+  margin: 1rem 0;
 
-    .filterType {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-
-    }
-
-    @media screen and (max-width: 360px) {
-      flex-direction: column;
-
-      .searchInput {
-        justify-content: space-between;
-      }
-    }
-  }
-
-  .list {
-    display: flex;
-    flex-direction: column;
+  .sale {
+    cursor: pointer;
+    border: 1px solid var(--COLOR_PRIMARY_NORMAL);
+    border-radius: 1rem;
+    padding: 1rem;
+    text-align: center;
     gap: 1rem;
-    padding: 5rem 0;
+    width: 100%;
+    margin: 1rem auto;
 
-    .sale {
+    .head {
       display: flex;
       justify-content: space-between;
-      border: 1px solid var(--COLOR_PRIMARY_NORMAL);
-      border-radius: 0.5rem;
-      padding: 1rem;
-      gap: 1rem;
-
-      &:hover {
-        background: var(--COLOR_GRAY_LIGHT);
-      }
-
-      @media screen and (max-width: 360px) {
-        flex-direction: column;
-      }
     }
 
-    @media screen and (max-width: 360px) {
-      padding: 8rem 0;
+    .preview {
+      display: flex;
+      padding-top: 1rem;
+      justify-content: space-between;
+    }
+
+    .status {
+      background: var(--COLOR_WHITE_LIGHT);
+      padding: 0 1rem;
+      border-radius: 0.3rem;
+      color: red;
+    }
+
+    .paid {
+      color: green;
+    }
+
+    &:hover {
+      background: var(--COLOR_GRAY_LIGHT);
     }
   }
-  
 }

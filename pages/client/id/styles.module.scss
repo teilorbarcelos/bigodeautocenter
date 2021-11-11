@@ -7,6 +7,10 @@
   height: 100%;
   padding: 4rem 0 2rem;
 
+  @media screen and (max-width: 400px) {
+    padding-top: 5rem;
+  }
+
   >div {
     display: flex;
     flex-direction: column;
@@ -31,7 +35,9 @@
 }
 
 .sales {
-  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+
 
   .salesTitle {
     width: 100%;
@@ -39,41 +45,9 @@
     margin: 0 auto;
   }
 
-  .sale {
-    cursor: pointer;
-    border: 1px solid var(--COLOR_PRIMARY_NORMAL);
-    border-radius: 1rem;
-    padding: 1rem;
-    text-align: center;
-    gap: 1rem;
+  .saleTable {
     width: 100%;
     max-width: 800px;
-    margin: 1rem auto;
-
-    .head {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .preview {
-      display: flex;
-      padding-top: 1rem;
-      justify-content: space-between;
-    }
-
-    .status {
-      background: var(--COLOR_WHITE_LIGHT);
-      padding: 0 1rem;
-      border-radius: 0.3rem;
-      color: red;
-    }
-
-    .paid {
-      color: green;
-    }
-
-    &:hover {
-      background: var(--COLOR_GRAY_LIGHT);
-    }
+    margin: 0 auto;
   }
 }

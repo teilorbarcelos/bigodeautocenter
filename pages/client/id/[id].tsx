@@ -12,6 +12,7 @@ import Navbar from '../../../components/Navbar'
 import { useForm } from 'react-hook-form'
 import ReactInputMask from 'react-input-mask'
 import Button1 from '../../../components/Button1'
+import SaleTable from '../../../components/SaleTable'
 
 const Client: NextPage = () => {
   const { handleSubmit } = useForm()
@@ -166,46 +167,10 @@ const Client: NextPage = () => {
                 <div className={styles.salesTitle}>
                   <h5>Vendas:</h5>
                 </div>
-                {sales.map((sale) => {
-                  const stringDate = sale.createdAt.split('T')[0].split('-')
-                  const date = `${stringDate[2]}/${stringDate[1]}/${stringDate[0]}`
-                  return (
-                    <Link
-                      key={sale.id}
-                      href={`/sale/id/${sale.id}`}
-                    >
-                      <a>
-                        <div
-                          title="Ver detalhes"
-                          className={styles.sale}
-                        >
-                          <div className={styles.head}>
-                            <p>{date}</p>
-                            <p>Carro: {sale.car}</p>
-                          </div>
-                          <div className={styles.preview}>
-                            <div>
-                              <p>Placa:</p>
-                              <p>{sale.plate}</p>
-                            </div>
-                            <div>
-                              <p>Total R$:</p>
-                              <p>{sale.total}</p>
-                            </div>
-                            <div>
-                              <p>Status:</p>
-                              <p
-                                className={`${sale.paid && styles.paid} ${styles.status}`}
-                              >
-                                {sale.paid ? 'Pago' : 'Pendente'}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </a>
-                    </Link>
-                  )
-                })}
+
+                <div className={styles.saleTable}>
+                  <SaleTable sales={sales} />
+                </div>
 
               </div>
             }

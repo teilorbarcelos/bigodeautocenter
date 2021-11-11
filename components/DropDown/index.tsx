@@ -39,13 +39,17 @@ export default function DropDown({ title = 'Opções', options }: Props) {
           {
             options.map((option, index) => {
               return (
-                <Button1
-                  key={index}
-                  type="button"
-                  onClick={option.action}
-                  title={option.title}
-                  disabled={option.disabled || false}
-                />
+                <>
+                  {
+                    !option.disabled &&
+                    <Button1
+                      key={index}
+                      type="button"
+                      onClick={option.action}
+                      title={option.title}
+                    />
+                  }
+                </>
               )
             })
           }
