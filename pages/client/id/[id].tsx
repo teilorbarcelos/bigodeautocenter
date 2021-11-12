@@ -158,6 +158,8 @@ const Client: NextPage = () => {
               </div>
             </form>
 
+            <div className={globals.divider}></div>
+
             {/* SALES */}
 
             {

@@ -7,6 +7,7 @@ import globals from '../../styles/globals.module.scss'
 import { api } from '../../pages/api'
 import Button1 from '../Button1'
 import LoadingScreen from '../LoadingScreen'
+import { IDebit } from '../DebitSaleList'
 
 export interface IProduct {
   name: string
@@ -26,7 +27,9 @@ export interface ISale {
   car?: string
   client: IClient
   cost?: ICost
+  debits?: IDebit[]
   info?: string
+  km?: string
   paid: boolean
   plate?: string
   products?: IProduct[]

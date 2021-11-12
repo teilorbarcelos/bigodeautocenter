@@ -23,6 +23,7 @@ export interface ISaleDataFormProps {
   clientId: string
   car: string,
   plate: string,
+  km: string
   info: string,
   total: number
 }
@@ -80,6 +81,7 @@ const SaleCreate: NextPage = () => {
       clientId: data.clientId,
       car: data.car,
       plate: data.plate.toUpperCase(),
+      km: data.km,
       products,
       info: data.info,
       total: totalValue,
@@ -156,6 +158,19 @@ const SaleCreate: NextPage = () => {
                 type="text"
                 className={globals.input}
                 placeholder="Placa do carro"
+              />
+            </div>
+          </div>
+
+          <div className={styles.smallInput}>
+            <div>
+              <label htmlFor="km">Km:</label>
+              <input
+                {...register('km')}
+                id="km"
+                type="text"
+                className={globals.input}
+                placeholder="Km atual"
               />
             </div>
           </div>

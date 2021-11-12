@@ -11,6 +11,13 @@
   height: 80px;
 }
 
+.divider {
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(110deg, var(--COLOR_GRAY_LIGHT), var(--COLOR_PRIMARY_DARK));
+  margin: 2rem 0;
+}
+
 .link {
   font-weight: bold;
   position: relative;

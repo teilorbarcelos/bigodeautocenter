@@ -73,7 +73,7 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
 
   async function createPendingDebit(data: IDebitFormData) {
 
-    if (!data.dueDate) {
+    if (!dueDate) {
       alert('Informe a data do vencimento!')
       return
     }
@@ -85,7 +85,7 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
 
     const newDebitResponse = await api.post<IDebit>('/debit/create', {
       saleId,
-      dueDate: data.dueDate,
+      dueDate,
       value: parseFloat(data.value.toString()),
       info: data.info,
       paid: false
@@ -156,7 +156,7 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
                   Vencimento: {dueDate}
                 </p>
                 <p>
-                  Valor: R$ {debit.value}
+                  Valor: R$ {debit.value.toFixed(2)}
                 </p>
                 <p>
                   Status: {debit.paid ? 'Pago' : 'Pendente'}

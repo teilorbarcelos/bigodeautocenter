@@ -28,6 +28,7 @@ const SaleUpdate: NextPage = () => {
   const [client, setClient] = useState<IClient | null>(null)
   const [car, setCar] = useState('')
   const [plate, setPlate] = useState('')
+  const [km, setKm] = useState('')
   const [paid, setPaid] = useState(false)
   const [info, setInfo] = useState('')
   const [cost, setCost] = useState<ICost>({} as ICost)
@@ -64,7 +65,6 @@ const SaleUpdate: NextPage = () => {
         })
 
         const data = saleResponse.data
-        // console.log(data)
 
         const date = data.createdAt.toString().split('T')[0].split('-')
         setProducts(JSON.parse(data.products.toString()) as IProduct[])
@@ -74,6 +74,7 @@ const SaleUpdate: NextPage = () => {
         setDate(`${date[2]}/${date[1]}/${date[0]}`)
         setCar(data.car)
         setPlate(data.plate)
+        setKm(data.km)
         setPaid(data.paid)
         setInfo(data.info)
         setCost(data.cost)
@@ -100,6 +101,7 @@ const SaleUpdate: NextPage = () => {
       car,
       plate: plate.toUpperCase(),
       products,
+      km,
       info,
       total: totalValue,
       paid
@@ -139,12 +141,13 @@ const SaleUpdate: NextPage = () => {
               className={styles.saleForm}
               onSubmit={handleSubmit(updateSale)}
             >
-              <h5>Cliente: <Link href={`/client/id/${client?.id}`}>
+              <h6>Venda ID: {id}</h6>
+              <h6>Data: {date}</h6>
+              <h6>Cliente: <Link href={`/client/id/${client?.id}`}>
                 <a className={styles.clientName}>
                   {client?.name}
                 </a>
-              </Link></h5>
-              <h6>Data: {date}</h6>
+              </Link></h6>
 
               <div>
                 <label htmlFor="car">Carro:</label>
@@ -170,6 +173,21 @@ const SaleUpdate: NextPage = () => {
                     onChange={e => setPlate(e.target.value)}
                     value={plate}
                     placeholder="Placa do carro"
+                  />
+                </div>
+              </div>
+
+              <div className={styles.smallInput}>
+                <div>
+                  <label htmlFor="km">Km:</label>
+                  <input
+                    {...register('km')}
+                    id="km"
+                    type="text"
+                    className={globals.input}
+                    onChange={e => setKm(e.target.value)}
+                    value={km}
+                    placeholder="Km atual"
                   />
                 </div>
               </div>
@@ -280,7 +298,7 @@ const SaleUpdate: NextPage = () => {
               </div>
 
               <div className={styles.paid}>
-                <label htmlFor="paid">Já está pago?</label>
+                <label htmlFor="paid"><strong>Já está pago?</strong></label>
                 <input
                   {...register('paid')}
                   id="paid"
@@ -304,8 +322,15 @@ const SaleUpdate: NextPage = () => {
               </div>
               <div className={styles.buttons}>
                 <Button1 title="Salvar" />
+                <Link href={`/sale/print/${id}`}>
+                  <a target="_blank">
+                    <Button1 type="button" title="Imprimir" />
+                  </a>
+                </Link>
               </div>
             </form>
+
+            <div className={globals.divider}></div>
 
             {/* DEBITS LIST */}
 

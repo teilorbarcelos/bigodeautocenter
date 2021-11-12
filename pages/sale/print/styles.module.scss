@@ -1,0 +1,131 @@
+.ticket {
+  max-width: 800px;
+  margin: 0 auto;
+
+  header {
+    border: 2px solid black;
+    display: flex;
+    margin-bottom: 1rem;
+
+    .companyInfo {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+      padding: 0.5rem;
+    }
+
+    @media screen and (max-width: 400px) {
+      flex-direction: column;
+    }
+  }
+
+  h6 {
+    padding: 0.2rem 0;
+  }
+
+  .totalValue {
+    display: flex;
+    justify-content: flex-end;
+
+    .highlight {
+      padding: 0.2rem 0.5rem;
+      border: 2px solid black;
+    }
+  }
+
+
+  .info {
+    border: 1px solid black;
+    padding: 0.5rem 1rem;
+  }
+
+  .autographs {
+    margin-top: 7rem;
+    display: flex;
+    justify-content: space-between;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.productsTable {
+  border: 1px solid black;
+  width: 100%;
+  margin-bottom: 1rem;
+
+  thead {
+    th {
+      border: 1px solid black;
+      padding: 3px;
+      background: var(--COLOR_GRAY_LIGHT);
+    }
+  }
+
+  tbody {
+    td {
+      border: 1px solid black;
+      padding: 2px 1rem;
+    }
+
+    tr {
+      :nth-child(1){
+        text-align: center;
+        width: 5rem;
+      }
+  
+      :nth-child(3){
+        text-align: right;
+        width: 10rem;
+      }
+    }
+  }
+}
+
+.debitsTable {
+  border: 1px solid black;
+  margin-bottom: 1rem;
+  width: 100%;
+
+  thead {
+    th {
+      border: 1px solid black;
+      padding: 3px;
+      background: var(--COLOR_GRAY_LIGHT);
+    }
+  }
+
+  tbody {
+    td {
+      border: 1px solid black;
+      padding: 2px 1rem;
+    }
+
+    tr {
+      :nth-child(1){
+        text-align: center;
+        width: 5rem;
+      }
+
+      :nth-child(2){
+        text-align: center;
+        width: 10rem;
+      }
+  
+      :nth-child(3){
+        text-align: center;
+        width: 10rem;
+      }
+  
+      :nth-child(4){
+        text-align: center;
+        width: 10rem;
+      }
+    }
+  }
+}
