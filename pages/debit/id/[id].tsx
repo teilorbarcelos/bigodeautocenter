@@ -143,7 +143,7 @@ const DebitUpdate: NextPage = () => {
 
               <div className={styles.saleLink}>
                 <Link href={`/sale/id/${saleId}`}>
-                  <a>
+                  <a className={globals.link}>
                     Voltar para o registro de venda.
                   </a>
                 </Link>

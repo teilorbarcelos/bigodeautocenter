@@ -12,22 +12,22 @@ export default function NavLinks({ user }: Props) {
     <ul className={styles.navlinks} id="navlinks">
       <li>
         <Link href={"/sale/list"}>
-          <a>Vendas</a>
+          <a className={globals.link}>Vendas</a>
         </Link>
       </li>
       <li>
         <Link href={"/client/list"}>
-          <a>Clientes</a>
+          <a className={globals.link}>Clientes</a>
         </Link>
       </li>
       <li>
         <Link href={"/reports"}>
-          <a>Relatórios</a>
+          <a className={globals.link}>Relatórios</a>
         </Link>
       </li>
       <li>
         <Link href={"/user/profile"}>
-          <a>{user.name}</a>
+          <a className={globals.link}>{user.name}</a>
         </Link>
       </li>
     </ul>

@@ -20,21 +20,6 @@
     border-radius: 1rem;
     color: var(--COLOR_WHITE_DARK);
   }
-  
-  .close {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    cursor: pointer;
-    font-weight: bold;
-    color: var(--COLOR_WHITE_NORMAL);
-
-    transition: 0.3s;
-
-    &:hover {
-      opacity: 0.8;
-    }
-  }
 }
 
 .visible {

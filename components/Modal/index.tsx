@@ -21,8 +21,6 @@ export default function Modal(props: Props) {
       id="modal"
       onClick={props.closeModal}
     >
-      <p className={styles.close} onClick={props.closeModal}>X</p>
-
       <div className={styles.children}>
         {props.children}
       </div>

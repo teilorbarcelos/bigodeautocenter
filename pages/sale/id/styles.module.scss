@@ -7,6 +7,10 @@
   height: 100%;
   padding-top: 4rem;
 
+  .clientName {
+    color: var(--COLOR_PRIMARY_DARK);
+  }
+
   @media screen and (max-width: 400px) {
     padding-top: 6rem;
   }

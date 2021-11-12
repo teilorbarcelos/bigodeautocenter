@@ -139,7 +139,11 @@ const SaleUpdate: NextPage = () => {
               className={styles.saleForm}
               onSubmit={handleSubmit(updateSale)}
             >
-              <h5>Cliente: <Link href={`/client/id/${client?.id}`}><a>{client?.name}</a></Link></h5>
+              <h5>Cliente: <Link href={`/client/id/${client?.id}`}>
+                <a className={styles.clientName}>
+                  {client?.name}
+                </a>
+              </Link></h5>
               <h6>Data: {date}</h6>
 
               <div>

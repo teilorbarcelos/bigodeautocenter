@@ -24,12 +24,12 @@ export default function Navbar() {
             </div>
 
             <div
-              className={styles.sandwich}
-              onClick={() => setModalMenuOpen(true)}
+              className={`${styles.sandwich} ${modalMenuOpen && styles.x}`}
+              onClick={() => setModalMenuOpen(modalMenuOpen ? false : true)}
             >
-              <div></div>
-              <div></div>
-              <div></div>
+              <div className={styles.line1}></div>
+              <div className={styles.line2}></div>
+              <div className={styles.line3}></div>
             </div>
           </div>
           <Modal closeModal={() => setModalMenuOpen(false)} visible={modalMenuOpen}>

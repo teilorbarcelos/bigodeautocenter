@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import styles from './styles.module.css'
-import globals from '../../styles/globals.module.css'
+import styles from './styles.module.scss'
+import globals from '../../styles/globals.module.scss'
 import Logo from '../Logo'
 
 export default function Header() {
@@ -13,7 +13,7 @@ export default function Header() {
         <ul className={styles.links}>
           <li>
             <Link href={"/dashboard"}>
-              <a>Sistema Interno</a>
+              <a className={globals.link}>Sistema Interno</a>
             </Link>
           </li>
         </ul>
