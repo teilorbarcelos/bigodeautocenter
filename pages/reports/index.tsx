@@ -33,9 +33,10 @@ const Reports: NextPage = () => {
   const [totalCosts, setTotalCosts] = useState(0)
   const [totalIncomes, setTotalIncomes] = useState(0)
   const [pendingDebits, setPendingDebits] = useState<IDebit[]>([])
+  const [totalDebits, setTotalDebits] = useState(0)
 
   interface IEntity {
-    entity: ICost[] | IIncome[]
+    entity: ICost[] | IIncome[] | IDebit[]
   }
 
   async function sumValues({ entity }: IEntity) {
@@ -59,8 +60,14 @@ const Reports: NextPage = () => {
       finalDate: finalDate ? finalDate.toISOString().split('T')[0] : ''
     })
 
+    const debitResponse = await api.post<IDebit[]>('/debit/report', {
+      paid: false
+    })
+
     setTotalIncomes(await sumValues({ entity: incomeResponse.data }))
     setTotalCosts(await sumValues({ entity: costsResponse.data }))
+    setPendingDebits(debitResponse.data)
+    setTotalDebits(await sumValues({ entity: debitResponse.data }))
   }
 
   useEffect(() => {
@@ -139,6 +146,8 @@ const Reports: NextPage = () => {
               <p>Total de entradas (R$): {totalIncomes.toFixed(2)}</p>
               <p>Total de custos (R$): {totalCosts.toFixed(2)}</p>
               <p>Total líquido (R$): {(totalIncomes - totalCosts).toFixed(2)}</p>
+              <p>Débitos pendentes: {pendingDebits.length}</p>
+              <p>Total de débitos pendentes (R$): {totalDebits.toFixed(2)}</p>
             </div>
           </>
           :

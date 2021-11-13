@@ -4,8 +4,7 @@ import { useForm } from 'react-hook-form'
 import Button1 from '../Button1'
 import { api } from '../../pages/api'
 import { useEffect, useState } from 'react'
-import DropDown from '../DropDown'
-import { useRouter } from 'next/router'
+import DebitTable from '../DebitTable'
 
 interface IDebitFormData {
   dueDate: Date
@@ -29,7 +28,6 @@ export interface IDebit {
 }
 
 export default function DebitSaleList({ saleId }: IDebitListProps) {
-  const router = useRouter()
   const { register, handleSubmit } = useForm()
   const [debitValue, setDebitValue] = useState(0)
   const [debitInfo, setDebitInfo] = useState('')
@@ -39,32 +37,32 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
       new Date(
         Date.now()
       )
-      // .setMonth(
-      //   new Date(
-      //     Date.now()
-      //   ).getMonth() + 1
-      // )
     ).toISOString()
       .split('T')[0]
       .toString()
   )
 
-  async function paidSwitch(id: string, status: boolean) {
-    const response = await api.post<IDebit>('/debit/paidSwitch', { id, status })
-
-    if (response.data.error) {
-      alert(response.data.error)
-      return
-    }
-
-    populateDebitsList()
-  }
-
   async function populateDebitsList() {
     const debits = await api.post<IDebit[]>('/debit/list', {
       saleId
     })
+
     setDebitsList(debits.data)
+
+    setDueDate(
+      new Date(
+        new Date(
+          debits.data[debits.data.length - 1].dueDate
+        )
+          .setMonth(
+            new Date(
+              debits.data[debits.data.length - 1].dueDate
+            ).getMonth() + 1
+          )
+      ).toISOString()
+        .split('T')[0]
+        .toString()
+    )
   }
 
   useEffect(() => {
@@ -109,27 +107,6 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
     )
     setDebitInfo('')
 
-    alert('Parcela cadastrada com sucesso!')
-
-    populateDebitsList()
-
-  }
-
-  async function debitEdit(id: string) {
-    router.push(`/debit/id/${id}`)
-
-    // alert(`Ir para a página de alteração do débito ID: "${id}"!`)
-  }
-
-  async function debitDelete(id: string) {
-    const response = await api.post('/debit/delete', { id })
-
-    if (response.data.error) {
-      alert(response.data.error)
-      return
-    }
-
-    alert(`Debito ID: "${response.data.id}" deletado com sucesso!`)
     populateDebitsList()
   }
 
@@ -138,56 +115,9 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
       <h5>Debitos desta venda</h5>
 
       <div className={styles.debitsList}>
-        {
-          debitsList.map((debit, index) => {
-            const dueDateSplit = debit.dueDate.toString().replace('T00:00:00.000Z', '').split('-')
-            const dueDate = `${dueDateSplit[2]}/${dueDateSplit[1]}/${dueDateSplit[0]}`
-            return (
-              <div
-                key={debit.id}
-                className={new Date(debit.dueDate) < new Date(Date.now()) &&
-                  !debit.paid ? styles.expired
-                  :
-                  debit.paid && styles.paid
-                }
-              >
-                <p>{index + 1}</p>
-                <p>
-                  Vencimento: {dueDate}
-                </p>
-                <p>
-                  Valor: R$ {debit.value.toFixed(2)}
-                </p>
-                <p>
-                  Status: {debit.paid ? 'Pago' : 'Pendente'}
-                </p>
 
-                <DropDown
-                  title="Opções"
-                  options={[
-                    {
-                      title: "Detalhes",
-                      action: () => debitEdit(debit.id)
-                    },
-                    {
-                      title: "Deletar",
-                      action: () => debitDelete(debit.id),
-                      disabled: debit.paid
-                    }
-                  ]}
-                />
+        <DebitTable debits={debitsList} updateList={populateDebitsList} />
 
-                <Button1
-                  type="button"
-                  title={debit.paid ? 'Pendente' : 'Pago'}
-                  onClick={() => {
-                    paidSwitch(debit.id, debit.paid ? false : true)
-                  }}
-                />
-              </div>
-            )
-          })
-        }
       </div>
 
       <form
