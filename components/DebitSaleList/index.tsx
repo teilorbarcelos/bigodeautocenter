@@ -49,20 +49,35 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
 
     setDebitsList(debits.data)
 
+    if (debits.data.length > 0) {
+
+      setDueDate(
+        new Date(
+          new Date(
+            debits.data[debits.data.length - 1].dueDate
+          )
+            .setMonth(
+              new Date(
+                debits.data[debits.data.length - 1].dueDate
+              ).getMonth() + 1
+            )
+        ).toISOString()
+          .split('T')[0]
+          .toString()
+      )
+      return
+    }
+
     setDueDate(
       new Date(
         new Date(
-          debits.data[debits.data.length - 1].dueDate
+          Date.now()
         )
-          .setMonth(
-            new Date(
-              debits.data[debits.data.length - 1].dueDate
-            ).getMonth() + 1
-          )
       ).toISOString()
         .split('T')[0]
         .toString()
     )
+
   }
 
   useEffect(() => {
@@ -112,13 +127,21 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
 
   return (
     <section className={styles.debitsalelist} id="debitsalelist">
-      <h5>Debitos desta venda</h5>
+      <h5>Débitos desta venda</h5>
+      {
+        debitsList.length > 0 ?
 
-      <div className={styles.debitsList}>
+          <div className={styles.debitsList}>
 
-        <DebitTable debits={debitsList} updateList={populateDebitsList} />
+            <DebitTable debits={debitsList} updateList={populateDebitsList} />
 
-      </div>
+          </div>
+
+          :
+
+          <h6>Nenhum débito cadastrado ainda.</h6>
+      }
+
 
       <form
         className={styles.form}
