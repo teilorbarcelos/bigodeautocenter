@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import styles from './styles.module.scss'
 import Logo from '../Logo'
 import { useAuth } from '../../hooks/useAuth'

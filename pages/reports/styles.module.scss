@@ -2,13 +2,12 @@
   position: fixed;
   display: flex;
   width: 100%;
-  max-width: 1200px;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  top: 3rem;
+  top: 3.5rem;
   padding: 1rem 0;
-  padding-right: 2rem;
   background: var(--COLOR_WHITE_LIGHT);
+  border-bottom: 2px solid var(--COLOR_GRAY_LIGHT);
 
   .filterType {
     display: flex;
@@ -34,9 +33,25 @@
 }
 
 .report {
-  padding-top: 7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  // height: 100vh;
+  width: 100%;
+  max-width: 1200px;
+  gap: 2rem;
+  padding: 10rem 1rem;
+
+  .reportItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
 
   @media screen and (max-width: 400px) {
-    padding-top: 17rem;
+    padding: 17rem 1rem;
   }
 }

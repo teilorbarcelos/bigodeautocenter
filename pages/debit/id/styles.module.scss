@@ -1,11 +1,17 @@
 .form {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   max-width: 850px;
   gap: 1rem;
-  // padding-top: 7rem;
   margin: auto;
+  height: 100vh;
+
+  @media screen and (max-width: 400px) {
+    padding: 0 1rem;
+  }
 
   .dateValue {
     flex-direction: row;

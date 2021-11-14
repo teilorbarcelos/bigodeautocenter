@@ -2,13 +2,13 @@
   position: fixed;
   display: flex;
   width: 100%;
-  max-width: 1200px;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  top: 3rem;
+  top: 3.5rem;
   padding: 1rem 0;
-  padding-right: 2rem;
+  gap: 1rem;
   background: var(--COLOR_WHITE_LIGHT);
+  border-bottom: 2px solid var(--COLOR_GRAY_LIGHT);
 
   .filterType {
     display: flex;
@@ -34,9 +34,13 @@
 }
 
 .saleTable {
-  padding-top: 7rem;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding-top: 8rem;
 
   @media screen and (max-width: 400px) {
-    padding-top: 17rem;
+    padding: 0 1rem;
+    padding-top: 18rem;
   }
 }

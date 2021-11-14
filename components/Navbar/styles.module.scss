@@ -3,12 +3,16 @@
   z-index: 1;
   display: flex;
   width: 100%;
-  max-width: 1200px;
   justify-content: center;
   align-items: center;
   background: var(--COLOR_WHITE_LIGHT);
   padding: 1rem 0;
-  padding-right: 1rem;
+
+  border-bottom: solid 2px var(--COLOR_GRAY_LIGHT);
+
+  @media screen and (max-width: 400px) {
+    padding: 1rem;
+  }
 }
 
 .container {
@@ -17,7 +21,6 @@
   align-items: center;
   max-width: 1200px;
   width: 100%;
-  padding-right: 1rem;
 
   .sandwich {
     display: none;
@@ -29,7 +32,7 @@
       width: 2rem;
       height: 4px;
       background: var(--COLOR_PRIMARY_DARK);
-      transition: 0.5s;
+      transition: 0.5s ease-in-out;
     }
   }
 

@@ -143,11 +143,30 @@ const Reports: NextPage = () => {
             </div>
 
             <div className={styles.report}>
-              <p>Total de entradas (R$): {totalIncomes.toFixed(2)}</p>
-              <p>Total de custos (R$): {totalCosts.toFixed(2)}</p>
-              <p>Total líquido (R$): {(totalIncomes - totalCosts).toFixed(2)}</p>
-              <p>Débitos pendentes: {pendingDebits.length}</p>
-              <p>Total de débitos pendentes (R$): {totalDebits.toFixed(2)}</p>
+              <div className={styles.reportItem}>
+                <h6>Total de entradas (R$): </h6>
+                <h6>{totalIncomes.toFixed(2)}</h6>
+              </div>
+
+              <div className={styles.reportItem}>
+                <h6>Total de custos (R$): </h6>
+                <h6>{totalCosts.toFixed(2)}</h6>
+              </div>
+
+              <div className={styles.reportItem}>
+                <h6>Total líquido (R$): </h6>
+                <h6>{(totalIncomes - totalCosts).toFixed(2)}</h6>
+              </div>
+
+              <div className={styles.reportItem}>
+                <h6>Débitos pendentes: </h6>
+                <h6>{pendingDebits.length}</h6>
+              </div>
+
+              <div className={styles.reportItem}>
+                <h6>Total de débitos pendentes (R$): </h6>
+                <h6>{totalDebits.toFixed(2)}</h6>
+              </div>
             </div>
           </>
           :

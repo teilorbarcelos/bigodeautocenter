@@ -32,6 +32,7 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
   const [debitValue, setDebitValue] = useState(0)
   const [debitInfo, setDebitInfo] = useState('')
   const [debitsList, setDebitsList] = useState<IDebit[]>([])
+  const [totalValue, setTotalValue] = useState(0)
   const [dueDate, setDueDate] = useState(
     new Date(
       new Date(
@@ -48,6 +49,16 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
     })
 
     setDebitsList(debits.data)
+
+    setTotalValue(
+      () => {
+        let sum = 0
+        debits.data.map(debit => {
+          sum += debit.value
+        })
+        return sum
+      }
+    )
 
     if (debits.data.length > 0) {
 
@@ -130,12 +141,14 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
       <h5>Débitos desta venda</h5>
       {
         debitsList.length > 0 ?
+          <>
+            <div className={styles.debitsList}>
 
-          <div className={styles.debitsList}>
+              <DebitTable debits={debitsList} updateList={populateDebitsList} />
 
-            <DebitTable debits={debitsList} updateList={populateDebitsList} />
-
-          </div>
+            </div>
+            <h6>Valor total dos débitos (R$): {totalValue.toFixed(2)}</h6>
+          </>
 
           :
 

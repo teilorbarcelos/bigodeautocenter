@@ -1,3 +1,9 @@
+.content {
+  @media screen and (max-width: 400px) {
+    padding: 0 1rem;
+  }
+}
+
 .updateClientForm {
   display: flex;
   flex-direction: column;

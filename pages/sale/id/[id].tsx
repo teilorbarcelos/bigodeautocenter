@@ -137,204 +137,209 @@ const SaleUpdate: NextPage = () => {
 
         {id &&
           <>
-            <form
-              className={styles.saleForm}
-              onSubmit={handleSubmit(updateSale)}
-            >
-              <h6>Venda ID: {id}</h6>
-              <h6>Data: {date}</h6>
-              <h6>Cliente: <Link href={`/client/id/${client?.id}`}>
-                <a className={styles.clientName}>
-                  {client?.name}
-                </a>
-              </Link></h6>
-
-              <div>
-                <label htmlFor="car">Carro:</label>
-                <input
-                  {...register('car')}
-                  id="car"
-                  type="text"
-                  className={globals.input}
-                  onChange={e => setCar(e.target.value)}
-                  value={car}
-                  placeholder="Carro do cliente"
-                />
-              </div>
-
-              <div className={styles.smallInput}>
-                <div>
-                  <label htmlFor="plate">Placa:</label>
-                  <input
-                    {...register('plate')}
-                    id="plate"
-                    type="text"
-                    className={globals.input}
-                    onChange={e => setPlate(e.target.value)}
-                    value={plate}
-                    placeholder="Placa do carro"
-                  />
-                </div>
-              </div>
-
-              <div className={styles.smallInput}>
-                <div>
-                  <label htmlFor="km">Km:</label>
-                  <input
-                    {...register('km')}
-                    id="km"
-                    type="text"
-                    className={globals.input}
-                    onChange={e => setKm(e.target.value)}
-                    value={km}
-                    placeholder="Km atual"
-                  />
-                </div>
-              </div>
-
-              <div className={styles.products}>
-                <h6>Produtos:</h6>
-
-                {/* PRODUCTS FORM */}
-                <div>
-
-                  {
-                    products.map((product, index) => {
-                      return (
-                        <div
-                          key={index}
-                          className={styles.product}
-                        >
-                          <div>
-                            <input
-                              type="text"
-                              className={`${globals.input} ${styles.productName}`}
-                              placeholder="Nome do produto"
-                              onChange={(e) => setProducts(() => {
-                                let newProducts = [...products]
-                                newProducts[index].name = e.target.value
-                                return newProducts
-                              })}
-                              value={products[index].name}
-                            />
-                          </div>
-                          <div>
-                            <label>Custo (R$): </label>
-                            <input
-                              type="number"
-                              step="0.01"
-                              min={0}
-                              className={`${globals.input} ${styles.productCost}`}
-                              onChange={(e) => setProducts(() => {
-                                let newProducts = [...products]
-                                newProducts[index].cost = parseFloat(e.target.value)
-                                return newProducts
-                              })}
-                              value={products[index].cost}
-                            />
-                          </div>
-                          <div>
-                            <label>Valor (R$): </label>
-                            <input
-                              type="number"
-                              step="0.01"
-                              min={0}
-                              className={`${globals.input} ${styles.productValue}`}
-                              onChange={(e) => setProducts(() => {
-                                let newProducts = [...products]
-                                newProducts[index].value = parseFloat(e.target.value)
-                                return newProducts
-                              })}
-                              value={products[index].value}
-                            />
-                          </div>
-                          <div>
-                            <Button2
-                              type="button"
-                              title="Remover"
-                              onClick={() =>
-                                setProducts(
-                                  () => {
-                                    let newProducts = [...products]
-                                    newProducts.splice(index, 1)
-                                    return newProducts
-                                  }
-                                )
-                              }
-                            />
-                          </div>
-                        </div>
-                      )
-                    })
-                  }
-
-                </div>
-
-                <div className={styles.addProduct}>
-                  <Button1
-                    type="button"
-                    title="Adicionar Produto"
-                    onClick={() => setProducts(
-                      () => {
-                        let newProducts = [...products]
-                        newProducts.push(
-                          {
-                            name: '',
-                            cost: 0,
-                            value: 0
-                          }
-                        )
-                        return newProducts
-                      }
-                    )}
-                  />
-                </div>
-
-                <div className={styles.totals}>
-                  <p>Custo Total (R$): {totalCost.toFixed(2)}</p>
-                  <p>Valor Total (R$): {totalValue.toFixed(2)}</p>
-                  <p>Lucro líquido (R$): {(totalValue - totalCost).toFixed(2)}</p>
-                </div>
-              </div>
-
-              <div className={styles.paid}>
-                <label htmlFor="paid"><strong>Já está pago?</strong></label>
-                <input
-                  {...register('paid')}
-                  id="paid"
-                  type="checkbox"
-                  onChange={e => setPaid(e.target.checked)}
-                  checked={paid}
-                />
-                <span className={paid ? styles.green : styles.red}>{paid ? 'Sim.' : 'Não.'}</span>
-              </div>
-
-              <div>
-                <label htmlFor="info">Info. adicional:</label>
-                <textarea
-                  {...register('info')}
-                  id="info"
-                  className={globals.textarea}
-                  onChange={e => setInfo(e.target.value)}
-                  value={info}
-                  placeholder="Informações adicionais."
-                />
-              </div>
-              <div className={styles.buttons}>
-                <Button1 title="Salvar" />
-                <Link href={`/sale/print/${id}`}>
-                  <a target="_blank">
-                    <Button1 type="button" title="Imprimir" />
+            <div className={styles.content}>
+              <form
+                className={styles.saleForm}
+                onSubmit={handleSubmit(updateSale)}
+              >
+                <h6>Venda ID: {id}</h6>
+                <h6>Data: {date}</h6>
+                <h6>Cliente: <Link href={`/client/id/${client?.id}`}>
+                  <a className={styles.clientName}>
+                    {client?.name}
                   </a>
-                </Link>
-              </div>
-            </form>
+                </Link></h6>
+
+                <div>
+                  <label htmlFor="car">Carro:</label>
+                  <input
+                    {...register('car')}
+                    id="car"
+                    type="text"
+                    className={globals.input}
+                    onChange={e => setCar(e.target.value)}
+                    value={car}
+                    placeholder="Carro do cliente"
+                  />
+                </div>
+
+                <div className={styles.smallInput}>
+                  <div>
+                    <label htmlFor="plate">Placa:</label>
+                    <input
+                      {...register('plate')}
+                      id="plate"
+                      type="text"
+                      className={globals.input}
+                      onChange={e => setPlate(e.target.value)}
+                      value={plate}
+                      placeholder="Placa do carro"
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.smallInput}>
+                  <div>
+                    <label htmlFor="km">Km:</label>
+                    <input
+                      {...register('km')}
+                      id="km"
+                      type="text"
+                      className={globals.input}
+                      onChange={e => setKm(e.target.value)}
+                      value={km}
+                      placeholder="Km atual"
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.products}>
+                  <h6>Produtos:</h6>
+
+                  {/* PRODUCTS FORM */}
+                  <div>
+
+                    {
+                      products.map((product, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className={styles.product}
+                          >
+                            <div>
+                              <input
+                                type="text"
+                                className={`${globals.input} ${styles.productName}`}
+                                placeholder="Nome do produto"
+                                onChange={(e) => setProducts(() => {
+                                  let newProducts = [...products]
+                                  newProducts[index].name = e.target.value
+                                  return newProducts
+                                })}
+                                value={products[index].name}
+                              />
+                            </div>
+                            <div>
+                              <label>Custo (R$): </label>
+                              <input
+                                type="number"
+                                step="0.01"
+                                min={0}
+                                className={`${globals.input} ${styles.productCost}`}
+                                onChange={(e) => setProducts(() => {
+                                  let newProducts = [...products]
+                                  newProducts[index].cost = parseFloat(e.target.value)
+                                  return newProducts
+                                })}
+                                value={products[index].cost}
+                              />
+                            </div>
+                            <div>
+                              <label>Valor (R$): </label>
+                              <input
+                                type="number"
+                                step="0.01"
+                                min={0}
+                                className={`${globals.input} ${styles.productValue}`}
+                                onChange={(e) => setProducts(() => {
+                                  let newProducts = [...products]
+                                  newProducts[index].value = parseFloat(e.target.value)
+                                  return newProducts
+                                })}
+                                value={products[index].value}
+                              />
+                            </div>
+                            <div>
+                              <Button2
+                                type="button"
+                                title="Remover"
+                                onClick={() =>
+                                  setProducts(
+                                    () => {
+                                      let newProducts = [...products]
+                                      newProducts.splice(index, 1)
+                                      return newProducts
+                                    }
+                                  )
+                                }
+                              />
+                            </div>
+                          </div>
+                        )
+                      })
+                    }
+
+                  </div>
+
+                  <div className={styles.addProduct}>
+                    <Button1
+                      type="button"
+                      title="Adicionar Produto"
+                      onClick={() => setProducts(
+                        () => {
+                          let newProducts = [...products]
+                          newProducts.push(
+                            {
+                              name: '',
+                              cost: 0,
+                              value: 0
+                            }
+                          )
+                          return newProducts
+                        }
+                      )}
+                    />
+                  </div>
+
+                  <div className={styles.totals}>
+                    <p>Custo Total (R$): {totalCost.toFixed(2)}</p>
+                    <p>Valor Total (R$): {totalValue.toFixed(2)}</p>
+                    <p>Lucro líquido (R$): {(totalValue - totalCost).toFixed(2)}</p>
+                  </div>
+                </div>
+
+                <div className={styles.paid}>
+                  <label htmlFor="paid"><strong>Já está pago?</strong></label>
+                  <input
+                    {...register('paid')}
+                    id="paid"
+                    type="checkbox"
+                    onChange={e => setPaid(e.target.checked)}
+                    checked={paid}
+                  />
+                  <span className={paid ? styles.green : styles.red}>{paid ? 'Sim.' : 'Não.'}</span>
+                </div>
+
+                <div>
+                  <label htmlFor="info">Info. adicional:</label>
+                  <textarea
+                    {...register('info')}
+                    id="info"
+                    className={globals.textarea}
+                    onChange={e => setInfo(e.target.value)}
+                    value={info}
+                    placeholder="Informações adicionais."
+                  />
+                </div>
+                <div className={styles.buttons}>
+                  <Button1 title="Salvar" />
+                  <Link href={`/sale/print/${id}`}>
+                    <a target="_blank">
+                      <Button1 type="button" title="Imprimir" />
+                    </a>
+                  </Link>
+                </div>
+              </form>
+            </div>
 
             <div className={globals.divider}></div>
 
-            {/* DEBITS LIST */}
+            <div className={styles.content}>
 
-            <DebitSaleList saleId={id} />
+              {/* DEBITS LIST */}
+
+              <DebitSaleList saleId={id} />
+            </div>
           </>
         }
       </>

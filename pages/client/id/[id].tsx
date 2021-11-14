@@ -90,93 +90,96 @@ const Client: NextPage = () => {
           <>
             <Navbar />
 
-            <form
-              className={styles.updateClientForm}
-              onSubmit={handleSubmit(updateClient)}
-            >
-              <h5>{originalName}</h5>
-              <div>
-                <label htmlFor="name">Nome:</label>
-                <input
-                  id="name"
-                  type="text"
-                  className={globals.input}
-                  onChange={e => setName(e.target.value)}
-                  value={name}
-                  placeholder="Nome do cliente"
-                />
-              </div>
-              <div>
-                <label htmlFor="contact">Contato:</label>
-                <input
-                  id="contact"
-                  type="text"
-                  className={globals.input}
-                  onChange={e => setContact(e.target.value)}
-                  value={contact}
-                  placeholder="Dados de contato"
-                />
-              </div>
-              <div className={styles.smallInput}>
+            <div className={styles.content}>
+              <form
+                className={styles.updateClientForm}
+                onSubmit={handleSubmit(updateClient)}
+              >
+                <h5>{originalName}</h5>
                 <div>
-                  <label htmlFor="cpf">CPF:</label>
-                  <ReactInputMask
-                    mask="999.999.999-99"
-                    id="cpf"
+                  <label htmlFor="name">Nome:</label>
+                  <input
+                    id="name"
                     type="text"
                     className={globals.input}
-                    onChange={e => setCpf(e.target.value)}
-                    value={cpf}
-                    placeholder="123.456.789-10"
+                    onChange={e => setName(e.target.value)}
+                    value={name}
+                    placeholder="Nome do cliente"
                   />
                 </div>
-              </div>
-              <div className={styles.smallInput}>
                 <div>
-                  <label htmlFor="birthday">Data de nascimento:</label>
+                  <label htmlFor="contact">Contato:</label>
                   <input
-                    id="birthday"
-                    type="date"
+                    id="contact"
+                    type="text"
                     className={globals.input}
-                    onChange={e => setBirthday(e.target.value)}
-                    value={birthday}
+                    onChange={e => setContact(e.target.value)}
+                    value={contact}
+                    placeholder="Dados de contato"
                   />
                 </div>
-              </div>
-              <div>
-                <label htmlFor="info">Info. adicional:</label>
-                <textarea
-                  id="info"
-                  className={globals.textarea}
-                  onChange={e => setInfo(e.target.value)}
-                  value={info}
-                  placeholder="Informações adicionais."
-                />
-              </div>
-              <div className={styles.buttons}>
-                <Button1 title="Salvar" />
-              </div>
-            </form>
+                <div className={styles.smallInput}>
+                  <div>
+                    <label htmlFor="cpf">CPF:</label>
+                    <ReactInputMask
+                      mask="999.999.999-99"
+                      id="cpf"
+                      type="text"
+                      className={globals.input}
+                      onChange={e => setCpf(e.target.value)}
+                      value={cpf}
+                      placeholder="123.456.789-10"
+                    />
+                  </div>
+                </div>
+                <div className={styles.smallInput}>
+                  <div>
+                    <label htmlFor="birthday">Data de nascimento:</label>
+                    <input
+                      id="birthday"
+                      type="date"
+                      className={globals.input}
+                      onChange={e => setBirthday(e.target.value)}
+                      value={birthday}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="info">Info. adicional:</label>
+                  <textarea
+                    id="info"
+                    className={globals.textarea}
+                    onChange={e => setInfo(e.target.value)}
+                    value={info}
+                    placeholder="Informações adicionais."
+                  />
+                </div>
+                <div className={styles.buttons}>
+                  <Button1 title="Salvar" />
+                </div>
+              </form>
+            </div>
 
             <div className={globals.divider}></div>
 
-            {/* SALES */}
+            <div className={styles.content}>
+              {/* SALES */}
 
-            {
-              sales.length > 0 &&
+              {
+                sales.length > 0 &&
 
-              <div className={styles.sales}>
-                <div className={styles.salesTitle}>
-                  <h5>Vendas:</h5>
+                <div className={styles.sales}>
+                  <div className={styles.salesTitle}>
+                    <h5>Vendas:</h5>
+                  </div>
+
+                  <div className={styles.saleTable}>
+                    <SaleTable sales={sales} />
+                  </div>
+
                 </div>
-
-                <div className={styles.saleTable}>
-                  <SaleTable sales={sales} />
-                </div>
-
-              </div>
-            }
-
+              }
+            </div>
           </>
         }
       </>
