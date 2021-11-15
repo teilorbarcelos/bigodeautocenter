@@ -31,6 +31,11 @@ export default function NavLinks({ user }: Props) {
         </Link>
       </li>
       <li>
+        <Link href={"/reminders"}>
+          <a className={globals.link}>Lembretes</a>
+        </Link>
+      </li>
+      <li>
         <Link href={"/user/profile"}>
           <a className={globals.link}>{user.name}</a>
         </Link>

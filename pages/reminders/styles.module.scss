@@ -1,0 +1,16 @@
+.reminders {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5rem 0;
+  
+  .remindersList {
+    width: 100%;
+    max-width: 1200px;
+
+    @media screen and (max-width: 400px) {
+      padding: 0 1rem;
+    }
+  }
+}

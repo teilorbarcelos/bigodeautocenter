@@ -1,0 +1,29 @@
+.remindersList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.5rem;
+
+  .expired {
+    background: var(--COLOR_RED);
+  }
+
+  .actie {
+    background: var(--COLOR_GREEN);
+  }
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--COLOR_PRIMARY_NORMAL);
+    padding: 1rem;
+    border-radius: 0.5rem;
+
+    @media screen and (max-width: 400px) {
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: center;
+    }
+  }
+}
