@@ -120,6 +120,8 @@ const SaleCreate: NextPage = () => {
           className={styles.saleForm}
           onSubmit={handleSubmit(createSale)}
         >
+          <h5>Nova venda</h5>
+
           <div>
             <label htmlFor="clientId">Selecione o cliente:</label>
             <select
