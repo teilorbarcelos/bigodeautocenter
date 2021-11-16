@@ -13,6 +13,7 @@ import { useForm } from 'react-hook-form'
 import ReactInputMask from 'react-input-mask'
 import Button1 from '../../../components/Button1'
 import SaleTable from '../../../components/SaleTable'
+import { IReminder } from '../../../components/ReminderTable'
 
 const Client: NextPage = () => {
   const { handleSubmit } = useForm()
@@ -23,9 +24,11 @@ const Client: NextPage = () => {
   const [name, setName] = useState('')
   const [contact, setContact] = useState('')
   const [cpf, setCpf] = useState('')
+  const [cnpj, setCnpj] = useState('')
   const [birthday, setBirthday] = useState('')
   const [info, setInfo] = useState('')
   const [sales, setSales] = useState<ISale[]>([])
+  const [reminders, setReminders] = useState<IReminder[]>([])
 
   useEffect(() => {
     try {
@@ -46,9 +49,11 @@ const Client: NextPage = () => {
         setName(clientResponse.data.name)
         setContact(clientResponse.data.contact)
         setCpf(clientResponse.data.cpf)
-        setBirthday(clientResponse.data.birthday.toString().replace('T00:00:00.000Z', ''))
+        setCnpj(clientResponse.data.cnpj)
+        setBirthday(clientResponse.data.birthday?.toString().replace('T00:00:00.000Z', ''))
         setInfo(clientResponse.data.info)
         setSales(clientResponse.data.sales)
+        setReminders(clientResponse.data.reminders)
 
       }
 
@@ -67,6 +72,7 @@ const Client: NextPage = () => {
       birthday,
       contact,
       cpf,
+      cnpj,
       info,
       name
     })
@@ -77,6 +83,22 @@ const Client: NextPage = () => {
     }
 
     alert('Cadastro atualizado com sucesso!')
+  }
+
+  async function createReminder() {
+    const reminderResponse = await api.post<IReminder>('/reminder/create', {
+      clientId: id,
+      date: new Date(Date.now()),
+      title: '',
+      info: ''
+    })
+
+    if (reminderResponse.data.error) {
+      alert(reminderResponse.data.error)
+      return
+    }
+
+    router.push(`/reminder/id/${reminderResponse.data.id}`)
   }
 
   return (
@@ -96,6 +118,7 @@ const Client: NextPage = () => {
                 onSubmit={handleSubmit(updateClient)}
               >
                 <h5>{originalName}</h5>
+
                 <div>
                   <label htmlFor="name">Nome:</label>
                   <input
@@ -107,6 +130,7 @@ const Client: NextPage = () => {
                     placeholder="Nome do cliente"
                   />
                 </div>
+
                 <div>
                   <label htmlFor="contact">Contato:</label>
                   <input
@@ -118,6 +142,7 @@ const Client: NextPage = () => {
                     placeholder="Dados de contato"
                   />
                 </div>
+
                 <div className={styles.smallInput}>
                   <div>
                     <label htmlFor="cpf">CPF:</label>
@@ -132,6 +157,22 @@ const Client: NextPage = () => {
                     />
                   </div>
                 </div>
+
+                <div className={styles.smallInput}>
+                  <div>
+                    <label htmlFor="cnpj">CNPJ:</label>
+                    <ReactInputMask
+                      mask="99.999.999/9999-99"
+                      id="cnpj"
+                      type="text"
+                      className={globals.input}
+                      onChange={e => setCnpj(e.target.value)}
+                      value={cnpj}
+                      placeholder="12.345.678/9012-34"
+                    />
+                  </div>
+                </div>
+
                 <div className={styles.smallInput}>
                   <div>
                     <label htmlFor="birthday">Data de nascimento:</label>
@@ -144,6 +185,7 @@ const Client: NextPage = () => {
                     />
                   </div>
                 </div>
+
                 <div>
                   <label htmlFor="info">Info. adicional:</label>
                   <textarea
@@ -154,31 +196,44 @@ const Client: NextPage = () => {
                     placeholder="Informações adicionais."
                   />
                 </div>
+
                 <div className={styles.buttons}>
                   <Button1 title="Salvar" />
                 </div>
+
               </form>
             </div>
 
+
+            {/* SALES */}
+
+            {
+              sales.length > 0 &&
+              <>
+                <div className={globals.divider}></div>
+
+                <div className={styles.content}>
+
+                  <div className={styles.sales}>
+                    <div className={styles.salesTitle}>
+                      <h5>Vendas:</h5>
+                    </div>
+
+                    <div className={styles.saleTable}>
+                      <SaleTable sales={sales} />
+                    </div>
+
+                  </div>
+                </div>
+              </>
+            }
+
             <div className={globals.divider}></div>
 
-            <div className={styles.content}>
-              {/* SALES */}
 
-              {
-                sales.length > 0 &&
 
-                <div className={styles.sales}>
-                  <div className={styles.salesTitle}>
-                    <h5>Vendas:</h5>
-                  </div>
-
-                  <div className={styles.saleTable}>
-                    <SaleTable sales={sales} />
-                  </div>
-
-                </div>
-              }
+            <div>
+              <Button1 type="button" title="Criar lembrete" onClick={createReminder} />
             </div>
           </>
         }

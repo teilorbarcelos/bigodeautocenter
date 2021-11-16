@@ -14,13 +14,14 @@ import Button1 from '../../../components/Button1'
 import { ICost, ISaleDataFormProps } from '../create'
 import Button2 from '../../../components/Button2'
 import DebitSaleList from '../../../components/DebitSaleList'
+import ButtonDanger from '../../../components/ButtonDanger'
 
 const SaleUpdate: NextPage = () => {
   const [products, setProducts] = useState<IProduct[]>([])
   const [totalCost, setTotalCost] = useState(0)
   const [totalValue, setTotalValue] = useState(0)
 
-  const { register, handleSubmit } = useForm()
+  const { handleSubmit } = useForm()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState('') //Sale ID
@@ -38,11 +39,13 @@ const SaleUpdate: NextPage = () => {
     let somaValue = 0
 
     products.map(product => {
-      somaCost += parseFloat(product.cost.toString())
+      const amount = product.amount || 1
+      somaCost += parseFloat((amount * product.cost).toString())
     })
 
     products.map(product => {
-      somaValue += parseFloat(product.value.toString())
+      const amount = product.amount || 1
+      somaValue += parseFloat((amount * product.value).toString())
     })
 
     setTotalCost(parseFloat(somaCost.toFixed(2)))
@@ -50,36 +53,36 @@ const SaleUpdate: NextPage = () => {
 
   }, [products])
 
+  async function getSale() {
+
+    const { id } = await router.query // necessary "await" here
+
+    if (!id) {
+      return
+    }
+
+    const saleResponse = await api.post<ISale>('/sale/getData', {
+      id
+    })
+
+    const data = saleResponse.data
+
+    const date = data.createdAt.toString().split('T')[0].split('-')
+    setProducts(JSON.parse(data.products.toString()) as IProduct[])
+
+    setId(id as string)
+    setClient(data.client)
+    setDate(`${date[2]}/${date[1]}/${date[0]}`)
+    setCar(data.car)
+    setPlate(data.plate)
+    setKm(data.km)
+    setPaid(data.paid)
+    setInfo(data.info)
+    setCost(data.cost)
+  }
+
   useEffect(() => {
     try {
-      async function getSale() {
-
-        const { id } = await router.query // necessary "await" here
-
-        if (!id) {
-          return
-        }
-
-        const saleResponse = await api.post<ISale>('/sale/getData', {
-          id
-        })
-
-        const data = saleResponse.data
-
-        const date = data.createdAt.toString().split('T')[0].split('-')
-        setProducts(JSON.parse(data.products.toString()) as IProduct[])
-
-        setId(id as string)
-        setClient(data.client)
-        setDate(`${date[2]}/${date[1]}/${date[0]}`)
-        setCar(data.car)
-        setPlate(data.plate)
-        setKm(data.km)
-        setPaid(data.paid)
-        setInfo(data.info)
-        setCost(data.cost)
-      }
-
       getSale()
 
     } catch (error) {
@@ -89,7 +92,7 @@ const SaleUpdate: NextPage = () => {
     }
   }, [router.query])
 
-  async function updateSale(data: ISaleDataFormProps) {
+  async function updateSale() {
 
     if (!totalCost || !totalValue) {
       alert('Valores de produtos inválidos, insira apenas números e não deixe nenhum em branco!')
@@ -126,6 +129,20 @@ const SaleUpdate: NextPage = () => {
     alert('Venda atualizada com sucesso!')
   }
 
+  async function saleDelete() {
+    if (window.confirm('Quer mesmo deletar? Todos os dados desta venda serão perdidos permanentemente, incluindo, débitos, custos e entradas de pagamento registradas no banco de dados!')) {
+      const sale = await api.post<ISale>('/sale/delete', { id })
+
+      if (sale.data.error) {
+        alert(sale.data.error)
+        return
+      }
+
+      alert('Venda deletada com sucesso!')
+      router.push(`/client/id/${client.id}`)
+    }
+  }
+
   return (
     <BasicPage
       title="Bigode Internal Sales System"
@@ -153,7 +170,6 @@ const SaleUpdate: NextPage = () => {
                 <div>
                   <label htmlFor="car">Carro:</label>
                   <input
-                    {...register('car')}
                     id="car"
                     type="text"
                     className={globals.input}
@@ -167,7 +183,6 @@ const SaleUpdate: NextPage = () => {
                   <div>
                     <label htmlFor="plate">Placa:</label>
                     <input
-                      {...register('plate')}
                       id="plate"
                       type="text"
                       className={globals.input}
@@ -182,7 +197,6 @@ const SaleUpdate: NextPage = () => {
                   <div>
                     <label htmlFor="km">Km:</label>
                     <input
-                      {...register('km')}
                       id="km"
                       type="text"
                       className={globals.input}
@@ -206,6 +220,7 @@ const SaleUpdate: NextPage = () => {
                             key={index}
                             className={styles.product}
                           >
+
                             <div>
                               <input
                                 type="text"
@@ -219,6 +234,23 @@ const SaleUpdate: NextPage = () => {
                                 value={products[index].name}
                               />
                             </div>
+
+                            <div>
+                              <label>x</label>
+                              <input
+                                type="number"
+                                step="1"
+                                min={1}
+                                className={`${globals.input} ${styles.microInput}`}
+                                onChange={(e) => setProducts(() => {
+                                  let newProducts = [...products]
+                                  newProducts[index].amount = parseFloat(e.target.value)
+                                  return newProducts
+                                })}
+                                value={products[index].amount || 1}
+                              />
+                            </div>
+
                             <div>
                               <label>Custo (R$): </label>
                               <input
@@ -234,6 +266,7 @@ const SaleUpdate: NextPage = () => {
                                 value={products[index].cost}
                               />
                             </div>
+
                             <div>
                               <label>Valor (R$): </label>
                               <input
@@ -249,6 +282,7 @@ const SaleUpdate: NextPage = () => {
                                 value={products[index].value}
                               />
                             </div>
+
                             <div>
                               <Button2
                                 type="button"
@@ -264,6 +298,7 @@ const SaleUpdate: NextPage = () => {
                                 }
                               />
                             </div>
+
                           </div>
                         )
                       })
@@ -301,7 +336,6 @@ const SaleUpdate: NextPage = () => {
                 <div className={styles.paid}>
                   <label htmlFor="paid"><strong>Já está pago?</strong></label>
                   <input
-                    {...register('paid')}
                     id="paid"
                     type="checkbox"
                     onChange={e => setPaid(e.target.checked)}
@@ -313,7 +347,6 @@ const SaleUpdate: NextPage = () => {
                 <div>
                   <label htmlFor="info">Info. adicional:</label>
                   <textarea
-                    {...register('info')}
                     id="info"
                     className={globals.textarea}
                     onChange={e => setInfo(e.target.value)}
@@ -328,6 +361,11 @@ const SaleUpdate: NextPage = () => {
                       <Button1 type="button" title="Imprimir" />
                     </a>
                   </Link>
+                  <ButtonDanger
+                    type="button"
+                    title="Excluir venda"
+                    onClick={saleDelete}
+                  />
                 </div>
               </form>
             </div>

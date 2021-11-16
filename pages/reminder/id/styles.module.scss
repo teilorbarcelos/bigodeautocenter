@@ -1,0 +1,57 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 850px;
+  gap: 1rem;
+  margin: auto;
+  min-height: 100vh;
+
+  @media screen and (max-width: 400px) {
+    padding: 7rem 1rem;
+  }
+
+  .dateValue {
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 100%;
+
+    .smallInput {
+      max-width: fit-content;
+    }
+
+    @media screen and (max-width: 400px) {
+      flex-direction: column;
+    }
+  }
+
+  .activeField {
+    > div {
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    .inactive {
+      color: red;
+    }
+
+    .active {
+      color: green;
+    }
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .clientLink {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

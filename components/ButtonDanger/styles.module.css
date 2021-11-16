@@ -1,0 +1,14 @@
+.buttondanger {
+  border: 2px solid var(--COLOR_RED);
+  background: red;
+  border-radius: 0.3rem;
+  color: blue;
+  transition: 0.3s;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0 1rem;
+}
+
+.buttondanger:hover {
+  opacity: 0.8;
+}

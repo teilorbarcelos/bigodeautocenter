@@ -19,6 +19,7 @@ const ClientCreate: NextPage = () => {
       birthday: data.birthday,
       contact: data.contact,
       cpf: data.cpf,
+      cnpj: data.cnpj,
       info: data.info,
       name: data.name
     })
@@ -47,6 +48,7 @@ const ClientCreate: NextPage = () => {
           onSubmit={handleSubmit(newClient)}
         >
           <h5>Cadastrar cliente</h5>
+
           <div>
             <label htmlFor="name">Nome:</label>
             <input
@@ -57,6 +59,7 @@ const ClientCreate: NextPage = () => {
               placeholder="Nome do cliente"
             />
           </div>
+
           <div>
             <label htmlFor="contact">Contato:</label>
             <input
@@ -67,6 +70,7 @@ const ClientCreate: NextPage = () => {
               placeholder="Dados de contato"
             />
           </div>
+
           <div className={styles.smallInput}>
             <div>
               <label htmlFor="cpf">CPF:</label>
@@ -80,6 +84,21 @@ const ClientCreate: NextPage = () => {
               />
             </div>
           </div>
+
+          <div className={styles.smallInput}>
+            <div>
+              <label htmlFor="cnpj">CNPJ:</label>
+              <ReactInputMask
+                {...register('cnpj')}
+                mask="99.999.999/9999-99"
+                id="cnpj"
+                type="text"
+                className={globals.input}
+                placeholder="12.345.678/9012-34"
+              />
+            </div>
+          </div>
+
           <div className={styles.smallInput}>
             <div>
               <label htmlFor="birthday">Data de nascimento:</label>
@@ -91,6 +110,7 @@ const ClientCreate: NextPage = () => {
               />
             </div>
           </div>
+
           <div>
             <label htmlFor="info">Info. adicional:</label>
             <textarea
@@ -100,11 +120,12 @@ const ClientCreate: NextPage = () => {
               placeholder="Informações adicionais."
             />
           </div>
+
           <div className={styles.buttons}>
             <Button1 title="Salvar" />
           </div>
-        </form>
 
+        </form>
       </>
     </BasicPage>
   )

@@ -43,11 +43,13 @@ const SaleCreate: NextPage = () => {
     let somaValue = 0
 
     products.map(product => {
-      somaCost += parseFloat(product.cost.toString())
+      const amount = product.amount || 1
+      somaCost += parseFloat((amount * product.cost).toString())
     })
 
     products.map(product => {
-      somaValue += parseFloat(product.value.toString())
+      const amount = product.amount || 1
+      somaValue += parseFloat((amount * product.value).toString())
     })
 
     setTotalCost(parseFloat(somaCost.toFixed(2)))
@@ -190,6 +192,7 @@ const SaleCreate: NextPage = () => {
                       key={index}
                       className={styles.product}
                     >
+
                       <div>
                         <input
                           type="text"
@@ -203,6 +206,23 @@ const SaleCreate: NextPage = () => {
                           value={products[index].name}
                         />
                       </div>
+
+                      <div>
+                        <label>x</label>
+                        <input
+                          type="number"
+                          step="1"
+                          min={1}
+                          className={`${globals.input} ${styles.microInput}`}
+                          onChange={(e) => setProducts(() => {
+                            let newProducts = [...products]
+                            newProducts[index].amount = parseFloat(e.target.value)
+                            return newProducts
+                          })}
+                          value={products[index].amount || 1}
+                        />
+                      </div>
+
                       <div>
                         <label>Custo (R$): </label>
                         <input
@@ -218,6 +238,7 @@ const SaleCreate: NextPage = () => {
                           value={products[index].cost}
                         />
                       </div>
+
                       <div>
                         <label>Valor (R$): </label>
                         <input
@@ -233,6 +254,7 @@ const SaleCreate: NextPage = () => {
                           value={products[index].value}
                         />
                       </div>
+
                       <div>
                         <Button2
                           type="button"
@@ -248,6 +270,7 @@ const SaleCreate: NextPage = () => {
                           }
                         />
                       </div>
+
                     </div>
                   )
                 })

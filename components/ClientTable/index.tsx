@@ -3,9 +3,11 @@ import Link from 'next/link'
 import styles from './styles.module.scss'
 import globals from '../../styles/globals.module.scss'
 import { IDebit } from '../DebitSaleList'
+import { IReminder } from '../ReminderTable'
 
 export interface IProduct {
   name: string
+  amount?: number
   cost: number
   value: number
 }
@@ -35,13 +37,14 @@ export interface ISale {
 
 export interface IClient {
   id?: string
-  name: string
-  contact: string
-  cpf: string
-  info: string
-  birthday: Date
+  name?: string
+  contact?: string
+  cpf?: string
+  cnpj?: string
+  info?: string
+  birthday?: Date
   sales?: ISale[]
-  reminder?: [{}]
+  reminders?: IReminder[]
   error?: string
 }
 

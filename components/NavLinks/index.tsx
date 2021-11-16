@@ -31,7 +31,7 @@ export default function NavLinks({ user }: Props) {
         </Link>
       </li>
       <li>
-        <Link href={"/reminders"}>
+        <Link href={"/reminder/list"}>
           <a className={globals.link}>Lembretes</a>
         </Link>
       </li>
