@@ -57,3 +57,17 @@
     margin: 0 auto;
   }
 }
+
+.reminders,
+.reminderCreateButton {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem 0;
+
+  @media screen and (max-width: 400px) {
+    padding: 1rem;
+  }
+}

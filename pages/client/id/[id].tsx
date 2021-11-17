@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styles from './styles.module.scss'
 import globals from '../../../styles/globals.module.scss'
@@ -13,7 +12,7 @@ import { useForm } from 'react-hook-form'
 import ReactInputMask from 'react-input-mask'
 import Button1 from '../../../components/Button1'
 import SaleTable from '../../../components/SaleTable'
-import { IReminder } from '../../../components/ReminderTable'
+import ReminderTable, { IReminder } from '../../../components/ReminderTable'
 
 const Client: NextPage = () => {
   const { handleSubmit } = useForm()
@@ -30,32 +29,33 @@ const Client: NextPage = () => {
   const [sales, setSales] = useState<ISale[]>([])
   const [reminders, setReminders] = useState<IReminder[]>([])
 
+  async function getClient() {
+
+    const { id } = await router.query // necessary "await" here
+
+    if (!id) {
+      return
+    }
+
+    const clientResponse = await api.post<IClient>('/client/getData', {
+      id
+    })
+
+    setId(id as string)
+    setOriginalName(clientResponse.data.name)
+    setName(clientResponse.data.name)
+    setContact(clientResponse.data.contact)
+    setCpf(clientResponse.data.cpf)
+    setCnpj(clientResponse.data.cnpj)
+    setBirthday(clientResponse.data.birthday?.toString().replace('T00:00:00.000Z', ''))
+    setInfo(clientResponse.data.info)
+    setSales(clientResponse.data.sales)
+    setReminders(clientResponse.data.reminders)
+
+  }
+
   useEffect(() => {
     try {
-      async function getClient() {
-
-        const { id } = await router.query // necessary "await" here
-
-        if (!id) {
-          return
-        }
-
-        const clientResponse = await api.post<IClient>('/client/getData', {
-          id
-        })
-
-        setId(id as string)
-        setOriginalName(clientResponse.data.name)
-        setName(clientResponse.data.name)
-        setContact(clientResponse.data.contact)
-        setCpf(clientResponse.data.cpf)
-        setCnpj(clientResponse.data.cnpj)
-        setBirthday(clientResponse.data.birthday?.toString().replace('T00:00:00.000Z', ''))
-        setInfo(clientResponse.data.info)
-        setSales(clientResponse.data.sales)
-        setReminders(clientResponse.data.reminders)
-
-      }
 
       getClient()
 
@@ -230,9 +230,13 @@ const Client: NextPage = () => {
 
             <div className={globals.divider}></div>
 
+            <div className={styles.reminders}>
+              <h5>Lembretes:</h5>
 
+              <ReminderTable updateList={getClient} reminders={reminders} />
+            </div>
 
-            <div>
+            <div className={styles.reminderCreateButton}>
               <Button1 type="button" title="Criar lembrete" onClick={createReminder} />
             </div>
           </>
