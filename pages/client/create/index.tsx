@@ -101,7 +101,7 @@ const ClientCreate: NextPage = () => {
 
           <div className={styles.smallInput}>
             <div>
-              <label htmlFor="birthday">Data de nascimento:</label>
+              <label htmlFor="birthday">Data (Opcional):</label>
               <input
                 {...register('birthday')}
                 id="birthday"

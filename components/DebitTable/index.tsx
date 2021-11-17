@@ -51,55 +51,60 @@ export default function DebitTable({
 
     <div className={styles.debitsList}>
       {
-        debits.map((debit, index) => {
-          const dueDateSplit = debit.dueDate.toString().replace('T00:00:00.000Z', '').split('-')
-          const dueDate = `${dueDateSplit[2]}/${dueDateSplit[1]}/${dueDateSplit[0]}`
-          return (
-            <div
-              key={debit.id}
-              className={new Date(debit.dueDate) < new Date(Date.now()) &&
-                !debit.paid ? styles.expired
-                :
-                debit.paid && styles.paid
-              }
-            >
-              <p>{index + 1}</p>
-              <p>
-                Vencimento: {dueDate}
-              </p>
-              <p>
-                Valor: R$ {debit.value.toFixed(2)}
-              </p>
-              <p>
-                Status: {debit.paid ? 'Pago' : 'Pendente'}
-              </p>
+        debits.length > 0 ?
+          debits.map((debit, index) => {
+            const dueDateSplit = debit.dueDate.toString().replace('T00:00:00.000Z', '').split('-')
+            const dueDate = `${dueDateSplit[2]}/${dueDateSplit[1]}/${dueDateSplit[0]}`
+            return (
+              <div
+                key={debit.id}
+                className={new Date(debit.dueDate) < new Date(Date.now()) &&
+                  !debit.paid ? styles.expired
+                  :
+                  debit.paid && styles.paid
+                }
+              >
+                <p>{index + 1}</p>
+                <p>
+                  Vencimento: {dueDate}
+                </p>
+                <p>
+                  Valor: R$ {debit.value.toFixed(2)}
+                </p>
+                <p>
+                  Status: {debit.paid ? 'Pago' : 'Pendente'}
+                </p>
 
-              <DropDown
-                title="Opções"
-                options={[
-                  {
-                    title: "Detalhes",
-                    action: () => debitEdit(debit.id)
-                  },
-                  {
-                    title: "Deletar",
-                    action: () => debitDelete(debit.id),
-                    disabled: debit.paid ? true : !deleteOption ? true : false
-                  }
-                ]}
-              />
-
-              {
-                paidSwitchButton &&
-                <Button1
-                  type="button"
-                  title={debit.paid ? 'Pendente' : 'Pago'}
-                  onClick={() => paidSwitch(debit.id, debit.paid ? false : true)}
+                <DropDown
+                  title="Opções"
+                  options={[
+                    {
+                      title: "Detalhes",
+                      action: () => debitEdit(debit.id)
+                    },
+                    {
+                      title: "Deletar",
+                      action: () => debitDelete(debit.id),
+                      disabled: debit.paid ? true : !deleteOption ? true : false
+                    }
+                  ]}
                 />
-              }
-            </div>
-          )
-        })
+
+                {
+                  paidSwitchButton &&
+                  <Button1
+                    type="button"
+                    title={debit.paid ? 'Pendente' : 'Pago'}
+                    onClick={() => paidSwitch(debit.id, debit.paid ? false : true)}
+                  />
+                }
+              </div>
+            )
+          })
+
+          :
+
+          <h6>Nenhum débito pendente!</h6>
       }
     </div>
   )

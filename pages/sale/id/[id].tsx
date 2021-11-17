@@ -355,12 +355,14 @@ const SaleUpdate: NextPage = () => {
                   />
                 </div>
                 <div className={styles.buttons}>
-                  <Button1 title="Salvar" />
-                  <Link href={`/sale/print/${id}`}>
-                    <a target="_blank">
-                      <Button1 type="button" title="Imprimir" />
-                    </a>
-                  </Link>
+                  <div>
+                    <Button1 title="Salvar" />
+                    <Link href={`/sale/print/${id}`}>
+                      <a target="_blank">
+                        <Button1 type="button" title="Imprimir" />
+                      </a>
+                    </Link>
+                  </div>
                   <ButtonDanger
                     type="button"
                     title="Excluir venda"

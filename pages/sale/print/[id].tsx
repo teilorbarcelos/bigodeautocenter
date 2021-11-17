@@ -95,6 +95,8 @@ const SalePrint: NextPage = () => {
             </header>
 
             <h6>Cliente: {client?.name}</h6>
+            <h6>CPF: {client?.cpf}</h6>
+            <h6>CNPJ: {client?.cnpj}</h6>
             <h6>Carro: {car}</h6>
             <h6>Placa: {plate}</h6>
             <h6>Km: {km}</h6>

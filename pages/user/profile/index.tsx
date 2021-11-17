@@ -9,6 +9,8 @@ import { api } from '../../api'
 import Login from '../../../components/Login'
 import LoadingScreen from '../../../components/LoadingScreen'
 import BasicPage from '../../../components/BasicPage'
+import ButtonDanger from '../../../components/ButtonDanger'
+import { useEffect, useState } from 'react'
 
 export interface IUserUpdate {
   user_id?: string
@@ -21,11 +23,18 @@ export interface IUserUpdate {
 const Profile: NextPage = () => {
   const { user, logOut, loading } = useAuth()
   const { register, handleSubmit } = useForm()
+  const [userName, setUserName] = useState('')
+
+  useEffect(() => {
+    if (!loading) {
+      setUserName(user.name)
+    }
+  }, [loading])
 
   async function userUpdate(data: IUserUpdate) {
 
     const response = await api.post('/user/update', {
-      name: data.name,
+      name: userName,
       password: data.password,
       password2: data.password2
     })
@@ -55,11 +64,11 @@ const Profile: NextPage = () => {
               <div>
                 <label htmlFor="name">Nome:</label>
                 <input
-                  {...register('name')}
                   id="name"
                   type="text"
                   className={globals.input}
-                  defaultValue={user.name}
+                  onChange={e => setUserName(e.target.value)}
+                  value={userName}
                 />
               </div>
               <div>
@@ -80,8 +89,14 @@ const Profile: NextPage = () => {
                   className={globals.input}
                 />
               </div>
-              <div>
+              <div className={styles.buttons}>
                 <Button1 title="Salvar" />
+
+                <ButtonDanger
+                  type="button"
+                  title="Logout"
+                  onClick={logOut}
+                />
               </div>
             </form>
           </>

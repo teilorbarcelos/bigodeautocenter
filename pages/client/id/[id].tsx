@@ -13,6 +13,7 @@ import ReactInputMask from 'react-input-mask'
 import Button1 from '../../../components/Button1'
 import SaleTable from '../../../components/SaleTable'
 import ReminderTable, { IReminder } from '../../../components/ReminderTable'
+import ButtonDanger from '../../../components/ButtonDanger'
 
 const Client: NextPage = () => {
   const { handleSubmit } = useForm()
@@ -101,6 +102,20 @@ const Client: NextPage = () => {
     router.push(`/reminder/id/${reminderResponse.data.id}`)
   }
 
+  async function clientDelete() {
+    if (window.confirm('Quer mesmo deletar o cadastro do cliente? Esta ação é irreversível!')) {
+      const client = await api.post<IClient>('/client/delete', { id })
+
+      if (client.data.error) {
+        alert(client.data.error)
+        return
+      }
+
+      alert('Cadastro de cliente deletado com sucesso!')
+      router.push('/client/list')
+    }
+  }
+
   return (
     <BasicPage
       title="Cadastro de cliente"
@@ -175,7 +190,7 @@ const Client: NextPage = () => {
 
                 <div className={styles.smallInput}>
                   <div>
-                    <label htmlFor="birthday">Data de nascimento:</label>
+                    <label htmlFor="birthday">Data (Opcional):</label>
                     <input
                       id="birthday"
                       type="date"
@@ -199,6 +214,11 @@ const Client: NextPage = () => {
 
                 <div className={styles.buttons}>
                   <Button1 title="Salvar" />
+                  <ButtonDanger
+                    type="button"
+                    title="Deletar cadastro"
+                    onClick={clientDelete}
+                  />
                 </div>
 
               </form>

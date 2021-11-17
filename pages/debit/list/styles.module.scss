@@ -1,6 +1,12 @@
 .debitTable {
   display: flex;
+  width: 100%;
+  max-width: 1200px;
   justify-content: center;
-  padding-top: 7rem;
-  margin: 0 1rem;
+  padding: 7rem 0;
+  margin: 0 auto;
+
+  @media screen and (max-width: 1200px) {
+    padding: 7rem 1rem;
+  }
 }
