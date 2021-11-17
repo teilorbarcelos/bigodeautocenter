@@ -26,8 +26,10 @@ const Profile: NextPage = () => {
   const [userName, setUserName] = useState('')
 
   useEffect(() => {
-    setUserName(user.name)
-  }, [])
+    if (!loading && user) {
+      setUserName(user.name)
+    }
+  }, [loading, user])
 
   async function userUpdate(data: IUserUpdate) {
 
