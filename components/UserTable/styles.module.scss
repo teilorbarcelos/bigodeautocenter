@@ -1,0 +1,47 @@
+.usertable {
+  padding-top: 3rem;
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 5rem 0;
+
+    .user {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--COLOR_PRIMARY_NORMAL);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      gap: 1rem;
+
+      &:hover {
+        background: var(--COLOR_GRAY_LIGHT);
+      }
+
+      @media screen and (max-width: 360px) {
+        flex-direction: column;
+      }
+
+      div {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+
+        .status {
+          color: red;
+        }
+
+        .active {
+          color: green;
+        }
+      }
+    }
+
+    @media screen and (max-width: 360px) {
+      padding: 8rem 0;
+    }
+  }
+  
+}
