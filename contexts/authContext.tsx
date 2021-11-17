@@ -49,8 +49,10 @@ export function AuthProvider(props: AuthProvider) {
     }
 
     const { token, user } = response.data
+    console.log(response.data)
 
     localStorage.setItem('@bigodeAutoCenter:token', token)
+    localStorage.setItem('@bigodeAutoCenter:user', JSON.stringify(user))
 
     api.defaults.headers.common.authorization = `Bearer ${token}`
 
@@ -64,11 +66,13 @@ export function AuthProvider(props: AuthProvider) {
 
   useEffect(() => {
     const token = localStorage.getItem('@bigodeAutoCenter:token')
+    const user = JSON.parse(localStorage.getItem('@bigodeAutoCenter:user')) as IUser
 
-    if (token) {
+    if (token && user) {
       api.defaults.headers.common.authorization = `Bearer ${token}`
-      api.post<IUser>('/user/profile').then(user => {
+      api.post<IUser>('/user/profile', { id: user.id }).then(user => {
         setUser(user.data)
+        console.log(user.data)
       })
     }
     setLoading(false)
