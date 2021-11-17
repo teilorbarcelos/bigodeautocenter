@@ -29,7 +29,8 @@ const SalePrint: NextPage = () => {
     let somaValue = 0
 
     products.map(product => {
-      somaValue += parseFloat(product.value.toString())
+      const amount = product.amount || 1
+      somaValue += parseFloat((amount * product.value).toString())
     })
 
     setTotalValue(parseFloat(somaValue.toFixed(2)))
@@ -113,7 +114,10 @@ const SalePrint: NextPage = () => {
                     Nome do produto
                   </th>
                   <th>
-                    Valor (R$)
+                    Quant.
+                  </th>
+                  <th>
+                    Valor Unit. (R$)
                   </th>
                 </tr>
               </thead>
@@ -127,6 +131,9 @@ const SalePrint: NextPage = () => {
                         </td>
                         <td>
                           {product.name}
+                        </td>
+                        <td>
+                          {product.amount}
                         </td>
                         <td>
                           {product.value.toFixed(2)}
