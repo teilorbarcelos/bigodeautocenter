@@ -35,6 +35,7 @@ export default function UserTable({ users = [], updateList }: Props) {
             users.map(userItem => {
               return (
                 <div
+                  key={userItem.id}
                   className={styles.user}
                 >
                   <p>{userItem.name}</p>
