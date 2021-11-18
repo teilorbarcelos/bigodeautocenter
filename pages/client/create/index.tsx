@@ -34,8 +34,6 @@ const ClientCreate: NextPage = () => {
     router.push(`/client/id/${response.data.id}`)
   }
 
-
-
   return (
     <BasicPage
       title="Cadastro de cliente"

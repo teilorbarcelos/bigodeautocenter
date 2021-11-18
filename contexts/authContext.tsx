@@ -19,6 +19,7 @@ export interface IUser {
   login: string
   admin: boolean
   active: boolean
+  error?: string
 }
 
 interface AuthProvider {
@@ -49,7 +50,6 @@ export function AuthProvider(props: AuthProvider) {
     }
 
     const { token, user } = response.data
-    console.log(response.data)
 
     localStorage.setItem('@bigodeAutoCenter:token', token)
     localStorage.setItem('@bigodeAutoCenter:user', JSON.stringify(user))
@@ -72,7 +72,6 @@ export function AuthProvider(props: AuthProvider) {
       api.defaults.headers.common.authorization = `Bearer ${token}`
       api.post<IUser>('/user/profile', { id: user.id }).then(user => {
         setUser(user.data)
-        console.log(user.data)
       })
     }
     setLoading(false)

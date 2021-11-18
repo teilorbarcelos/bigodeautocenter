@@ -1,33 +1,37 @@
-.filter {
-  position: fixed;
-  top: 3.5rem;
-  display: flex;
-  width: 100%;
-  gap: 1rem;
-  padding: 1rem 0;
-  justify-content: center;
-  align-items: center;
-  background: var(--COLOR_WHITE_LIGHT);
-  border-bottom: 2px solid var(--COLOR_GRAY_LIGHT);
-
-  .searchInput {
-    display: flex;
-    gap: 1rem;
-    padding: 0 1rem;
-  }
-
-  @media screen and (max-width: 400px) {
-    flex-direction: column;
-  }
-}
-
 .userList {
   margin: 0 auto;
   width: 100%;
   max-width: 1200px;
-  padding-top: 1rem;
+  padding: 6rem;
 
-  @media screen and (max-width: 400px) {
-    padding: 1rem;
+  @media screen and (max-width: 1200px) {
+    padding: 6rem 1rem;
+  }
+}
+
+.newUserForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+
+  form {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    @media screen and (max-width: 1200px) {
+      padding: 0 1rem;
+      flex-direction: column;
+      gap: 1rem;
+    }
   }
 }
