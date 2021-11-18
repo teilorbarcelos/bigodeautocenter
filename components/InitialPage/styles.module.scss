@@ -1,6 +1,42 @@
 .initialpage {
-  
-  .cards {
+  display: flex;
+  justify-content: center;
+  padding: 6rem 0;
 
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    width: 100%;
+    max-width: 1200px;
+    gap: 2rem;
+    padding: 1rem;
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 360px;
+      cursor: pointer;
+      gap: 1rem;
+      border: 2px solid var(--COLOR_PRIMARY_DARK);
+      border-radius: 1rem;
+      box-shadow: 2px 2px 15px 1px var(--COLOR_PRIMARY_NORMAL);
+      padding: 1rem;
+      transition: 0.3s;
+
+      div {
+        text-align: center;
+        color: var(--COLOR_PRIMARY_DARK);
+      }
+
+      &:hover {
+        transform: scale(1.02);
+      }
+    }
   }
+}
+
+.svgIcon {
+  fill: var(--COLOR_PRIMARY_NORMAL);
+  width: 100%;
 }

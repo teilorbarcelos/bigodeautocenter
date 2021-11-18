@@ -6,6 +6,7 @@ import globals from '../../styles/globals.module.scss'
 import InitialPage from '../../components/InitialPage'
 import LoadingScreen from '../../components/LoadingScreen'
 import BasicPage from '../../components/BasicPage'
+import Navbar from '../../components/Navbar'
 
 const Dashboard: NextPage = () => {
   const { user, loading } = useAuth()
@@ -17,6 +18,8 @@ const Dashboard: NextPage = () => {
     >
       <>
         <LoadingScreen visible={loading} />
+        <Navbar />
+
         {
           user ?
             <InitialPage />

@@ -10,7 +10,7 @@
 
   border-bottom: solid 2px var(--COLOR_GRAY_LIGHT);
 
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 1200px) {
     padding: 1rem;
   }
 }
@@ -55,7 +55,7 @@
     }
   }
 
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 1200px) {
     .desktop {
       display: none;
     }
