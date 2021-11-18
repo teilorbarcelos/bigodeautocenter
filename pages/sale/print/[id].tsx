@@ -119,6 +119,9 @@ const SalePrint: NextPage = () => {
                   <th>
                     Valor Unit. (R$)
                   </th>
+                  <th>
+                    Valor total. (R$)
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -133,10 +136,13 @@ const SalePrint: NextPage = () => {
                           {product.name}
                         </td>
                         <td>
-                          {product.amount}
+                          {product.amount || 1}
                         </td>
                         <td>
                           {product.value.toFixed(2)}
+                        </td>
+                        <td>
+                          {((product.amount || 1) * product.value).toFixed(2)}
                         </td>
                       </tr>
                     )

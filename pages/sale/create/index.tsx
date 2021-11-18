@@ -240,6 +240,10 @@ const SaleCreate: NextPage = () => {
                       </div>
 
                       <div>
+                        <p>= {((products[index].amount || 1) * products[index].cost).toFixed(2)}</p>
+                      </div>
+
+                      <div>
                         <label>Valor (R$): </label>
                         <input
                           type="number"
@@ -253,6 +257,10 @@ const SaleCreate: NextPage = () => {
                           })}
                           value={products[index].value}
                         />
+                      </div>
+
+                      <div>
+                        <p>= {((products[index].amount || 1) * products[index].value).toFixed(2)}</p>
                       </div>
 
                       <div>

@@ -76,17 +76,22 @@
     tr {
       :nth-child(1){
         text-align: center;
-        width: 5rem;
+        width: 4rem;
       }
   
       :nth-child(3){
         text-align: center;
-        width: 10rem;
+        width: 4rem;
       }
   
       :nth-child(4){
         text-align: right;
-        width: 10rem;
+        width: 8rem;
+      }
+  
+      :nth-child(5){
+        text-align: right;
+        width: 8rem;
       }
     }
   }

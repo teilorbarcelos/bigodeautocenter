@@ -12,6 +12,12 @@ export default function NavLinks({ user }: Props) {
     <ul className={styles.navlinks} id="navlinks">
 
       <li>
+        <Link href={"/dashboard"}>
+          <a className={globals.link}>Início</a>
+        </Link>
+      </li>
+
+      <li>
         <Link href={"/sale/list"}>
           <a className={globals.link}>Vendas</a>
         </Link>

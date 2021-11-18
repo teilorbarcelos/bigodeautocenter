@@ -17,7 +17,12 @@ const Dashboard: NextPage = () => {
     >
       <>
         <LoadingScreen visible={loading} />
-        {user ? <InitialPage /> : !loading && <Login />}
+        {
+          user ?
+            <InitialPage />
+            :
+            <Login />
+        }
       </>
     </BasicPage>
   )

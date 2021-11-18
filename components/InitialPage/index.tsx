@@ -6,6 +6,14 @@ export default function InitialPage() {
   return (
     <section className={styles.initialpage} id="initialpage">
       <Navbar />
+
+      <div className={styles.cards}>
+        <div
+          className={styles.card}
+        >
+          <h6>Vendas</h6>
+        </div>
+      </div>
     </section>
   )
 }
