@@ -79,66 +79,71 @@ const UserList: NextPage = () => {
               <UserTable updateList={getUsersList} users={users} />
             </div>
 
-            <div className={styles.newUserForm}>
-              <h5>Criar novo usuário:</h5>
-              <form onSubmit={handleSubmit(newUser)}>
-                <div>
-                  <label htmlFor="name">Nome: </label>
-                  <input
-                    {...register('name')}
-                    type="text"
-                    id="name"
-                    className={globals.input}
-                    placeholder="Nome do novo usuário"
-                    onChange={(e) => setNewUserName(e.target.value)}
-                    value={newUserName}
-                  />
-                </div>
+            {
+              user.admin &&
 
-                <div>
-                  <label htmlFor="name">Login: </label>
-                  <input
-                    {...register('login')}
-                    type="text"
-                    id="login"
-                    className={globals.input}
-                    placeholder="Login do novo usuário"
-                    onChange={(e) => setNewUserLogin(e.target.value)}
-                    value={newUserLogin}
-                  />
-                </div>
+              <div className={styles.newUserForm}>
+                <h5>Criar novo usuário:</h5>
+                <form onSubmit={handleSubmit(newUser)}>
+                  <div>
+                    <label htmlFor="name">Nome: </label>
+                    <input
+                      {...register('name')}
+                      type="text"
+                      id="name"
+                      className={globals.input}
+                      placeholder="Nome do novo usuário"
+                      onChange={(e) => setNewUserName(e.target.value)}
+                      value={newUserName}
+                    />
+                  </div>
 
-                <div>
-                  <label htmlFor="password">Senha: </label>
-                  <input
-                    {...register('password')}
-                    type="password"
-                    id="password"
-                    className={globals.input}
-                    onChange={(e) => setNewUserPassword(e.target.value)}
-                    value={newUserPassword}
-                  />
-                </div>
+                  <div>
+                    <label htmlFor="name">Login: </label>
+                    <input
+                      {...register('login')}
+                      type="text"
+                      id="login"
+                      className={globals.input}
+                      placeholder="Login do novo usuário"
+                      onChange={(e) => setNewUserLogin(e.target.value)}
+                      value={newUserLogin}
+                    />
+                  </div>
 
-                <div>
-                  <label htmlFor="password2">Confirme a senha: </label>
-                  <input
-                    {...register('password2')}
-                    type="password"
-                    id="password2"
-                    className={globals.input}
-                    onChange={(e) => setNewUserPassword2(e.target.value)}
-                    value={newUserPassword2}
-                  />
-                </div>
+                  <div>
+                    <label htmlFor="password">Senha: </label>
+                    <input
+                      {...register('password')}
+                      type="password"
+                      id="password"
+                      className={globals.input}
+                      onChange={(e) => setNewUserPassword(e.target.value)}
+                      value={newUserPassword}
+                    />
+                  </div>
 
-                <div>
-                  <Button1
-                    title="Criar usuário"
-                  />
-                </div>
-              </form>
-            </div>
+                  <div>
+                    <label htmlFor="password2">Confirme a senha: </label>
+                    <input
+                      {...register('password2')}
+                      type="password"
+                      id="password2"
+                      className={globals.input}
+                      onChange={(e) => setNewUserPassword2(e.target.value)}
+                      value={newUserPassword2}
+                    />
+                  </div>
+
+                  <div>
+                    <Button1
+                      title="Criar usuário"
+                    />
+                  </div>
+                </form>
+              </div>
+            }
+
 
           </>
           :
