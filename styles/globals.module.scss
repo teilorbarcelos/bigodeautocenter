@@ -58,3 +58,28 @@
   display: flex;
   flex-direction: column;
 }
+
+.img {
+  width: 100%;
+  height: auto;
+}
+
+.title {
+  font: 700 var(--title-font-size) 'Poppins', sans-serif;
+  color: var(--title-color);
+  -webkit-font-smooothing: auto;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: var(--subtitle-font-size);
+}
+
+.grid {
+  display: grid;
+}
+
+.smallText {
+  font: 400 var(--subtitle-font-size) var(--body-font);
+  color: var(--text-color);
+}

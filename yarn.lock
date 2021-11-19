@@ -80,6 +80,16 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@fontsource/dm-sans@^4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/dm-sans/-/dm-sans-4.5.0.tgz#0dae7ab3563b3ffd47181a3fa4c9c6a33fb04c5e"
+  integrity sha512-GKsjzK7NU6G1NHAxXRCquZQmZSvj3ah5AMR4N6PU2YpshIpr+NLIwYc+SJty+ZJ4Btysr9KN40+X4ng34heGjw==
+
+"@fontsource/poppins@^4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/poppins/-/poppins-4.5.0.tgz#a419697b85864afbf8363f5c247b1e9d1f117564"
+  integrity sha512-RqgMIQqKHWNH3IUj+a0MAhlb4g5fftsXRTJ2bauefBmfM8Ja5q+qQZjKwyB/iCc+paJD320zFnLJ8G+y1ZyemQ==
+
 "@fontsource/roboto@^4.5.1":
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-4.5.1.tgz#63f7b783f755d8f6727eb60198627e7e1be3ac20"

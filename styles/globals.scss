@@ -1,3 +1,11 @@
+@import "~@fontsource/poppins/400.css";
+@import "~@fontsource/poppins/500.css";
+@import "~@fontsource/poppins/700.css";
+
+@import "~@fontsource/dm-sans/400.css";
+@import "~@fontsource/dm-sans/500.css";
+@import "~@fontsource/dm-sans/700.css";
+
 html,
 body {
   padding: 0;
@@ -43,6 +51,26 @@ a {
   --FONT_COLOR_DARK: var(--COLOR_BLACK_DARK);
   --FONT_COLOR_NORMAL: var(--COLOR_GRAY_DARK);
   --FONT_COLOR_LIGHT: var(--COLOR_WHITE_NORMAL);
+
+  // INSTITUTIONAL ===========================
+  /* colors */
+  --hue: 159;
+  /* HSL color mode */
+  --base-color: hsl(var(--hue) 36% 57%);
+  --base-color-second: hsl(var(--hue) 65% 88%);
+  --base-color-alt: hsl(var(--hue) 57% 53%);
+  --title-color: hsl(var(--hue) 41% 10%);
+  --text-color: hsl(0 0% 46%);
+  --text-color-light: hsl(0 0% 98%);
+  --body-color: hsl(0 0% 98%);
+
+  /* fonts */
+  --title-font-size: 1.875rem;
+  --subtitle-font-size: 1rem;
+
+  --title-font: 'Poppins', sans-serif;
+  --body-font: 'DM Sans', sans-serif;
+
 }
 
 // TIPOGRAPHY
