@@ -1,13 +1,23 @@
 .initialpage {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   padding: 6rem 0;
+  min-height: 100vh;
+  align-items: center;
+  gap: 3rem;
+
+  .title {
+    padding: 1rem;
+    color: var(--COLOR_PRIMARY_NORMAL);
+  }
 
   .cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     width: 100%;
     max-width: 1200px;
+    height: max-content;
     gap: 2rem;
     padding: 1rem;
 

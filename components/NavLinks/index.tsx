@@ -47,21 +47,6 @@ export default function NavLinks({ user }: Props) {
         </Link>
       </li>
 
-      <li>
-        <Link href={"/user/profile"}>
-          <a className={globals.link}>{user.name}</a>
-        </Link>
-      </li>
-
-      {
-        user.admin &&
-        <li>
-          <Link href={"/user/list"}>
-            <a className={globals.link}>Users</a>
-          </Link>
-        </li>
-      }
-
     </ul>
   )
 }
