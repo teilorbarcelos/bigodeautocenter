@@ -3,13 +3,15 @@
 
   .sale {
     cursor: pointer;
-    border: 1px solid var(--COLOR_PRIMARY_NORMAL);
+    outline: 1px solid var(--COLOR_PRIMARY_NORMAL);
     border-radius: 1rem;
     padding: 1rem;
     text-align: center;
     gap: 1rem;
     width: 100%;
     margin: 1rem auto;
+    box-shadow: 2px 2px 10px 1px var(--COLOR_PRIMARY_NORMAL);
+    transition: 0.2s;
 
     .head {
       display: flex;
@@ -34,7 +36,8 @@
     }
 
     &:hover {
-      background: var(--COLOR_GRAY_LIGHT);
+      outline: 3px solid var(--COLOR_PRIMARY_NORMAL);
+      background: var(--COLOR_WHITE_DARK);
     }
   }
 }

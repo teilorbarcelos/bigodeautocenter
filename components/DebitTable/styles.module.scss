@@ -16,7 +16,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid var(--COLOR_PRIMARY_NORMAL);
+    outline: 1px solid var(--COLOR_PRIMARY_NORMAL);
+    box-shadow: 2px 2px 10px 1px var(--COLOR_PRIMARY_NORMAL);
     padding: 1rem;
     border-radius: 0.5rem;
 
