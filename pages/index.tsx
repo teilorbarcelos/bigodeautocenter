@@ -5,6 +5,7 @@ import Divider1 from '../components/institutional/Divider1'
 import Divider2 from '../components/institutional/Divider2'
 import Header from '../components/institutional/Header'
 import IHome from '../components/institutional/IHome'
+import Services from '../components/institutional/Services'
 import styles from '../styles/Home.module.scss'
 
 const Home: NextPage = () => {
@@ -24,6 +25,10 @@ const Home: NextPage = () => {
         <About />
 
         <Divider2 />
+
+        <Services />
+
+        <Divider1 />
       </>
     </BasicPage>
   )
