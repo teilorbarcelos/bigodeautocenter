@@ -1,0 +1,64 @@
+.container {
+  padding: 4rem 1.5rem;
+  background: var(--base-color);
+}
+
+.brand p {
+  color: var(--text-color-light);
+  margin-bottom: 0.75rem;
+}
+
+.logo {
+  display: inline-block;
+  font: 700 2.25rem var(--title-font);
+  color: var(--title-color);
+  margin-bottom: 1.5rem;
+}
+
+.coloured {
+  color: var(--body-color);
+}
+
+.developedBy {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  color: var(--text-color-light);
+}
+
+.myLink {
+  font: 700 1rem var(--title-font);
+  color: var(--title-color);
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    display: grid;
+    padding: 3.75rem 0;
+  }
+
+  .content {
+    width: 100%;
+    grid-auto-flow: column;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .container {
+    display: grid;
+    padding: 3.75rem 0;
+  }
+
+  .content {
+    width: 100%;
+    grid-auto-flow: column;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+}

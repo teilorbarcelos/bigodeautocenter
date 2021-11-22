@@ -4,6 +4,7 @@ import About from '../components/institutional/About'
 import Contact from '../components/institutional/Contact'
 import Divider1 from '../components/institutional/Divider1'
 import Divider2 from '../components/institutional/Divider2'
+import Footer from '../components/institutional/Footer'
 import Header from '../components/institutional/Header'
 import IHome from '../components/institutional/IHome'
 import Services from '../components/institutional/Services'
@@ -39,6 +40,8 @@ const Home: NextPage = () => {
         <Contact />
 
         <Divider1 />
+
+        <Footer />
       </>
     </BasicPage>
   )
