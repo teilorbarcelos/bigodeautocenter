@@ -1,0 +1,54 @@
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 7rem 0;
+
+  @media screen and (max-width: 960px) {
+    padding: 7rem 1rem;
+  }
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 960px;
+
+  @media screen and (max-width: 768px) {
+    display: grid;
+    gap: 4rem;
+  }
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+}
+
+.text p {
+  margin-bottom: 2rem;
+  color: var(--text-color);
+}
+
+.contactList ul {
+  gap: 2rem;
+  color: var(--text-color);
+}
+
+.contactList ul li {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+@media screen and (min-width: 1200px) {
+  .grid {
+      grid-auto-flow: column;
+      align-items: center;
+  }
+
+  .text {
+      max-width: 25rem;
+  }
+}

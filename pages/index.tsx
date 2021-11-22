@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import BasicPage from '../components/BasicPage'
 import About from '../components/institutional/About'
+import Contact from '../components/institutional/Contact'
 import Divider1 from '../components/institutional/Divider1'
 import Divider2 from '../components/institutional/Divider2'
 import Header from '../components/institutional/Header'
@@ -34,6 +35,10 @@ const Home: NextPage = () => {
         <Testimonials />
 
         <Divider2 />
+
+        <Contact />
+
+        <Divider1 />
       </>
     </BasicPage>
   )

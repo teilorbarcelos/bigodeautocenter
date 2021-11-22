@@ -1,0 +1,25 @@
+.button {
+  display: inline-flex;
+  background: var(--base-color);
+  height: 3.5rem;
+  align-items: center;
+  color: var(--text-color-light);
+  padding: 0 2rem;
+  border-radius: .25rem;
+  font: 500 1rem var(--body-font);
+  transition: background 0.3s;
+}
+
+.button:hover {
+  background: var(--base-color-alt);
+}
+
+.icon {
+  margin-right: 0.625rem;
+}
+
+@media screen and (min-width: 1200px){
+  .button {
+    height: 3.125rem;
+  }
+}
