@@ -14,13 +14,6 @@ import Testimonials from '../components/institutional/Testimonials'
 import styles from '../styles/Home.module.scss'
 
 const Home: NextPage = () => {
-  const [render, setRender] = useState(false)
-
-  useEffect(() => {
-    if (document) {
-      setRender(true)
-    }
-  }, [document])
 
   return (
 
