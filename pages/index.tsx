@@ -8,6 +8,7 @@ import Divider2 from '../components/institutional/Divider2'
 import Footer from '../components/institutional/Footer'
 import Header from '../components/institutional/Header'
 import IHome from '../components/institutional/IHome'
+import ScrollReveal from '../components/institutional/ScrollReveal'
 import Services from '../components/institutional/Services'
 import Testimonials from '../components/institutional/Testimonials'
 import styles from '../styles/Home.module.scss'
@@ -22,23 +23,33 @@ const Home: NextPage = () => {
       <>
         <Header />
 
-        <IHome />
+        <ScrollReveal>
+          <IHome />
+        </ScrollReveal>
 
         <Divider1 />
 
-        <About />
+        <ScrollReveal>
+          <About />
+        </ScrollReveal>
 
         <Divider2 />
 
-        <Services />
+        <ScrollReveal>
+          <Services />
+        </ScrollReveal>
 
         <Divider1 />
 
-        <Testimonials />
+        <ScrollReveal>
+          <Testimonials />
+        </ScrollReveal>
 
         <Divider2 />
 
-        <Contact />
+        <ScrollReveal>
+          <Contact />
+        </ScrollReveal>
 
         <Divider1 />
 
