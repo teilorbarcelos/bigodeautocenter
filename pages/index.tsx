@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import { useEffect, useState } from 'react'
 import BasicPage from '../components/BasicPage'
 import About from '../components/institutional/About'
 import BackToTopButton from '../components/institutional/BackToTopButton'
@@ -14,6 +15,12 @@ import Testimonials from '../components/institutional/Testimonials'
 import styles from '../styles/Home.module.scss'
 
 const Home: NextPage = () => {
+  const [render, setRender] = useState(false)
+
+  useEffect(() => {
+    setRender(true)
+  }, [])
+
   return (
 
     <BasicPage
@@ -23,33 +30,41 @@ const Home: NextPage = () => {
       <>
         <Header />
 
-        <ScrollReveal>
-          <IHome />
-        </ScrollReveal>
+        {
+          render &&
 
-        <Divider1 />
+          <>
+            <ScrollReveal>
+              <IHome />
+            </ScrollReveal>
 
-        <ScrollReveal>
-          <About />
-        </ScrollReveal>
+            <Divider1 />
 
-        <Divider2 />
+            <ScrollReveal>
+              <About />
+            </ScrollReveal>
 
-        <ScrollReveal>
-          <Services />
-        </ScrollReveal>
+            <Divider2 />
 
-        <Divider1 />
+            <ScrollReveal>
+              <Services />
+            </ScrollReveal>
 
-        <ScrollReveal>
-          <Testimonials />
-        </ScrollReveal>
+            <Divider1 />
 
-        <Divider2 />
+            <ScrollReveal>
+              <Testimonials />
+            </ScrollReveal>
 
-        <ScrollReveal>
-          <Contact />
-        </ScrollReveal>
+            <Divider2 />
+
+            <ScrollReveal>
+              <Contact />
+            </ScrollReveal>
+          </>
+
+        }
+
 
         <Divider1 />
 
