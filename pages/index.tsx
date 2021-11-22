@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import BasicPage from '../components/BasicPage'
 import About from '../components/institutional/About'
+import BackToTopButton from '../components/institutional/BackToTopButton'
 import Contact from '../components/institutional/Contact'
 import Divider1 from '../components/institutional/Divider1'
 import Divider2 from '../components/institutional/Divider2'
@@ -42,6 +43,8 @@ const Home: NextPage = () => {
         <Divider1 />
 
         <Footer />
+
+        <BackToTopButton />
       </>
     </BasicPage>
   )
