@@ -18,8 +18,10 @@ const Home: NextPage = () => {
   const [render, setRender] = useState(false)
 
   useEffect(() => {
-    setRender(true)
-  }, [])
+    if (document) {
+      setRender(true)
+    }
+  }, [document])
 
   return (
 
