@@ -1,0 +1,32 @@
+.testimonial {
+  width: 100%;
+}
+
+.testimonial blockquote {
+  padding: 2rem;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+  border-radius: 0.25rem;
+}
+
+.testimonial blockquote p {
+  position: relative;
+  text-indent: 1.875rem;
+  margin-bottom: 1.5rem;
+  color: var(--title-color);
+}
+
+.testimonial blockquote p span {
+  font: 700 2.5rem serif;
+  position: absolute;
+  top: -0.4rem;
+  left: -1.875rem;
+  color: var(--base-color);
+}
+
+.cite {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-style: normal;
+  color: var(--text-color);
+}
