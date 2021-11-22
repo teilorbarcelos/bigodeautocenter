@@ -8,7 +8,7 @@
   background: var(--COLOR_WHITE_LIGHT);
   padding: 1rem 0;
 
-  border-bottom: solid 2px var(--COLOR_GRAY_LIGHT);
+  border-bottom: 1px solid #e4e4e4;
 
   @media screen and (max-width: 1200px) {
     padding: 1rem;
@@ -22,46 +22,9 @@
   max-width: 1200px;
   width: 100%;
 
-  .sandwich {
-    display: none;
-    z-index: 1;
-    flex-direction: column;
-    gap: 4px;
-
-    div {
-      width: 2rem;
-      height: 4px;
-      background: var(--COLOR_PRIMARY_DARK);
-      transition: 0.5s ease-in-out;
-    }
-  }
-
-  .x {
-    .line1 {
-      transform-origin: right;
-      transform: rotate(-45deg);
-      width: 69%;
-    }
-
-    .line2 {
-      visibility: hidden;
-      opacity: 0;
-    }
-
-    .line3 {
-      transform-origin: right;
-      transform: rotate(45deg);
-      width: 69%;
-    }
-  }
-
   @media screen and (max-width: 1200px) {
     .desktop {
       display: none;
-    }
-
-    .sandwich {
-      display: flex;
     }
   }
 

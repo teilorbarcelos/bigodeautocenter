@@ -1,41 +1,35 @@
 import styles from './styles.module.scss'
 import Logo from '../Logo'
-import { useAuth } from '../../hooks/useAuth'
 import NavLinks from '../NavLinks'
 import Modal from '../Modal'
 import { useState } from 'react'
+import HamburgerIcon from '../HamburgerIcon'
 
 export default function Navbar() {
   const [modalMenuOpen, setModalMenuOpen] = useState(false)
-  const { user } = useAuth()
 
   return (
     <>
-      {user &&
-        <nav className={styles.nav}>
-          <div className={styles.container}>
-            <div className={styles.logo}>
-              <Logo href="/" />
-            </div>
-
-            <div className={styles.desktop}>
-              <NavLinks user={user} />
-            </div>
-
-            <div
-              className={`${styles.sandwich} ${modalMenuOpen && styles.x}`}
-              onClick={() => setModalMenuOpen(modalMenuOpen ? false : true)}
-            >
-              <div className={styles.line1}></div>
-              <div className={styles.line2}></div>
-              <div className={styles.line3}></div>
-            </div>
+      <nav className={styles.nav}>
+        <div className={styles.container}>
+          <div className={styles.logo}>
+            <Logo href="/" />
           </div>
-          <Modal closeModal={() => setModalMenuOpen(false)} visible={modalMenuOpen}>
-            <NavLinks user={user} />
-          </Modal>
-        </nav>
-      }
+
+          <div className={styles.desktop}>
+            <NavLinks />
+          </div>
+
+          <HamburgerIcon
+            open={modalMenuOpen}
+            openCloseFunction={() => setModalMenuOpen(modalMenuOpen ? false : true)}
+          />
+
+        </div>
+        <Modal closeModal={() => setModalMenuOpen(false)} visible={modalMenuOpen}>
+          <NavLinks />
+        </Modal>
+      </nav>
     </>
   )
 }

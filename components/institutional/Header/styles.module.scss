@@ -20,6 +20,12 @@
   align-items: center;
   max-width: 1200px;
   width: 100%;
+
+  @media screen and (max-width: 1200px) {
+    .desktop {
+      display: none;
+    }
+  }
 }
 
 .logo {

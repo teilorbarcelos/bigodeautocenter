@@ -1,0 +1,38 @@
+.hamburger {
+  display: none;
+  z-index: 1;
+  flex-direction: column;
+  gap: 4px;
+
+  div {
+    width: 2rem;
+    height: 4px;
+    background: var(--COLOR_PRIMARY_DARK);
+    transition: 0.5s ease-in-out;
+  }
+}
+
+.x {
+  .line1 {
+    transform-origin: right;
+    transform: rotate(-45deg);
+    width: 69%;
+  }
+
+  .line2 {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .line3 {
+    transform-origin: right;
+    transform: rotate(45deg);
+    width: 69%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .hamburger {
+    display: flex;
+  }
+}

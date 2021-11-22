@@ -21,7 +21,7 @@
 .link {
   font-weight: bold;
   position: relative;
-  color: var(--COLOR_PRIMARY_DARK);
+  color: var(--COLOR_BLACK_DARK);
   transition: 0.3s;
 
   &::after {
@@ -30,13 +30,13 @@
     width: 0;
     left: 50%;
     height: 2px;
-    bottom: -0.5rem;
-    background: var(--COLOR_PRIMARY_DARK);
+    bottom: -1.2rem;
+    background: var(--COLOR_PRIMARY_NORMAL);
     transition: 0.3s;
   }
 
   &:hover {
-    opacity: 0.8;
+    color: var(--COLOR_PRIMARY_NORMAL);
   }
 
   &:hover::after {

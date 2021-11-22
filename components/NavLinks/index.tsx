@@ -1,13 +1,8 @@
 import styles from './styles.module.scss'
 import globals from '../../styles/globals.module.scss'
 import Link from 'next/link'
-import { IUser } from '../../contexts/authContext'
 
-interface Props {
-  user: IUser
-}
-
-export default function NavLinks({ user }: Props) {
+export default function NavLinks() {
   return (
     <ul className={styles.navlinks} id="navlinks">
 
