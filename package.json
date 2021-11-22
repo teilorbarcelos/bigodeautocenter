@@ -20,7 +20,6 @@
     "react-hook-form": "^7.18.0",
     "react-input-mask": "^2.0.4",
     "sass": "^1.43.4",
-    "scrollreveal": "^4.0.9",
     "svg-loaders": "^0.2.0",
     "swiper": "^7.3.0"
   },
@@ -29,7 +28,6 @@
     "@types/node": "16.11.6",
     "@types/react": "17.0.33",
     "@types/react-input-mask": "^3.0.1",
-    "@types/scrollreveal": "^0.0.7",
     "eslint": "7",
     "eslint-config-next": "12.0.1",
     "typescript": "4.4.4"
