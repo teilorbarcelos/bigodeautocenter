@@ -60,12 +60,12 @@ export default function DebitTable({
             return (
               <div
                 key={debit.id}
-                className={new Date(debit.dueDate) >= today ?
-                  debit.paid && styles.paid
+                className={(new Date(debit.dueDate) >= today) ?
+                  debit.paid ? styles.paid : ''
                   :
                   !debit.paid ? styles.expired
                     :
-                    debit.paid && styles.paid
+                    debit.paid ? styles.paid : ''
                 }
               >
                 <p>{index + 1}</p>
