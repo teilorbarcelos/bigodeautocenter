@@ -12,6 +12,7 @@ export default function IHome() {
             className={globals.img}
             src={img1}
             alt="Ilustração do trabalho no Bigode Auto Center."
+            priority={true}
           />
         </div>
         <div className={styles.text}>

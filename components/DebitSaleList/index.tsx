@@ -5,6 +5,7 @@ import Button1 from '../Button1'
 import { api } from '../../pages/api'
 import { useEffect, useState } from 'react'
 import DebitTable from '../DebitTable'
+import { IIncome } from '../../pages/debit/id/[id]'
 
 interface IDebitFormData {
   dueDate: Date
@@ -24,6 +25,7 @@ export interface IDebit {
   saleId: string
   userId: string
   value: number
+  income?: IIncome
   error?: string
 }
 

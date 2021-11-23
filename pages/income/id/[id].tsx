@@ -11,28 +11,19 @@ import { useForm } from 'react-hook-form'
 import Button1 from '../../../components/Button1'
 import { IDebit } from '../../../components/DebitSaleList'
 import { useRouter } from 'next/router'
+import { IIncome } from '../../debit/id/[id]'
 
-export interface IIncome {
-  id?: string
-  debit?: IDebit
-  saleId?: string
-  createdAt?: Date
-  value?: number
-  info?: string
-  error?: string
-}
-
-const DebitUpdate: NextPage = () => {
+const IncomeUpdate: NextPage = () => {
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const { handleSubmit } = useForm()
   const [saleId, setSaleId] = useState('')
-  const [debitId, setDebitId] = useState('')
+  const [incomeId, setIncomeId] = useState('')
   const [paid, setPaid] = useState(false)
-  const [income, setIncome] = useState<IIncome>({})
-  const [debitValue, setDebitValue] = useState(0)
-  const [debitInfo, setDebitInfo] = useState('')
-  const [debitDueDate, setDebitDueDate] = useState(
+  const [debit, setDebit] = useState<IDebit>({} as IDebit)
+  const [incomeValue, setIncomeValue] = useState(0)
+  const [incomeInfo, setIncomeInfo] = useState('')
+  const [incomeDate, setIncomeDate] = useState(
     new Date(
       new Date(
         Date.now()
@@ -44,7 +35,7 @@ const DebitUpdate: NextPage = () => {
 
   useEffect(() => {
     try {
-      async function getDebit() {
+      async function getIncome() {
 
         const { id } = await router.query // necessary "await" here
 
@@ -52,26 +43,25 @@ const DebitUpdate: NextPage = () => {
           return
         }
 
-        const debitResponse = await api.post<IDebit>('/debit/getData', {
+        const incomeResponse = await api.post<IIncome>('/income/getData', {
           id
         })
 
-        const debit = debitResponse.data
+        const income = incomeResponse.data
 
-        setSaleId(debit.saleId)
-        setDebitId(id as string)
-        setDebitValue(debit.value)
-        setDebitInfo(debit.info)
-        setPaid(debit.paid)
-        setIncome(debit.income)
-        setDebitDueDate(
+        setSaleId(income.saleId)
+        setIncomeId(id as string)
+        setIncomeValue(income.value)
+        setIncomeInfo(income.info)
+        setDebit(income.debit)
+        setIncomeDate(
           new Date(
-            debit.dueDate
+            income.createdAt
           ).toISOString().split('T')[0].toString()
         )
       }
 
-      getDebit()
+      getIncome()
 
     } catch (error) {
       alert(error)
@@ -80,12 +70,12 @@ const DebitUpdate: NextPage = () => {
     }
   }, [router.query])
 
-  async function updateDebit() {
-    const response = await api.post<IDebit>('/debit/update', {
-      id: debitId,
-      value: debitValue,
-      dueDate: new Date(debitDueDate),
-      info: debitInfo
+  async function updateIncome() {
+    const response = await api.post<IIncome>('/income/update', {
+      id: incomeId,
+      value: incomeValue,
+      createdAt: new Date(incomeDate),
+      info: incomeInfo
     })
 
     if (response.data.error) {
@@ -109,29 +99,29 @@ const DebitUpdate: NextPage = () => {
 
             <form
               className={styles.form}
-              onSubmit={handleSubmit(updateDebit)}
+              onSubmit={handleSubmit(updateIncome)}
             >
-              <h6>Débito ID: {debitId}</h6>
+              <h6>Pagamento ID: {incomeId}</h6>
               <div className={styles.dateValue}>
                 <div className={styles.smallInput}>
-                  <label htmlFor="dueDate">Data do vencimento:</label>
+                  <label htmlFor="dueDate">Data do pagamento:</label>
                   <input
                     type="date"
                     className={globals.input}
-                    onChange={e => setDebitDueDate(e.target.value)}
-                    value={debitDueDate}
+                    onChange={e => setIncomeDate(e.target.value)}
+                    value={incomeDate}
                   />
                 </div>
 
                 <div className={styles.smallInput}>
-                  <label htmlFor="value">Valor (R$):</label>
+                  <label htmlFor="value">Valor pago (R$):</label>
                   <input
                     type="number"
                     step="0.01"
                     min={0}
                     className={globals.input}
-                    onChange={e => setDebitValue(parseFloat(e.target.value))}
-                    value={debitValue}
+                    onChange={e => setIncomeValue(parseFloat(e.target.value))}
+                    value={incomeValue}
                   />
                 </div>
               </div>
@@ -142,8 +132,8 @@ const DebitUpdate: NextPage = () => {
                   id="info"
                   className={globals.textarea}
                   placeholder="Informações adicionais."
-                  onChange={e => setDebitInfo(e.target.value)}
-                  value={debitInfo}
+                  onChange={e => setIncomeInfo(e.target.value)}
+                  value={incomeInfo}
                 />
               </div>
 
@@ -159,17 +149,13 @@ const DebitUpdate: NextPage = () => {
                 </Link>
               </div>
 
-              {
-                paid &&
-
-                <div className={styles.saleLink}>
-                  <Link href={`/income/id/${income.id}`}>
-                    <a className={globals.link}>
-                      Detalhes do pagamento.
-                    </a>
-                  </Link>
-                </div>
-              }
+              <div className={styles.saleLink}>
+                <Link href={`/debit/id/${debit.id}`}>
+                  <a className={globals.link}>
+                    Voltar para a tela do débito.
+                  </a>
+                </Link>
+              </div>
 
             </form>
 
@@ -180,4 +166,4 @@ const DebitUpdate: NextPage = () => {
   )
 }
 
-export default DebitUpdate
+export default IncomeUpdate

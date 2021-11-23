@@ -11,7 +11,7 @@ export default function Services() {
       id: 1,
       icon: <MotorIcon className={styles.svgFill} />,
       title: "Mecânica em Geral",
-      description: "Mecânica em geral de todos os tipos de motores, tais como alchool, gasolina e diesel."
+      description: "Mecânica em geral de todos os tipos de motores, tais como álcool, gasolina e diesel."
     },
     {
       id: 2,
@@ -26,6 +26,7 @@ export default function Services() {
       description: "Não poderia faltar também a parte de suspenção, desde os amortecedores até as rodas, com direito a balanceamento e geometria computadorizada."
     }
   ]
+
   return (
     <section className={styles.services} id="services">
       <div className={`${styles.container} ${styles.grid}`}>

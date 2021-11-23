@@ -55,13 +55,17 @@ export default function DebitTable({
           debits.map((debit, index) => {
             const dueDateSplit = debit.dueDate.toString().replace('T00:00:00.000Z', '').split('-')
             const dueDate = `${dueDateSplit[2]}/${dueDateSplit[1]}/${dueDateSplit[0]}`
+            const today = new Date(new Date(Date.now()).toISOString().split('T')[0])
+
             return (
               <div
                 key={debit.id}
-                className={new Date(debit.dueDate) < new Date(Date.now()) &&
-                  !debit.paid ? styles.expired
-                  :
+                className={new Date(debit.dueDate) >= today ?
                   debit.paid && styles.paid
+                  :
+                  !debit.paid ? styles.expired
+                    :
+                    debit.paid && styles.paid
                 }
               >
                 <p>{index + 1}</p>
