@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import { useEffect, useState } from 'react'
 import BasicPage from '../components/BasicPage'
 import About from '../components/institutional/About'
 import BackToTopButton from '../components/institutional/BackToTopButton'

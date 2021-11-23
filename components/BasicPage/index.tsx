@@ -1,11 +1,11 @@
 import Head from 'next/head'
-import { ReactElement } from 'react'
+import React, { MutableRefObject, ReactElement, ReactNode } from 'react'
 import globals from '../../styles/globals.module.scss'
 
 interface Props {
   title?: string
   content?: string
-  children: ReactElement
+  children?: ReactElement
 }
 
 export default function BasicPage({
@@ -13,6 +13,7 @@ export default function BasicPage({
   children,
   content
 }: Props) {
+
   return (
     <div className={globals.container}>
       <Head>

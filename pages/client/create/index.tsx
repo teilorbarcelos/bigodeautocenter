@@ -7,19 +7,22 @@ import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { IClient } from '../../../components/ClientTable'
 import { api } from '../../api'
-import ReactInputMask from 'react-input-mask'
+import MyMaskedInput from '../../../components/MyMaskedInput'
 import Button1 from '../../../components/Button1'
+import { useState } from 'react'
 
 const ClientCreate: NextPage = () => {
   const router = useRouter()
   const { register, handleSubmit } = useForm()
+  const [cpf, setCpf] = useState('')
+  const [cnpj, setCnpj] = useState('')
 
   async function newClient(data: IClient) {
     const response = await api.post<IClient>('/client/create', {
       birthday: data.birthday,
       contact: data.contact,
-      cpf: data.cpf,
-      cnpj: data.cnpj,
+      cpf,
+      cnpj,
       info: data.info,
       name: data.name
     })
@@ -72,11 +75,13 @@ const ClientCreate: NextPage = () => {
           <div className={styles.smallInput}>
             <div>
               <label htmlFor="cpf">CPF:</label>
-              <ReactInputMask
-                {...register('cpf')}
-                mask="999.999.999-99"
+              <MyMaskedInput
+                // {...register('cpf')} // disable due reference error in customized input
+                mask="cpf"
                 id="cpf"
                 type="text"
+                onChange={e => setCpf(e.target.value)}
+                value={cpf}
                 className={globals.input}
                 placeholder="123.456.789-10"
               />
@@ -86,11 +91,13 @@ const ClientCreate: NextPage = () => {
           <div className={styles.smallInput}>
             <div>
               <label htmlFor="cnpj">CNPJ:</label>
-              <ReactInputMask
-                {...register('cnpj')}
-                mask="99.999.999/9999-99"
+              <MyMaskedInput
+                // {...register('cnpj')} // disable due reference error in customized input
+                mask="cnpj"
                 id="cnpj"
                 type="text"
+                onChange={e => setCnpj(e.target.value)}
+                value={cnpj}
                 className={globals.input}
                 placeholder="12.345.678/9012-34"
               />

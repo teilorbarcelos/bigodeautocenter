@@ -1,3 +1,4 @@
+import React from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import styles from './styles.module.scss'
@@ -9,11 +10,11 @@ import { api } from '../../api'
 import BasicPage from '../../../components/BasicPage'
 import Navbar from '../../../components/Navbar'
 import { useForm } from 'react-hook-form'
-import ReactInputMask from 'react-input-mask'
 import Button1 from '../../../components/Button1'
 import SaleTable from '../../../components/SaleTable'
 import ReminderTable, { IReminder } from '../../../components/ReminderTable'
 import ButtonDanger from '../../../components/ButtonDanger'
+import MyMaskedInput from '../../../components/MyMaskedInput'
 
 const Client: NextPage = () => {
   const { handleSubmit } = useForm()
@@ -161,8 +162,8 @@ const Client: NextPage = () => {
                 <div className={styles.smallInput}>
                   <div>
                     <label htmlFor="cpf">CPF:</label>
-                    <ReactInputMask
-                      mask="999.999.999-99"
+                    <MyMaskedInput
+                      mask="cpf"
                       id="cpf"
                       type="text"
                       className={globals.input}
@@ -176,8 +177,8 @@ const Client: NextPage = () => {
                 <div className={styles.smallInput}>
                   <div>
                     <label htmlFor="cnpj">CNPJ:</label>
-                    <ReactInputMask
-                      mask="99.999.999/9999-99"
+                    <MyMaskedInput
+                      mask="cnpj"
                       id="cnpj"
                       type="text"
                       className={globals.input}
