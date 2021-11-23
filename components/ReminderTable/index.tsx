@@ -69,8 +69,8 @@ export default function ReminderTable({
             return (
               <div
                 key={reminder.id}
-                className={new Date(reminder.date) < new Date(Date.now()) &&
-                  reminder.active && styles.expired
+                className={new Date(reminder.date) < new Date(Date.now()) ?
+                  reminder.active ? styles.expired : '' : ''
                 }
               >
                 <p>{index + 1}</p>

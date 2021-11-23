@@ -19,7 +19,6 @@ const IncomeUpdate: NextPage = () => {
   const { handleSubmit } = useForm()
   const [saleId, setSaleId] = useState('')
   const [incomeId, setIncomeId] = useState('')
-  const [paid, setPaid] = useState(false)
   const [debit, setDebit] = useState<IDebit>({} as IDebit)
   const [incomeValue, setIncomeValue] = useState(0)
   const [incomeInfo, setIncomeInfo] = useState('')
@@ -52,7 +51,7 @@ const IncomeUpdate: NextPage = () => {
         setSaleId(income.saleId)
         setIncomeId(id as string)
         setIncomeValue(income.value)
-        setIncomeInfo(income.info)
+        setIncomeInfo(income.info || '')
         setDebit(income.debit)
         setIncomeDate(
           new Date(
