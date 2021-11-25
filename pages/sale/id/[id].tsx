@@ -256,7 +256,6 @@ const SaleUpdate: NextPage = () => {
                               <input
                                 type="number"
                                 step="0.01"
-                                min={0}
                                 className={`${globals.input} ${styles.productCost}`}
                                 onChange={(e) => setProducts(() => {
                                   let newProducts = [...products]
@@ -276,7 +275,6 @@ const SaleUpdate: NextPage = () => {
                               <input
                                 type="number"
                                 step="0.01"
-                                min={0}
                                 className={`${globals.input} ${styles.productValue}`}
                                 onChange={(e) => setProducts(() => {
                                   let newProducts = [...products]
