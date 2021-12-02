@@ -37,6 +37,12 @@ export default function NavLinks() {
       </li>
 
       <li>
+        <Link href={"/income/list"}>
+          <a className={globals.link}>Pagamentos</a>
+        </Link>
+      </li>
+
+      <li>
         <Link href={"/reminder/list"}>
           <a className={globals.link}>Lembretes</a>
         </Link>

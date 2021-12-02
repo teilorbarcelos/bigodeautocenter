@@ -151,7 +151,7 @@ const IncomeUpdate: NextPage = () => {
               <div className={styles.saleLink}>
                 <Link href={`/debit/id/${debit.id}`}>
                   <a className={globals.link}>
-                    Voltar para a tela do débito.
+                    Ir para a tela do débito.
                   </a>
                 </Link>
               </div>

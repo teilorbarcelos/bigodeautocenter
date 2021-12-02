@@ -1,0 +1,47 @@
+.filter {
+  position: fixed;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  top: 3.5rem;
+  padding: 1rem 0;
+  gap: 1rem;
+  background: var(--COLOR_WHITE_LIGHT);
+  border-bottom: 2px solid var(--COLOR_GRAY_LIGHT);
+
+  .filterType {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    @media screen and (max-width: 400px) {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+  }
+
+  @media screen and (max-width: 400px) {
+    flex-direction: column;
+    gap: 1rem;
+
+    .searchInput {
+      justify-content: space-between;
+    }
+  }
+}
+
+.incomeTable {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  justify-content: center;
+  padding: 9rem 0;
+  margin: 0 auto;
+
+  @media screen and (max-width: 400px) {
+    padding: 18rem 1rem;
+  }
+}

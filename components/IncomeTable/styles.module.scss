@@ -1,0 +1,22 @@
+.incomesList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.5rem;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    outline: 1px solid var(--COLOR_PRIMARY_NORMAL);
+    box-shadow: 2px 2px 10px 1px var(--COLOR_PRIMARY_NORMAL);
+    padding: 1rem;
+    border-radius: 0.5rem;
+
+    @media screen and (max-width: 400px) {
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: center;
+    }
+  }
+}

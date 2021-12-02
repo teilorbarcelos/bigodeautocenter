@@ -9,6 +9,7 @@ import ReminderIcon from '../svg/ReminderIcon'
 import UserIcon from '../svg/UserIcon'
 import { useAuth } from '../../hooks/useAuth'
 import UsersIcon from '../svg/UsersIcon'
+import IncomeIcon from '../svg/IncomeIcon'
 
 export default function InitialPage() {
   const { user } = useAuth()
@@ -65,6 +66,18 @@ export default function InitialPage() {
           </div>
           <div>
             <DebitIcon className={styles.svgIcon} />
+          </div>
+        </div>
+
+        <div
+          className={styles.card}
+          onClick={() => router.push('/income/list')}
+        >
+          <div>
+            <h6>Pagamentos</h6>
+          </div>
+          <div>
+            <IncomeIcon className={styles.svgIcon} />
           </div>
         </div>
 
