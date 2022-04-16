@@ -12,6 +12,8 @@ import { useForm } from 'react-hook-form'
 import { api } from '../../api'
 import { useEffect, useState } from 'react'
 import Button1 from '../../../components/Button1'
+import { IPaginationProps } from '../../../interfaces'
+import { Pagination } from '../../../components/Pagination'
 
 export interface IUserUpdate {
   user_id?: string
@@ -21,29 +23,44 @@ export interface IUserUpdate {
   password2: string
 }
 
+interface IClientsListProps {
+  clients: IClient[]
+  page: number
+  perPage: number
+  total: number
+}
+
 const ClientList: NextPage = () => {
   const { user, loading } = useAuth()
   const { handleSubmit } = useForm()
   const [filter, setFilter] = useState('')
   const [clients, setClients] = useState<IClient[]>([])
+  const [pagination, setPagination] = useState<IPaginationProps>({
+    page: 1,
+    perPage: 30,
+    total: 0
+  })
 
-  async function filterClientList() {
-    const response = await api.post<IClient[]>('/client/list', {
-      filter
+  async function getClientList() {
+    const response = await api.post<IClientsListProps>('/client/list', {
+      filter,
+      perPage: pagination.perPage,
+      page: pagination.page
     })
-    setClients(response.data)
-  }
 
-  async function populateInitialClientList() {
-    const response = await api.post<IClient[]>('/client/list')
-    setClients(response.data)
+    setClients(response.data.clients)
+    setPagination({
+      ...pagination,
+      perPage: response.data.perPage,
+      total: response.data.total
+    })
   }
 
   useEffect(() => {
     if (!loading) {
-      populateInitialClientList()
+      getClientList()
     }
-  }, [loading])
+  }, [loading, pagination.page])
 
   return (
 
@@ -61,7 +78,7 @@ const ClientList: NextPage = () => {
 
               <form
                 className={styles.searchInput}
-                onSubmit={handleSubmit(filterClientList)}
+                onSubmit={handleSubmit(getClientList)}
               >
                 <input
                   id="filter"
@@ -71,7 +88,13 @@ const ClientList: NextPage = () => {
                   className={globals.input}
                 />
 
-                <Button1 onClick={filterClientList} title="Buscar" />
+                <Button1
+                  onClick={() => setPagination({
+                    ...pagination,
+                    page: 1
+                  })}
+                  title="Buscar"
+                />
               </form>
 
               <Link href="/client/create">
@@ -84,6 +107,13 @@ const ClientList: NextPage = () => {
 
             <div className={styles.clientList}>
               <ClientTable clients={clients} />
+
+              {pagination.total > pagination.perPage &&
+                <Pagination
+                  pagination={pagination}
+                  setPagination={setPagination}
+                />
+              }
             </div>
 
           </>
