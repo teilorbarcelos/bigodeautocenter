@@ -12,12 +12,17 @@ import { IUser } from '../../../contexts/authContext'
 import UserTable from '../../../components/UserTable'
 import { useForm } from 'react-hook-form'
 import Button1 from '../../../components/Button1'
+import { IPaginationProps } from '../../../interfaces'
 
 interface INewUser {
   name: string
   login: string
   password: string
   password2: string
+}
+
+interface IUserList extends IPaginationProps {
+  users: IUser[]
 }
 
 const UserList: NextPage = () => {
@@ -30,8 +35,10 @@ const UserList: NextPage = () => {
   const [newUserPassword2, setNewUserPassword2] = useState('')
 
   async function getUsersList() {
-    const response = await api.post<IUser[]>('/user/list')
-    setUsers(response.data)
+    const response = await api.post<IUserList>('/user/list', {
+      page: 1
+    })
+    setUsers(response.data.users)
   }
 
   useEffect(() => {

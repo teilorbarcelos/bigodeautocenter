@@ -1,5 +1,7 @@
 import axios from "axios"
 
 export const api = axios.create({
-  baseURL: 'https://backend-bigode.herokuapp.com'
+  baseURL: 'http://localhost:3300'
+  // baseURL: process.env.REACT_APP_API
+  // 'https://backend-bigode.herokuapp.com'
 })
