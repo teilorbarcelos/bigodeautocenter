@@ -13,6 +13,7 @@ import UserTable from '../../../components/UserTable'
 import { useForm } from 'react-hook-form'
 import Button1 from '../../../components/Button1'
 import { IPaginationProps } from '../../../interfaces'
+import { Pagination } from '../../../components/Pagination'
 
 interface INewUser {
   name: string
@@ -33,12 +34,23 @@ const UserList: NextPage = () => {
   const [newUserLogin, setNewUserLogin] = useState('')
   const [newUserPassword, setNewUserPassword] = useState('')
   const [newUserPassword2, setNewUserPassword2] = useState('')
+  const [pagination, setPagination] = useState<IPaginationProps>({
+    page: 1,
+    perPage: 30,
+    total: 0
+  })
 
   async function getUsersList() {
     const response = await api.post<IUserList>('/user/list', {
-      page: 1
+      page: pagination.page
     })
+
     setUsers(response.data.users)
+    setPagination({
+      page: response.data.page,
+      perPage: response.data.perPage,
+      total: response.data.total
+    })
   }
 
   useEffect(() => {
@@ -84,6 +96,12 @@ const UserList: NextPage = () => {
 
             <div className={styles.userList}>
               <UserTable updateList={getUsersList} users={users} />
+
+              <Pagination
+                pagination={pagination}
+                setPagination={setPagination}
+                refreshList={getUsersList}
+              />
             </div>
 
             {

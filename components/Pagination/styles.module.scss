@@ -1,0 +1,44 @@
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0;
+
+  .buttonsContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .arrowButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid var(--COLOR_PRIMARY_DARK);
+    border-radius: 8px;
+    color: var(--COLOR_PRIMARY_DARK);
+    cursor: pointer;
+  }
+
+  .currentPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid var(--COLOR_PRIMARY_DARK);
+    border-radius: 8px;
+    background: var(--COLOR_PRIMARY_LIGHT);
+    color: var(--COLOR_PRIMARY_DARK);
+  }
+
+  .allowedPages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    border-radius: 8px;
+    color: var(--COLOR_PRIMARY_DARK);
+    cursor: pointer;
+  }
+}
