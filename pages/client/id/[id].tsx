@@ -15,6 +15,16 @@ import SaleTable from '../../../components/SaleTable'
 import ReminderTable, { IReminder } from '../../../components/ReminderTable'
 import ButtonDanger from '../../../components/ButtonDanger'
 import MyMaskedInput from '../../../components/MyMaskedInput'
+import { Pagination } from '../../../components/Pagination'
+import { IPaginationProps } from '../../../interfaces'
+
+interface IClientListResponseProps {
+  client: IClient
+  remindersPage?: number
+  totalReminders?: number
+  salesPage?: number
+  totalSales?: number
+}
 
 const Client: NextPage = () => {
   const { handleSubmit } = useForm()
@@ -30,8 +40,18 @@ const Client: NextPage = () => {
   const [info, setInfo] = useState('')
   const [sales, setSales] = useState<ISale[]>([])
   const [reminders, setReminders] = useState<IReminder[]>([])
+  const [salesPagination, setSalesPagination] = useState<IPaginationProps>({
+    page: 1,
+    perPage: 10,
+    total: 0
+  })
+  const [remindersPagination, setRemindersPagination] = useState<IPaginationProps>({
+    page: 1,
+    perPage: 10,
+    total: 0
+  })
 
-  async function getClient() {
+  const getClient = async () => {
 
     const { id } = await router.query // necessary "await" here
 
@@ -39,34 +59,46 @@ const Client: NextPage = () => {
       return
     }
 
-    const clientResponse = await api.post<IClient>('/client/getData', {
-      id
+    const clientResponse = await api.post<IClientListResponseProps>('/client/getData', {
+      id,
+      salesPage: salesPagination.page,
+      remindersPage: remindersPagination.page
     })
 
     setId(id as string)
-    setOriginalName(clientResponse.data.name)
-    setName(clientResponse.data.name)
-    setContact(clientResponse.data.contact)
-    setCpf(clientResponse.data.cpf)
-    setCnpj(clientResponse.data.cnpj)
-    setBirthday(clientResponse.data.birthday?.toString().replace('T00:00:00.000Z', ''))
-    setInfo(clientResponse.data.info)
-    setSales(clientResponse.data.sales)
-    setReminders(clientResponse.data.reminders)
+    setOriginalName(clientResponse.data.client.name)
+    setName(clientResponse.data.client.name)
+    setContact(clientResponse.data.client.contact)
+    setCpf(clientResponse.data.client.cpf)
+    setCnpj(clientResponse.data.client.cnpj)
+    setBirthday(clientResponse.data.client.birthday?.toString().replace('T00:00:00.000Z', ''))
+    setInfo(clientResponse.data.client.info)
+    setSales(clientResponse.data.client.sales)
+    setReminders(clientResponse.data.client.reminders)
+    setRemindersPagination({
+      ...remindersPagination,
+      total: clientResponse.data.totalReminders
+    })
+    setSalesPagination({
+      ...salesPagination,
+      total: clientResponse.data.totalSales
+    })
 
   }
 
   useEffect(() => {
     try {
-
       getClient()
-
     } catch (error) {
       alert(error)
     } finally {
       setLoading(false)
     }
-  }, [router.query])
+  }, [
+    router.query,
+    remindersPagination.page,
+    salesPagination.page
+  ])
 
   async function updateClient() {
     const response = await api.post<IClient>('/client/update', {
@@ -242,8 +274,14 @@ const Client: NextPage = () => {
 
                     <div className={styles.saleTable}>
                       <SaleTable sales={sales} />
-                    </div>
 
+                      {salesPagination.total > 10 &&
+                        <Pagination
+                          pagination={salesPagination}
+                          setPagination={setSalesPagination}
+                        />
+                      }
+                    </div>
                   </div>
                 </div>
               </>
@@ -255,6 +293,13 @@ const Client: NextPage = () => {
               <h5>Lembretes:</h5>
 
               <ReminderTable updateList={getClient} reminders={reminders} />
+
+              {remindersPagination.total > 10 &&
+                <Pagination
+                  pagination={remindersPagination}
+                  setPagination={setRemindersPagination}
+                />
+              }
             </div>
 
             <div className={styles.reminderCreateButton}>

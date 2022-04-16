@@ -47,7 +47,7 @@ const UserList: NextPage = () => {
 
     setUsers(response.data.users)
     setPagination({
-      page: response.data.page,
+      ...pagination,
       perPage: response.data.perPage,
       total: response.data.total
     })
@@ -57,7 +57,7 @@ const UserList: NextPage = () => {
     if (!loading) {
       getUsersList()
     }
-  }, [loading])
+  }, [loading, pagination.page])
 
   async function newUser(data: INewUser) {
     const newUser = await api.post<IUser>('/user/create', {
@@ -97,11 +97,12 @@ const UserList: NextPage = () => {
             <div className={styles.userList}>
               <UserTable updateList={getUsersList} users={users} />
 
-              <Pagination
-                pagination={pagination}
-                setPagination={setPagination}
-                refreshList={getUsersList}
-              />
+              {pagination.total > 30 &&
+                <Pagination
+                  pagination={pagination}
+                  setPagination={setPagination}
+                />
+              }
             </div>
 
             {

@@ -5,13 +5,11 @@ import styles from './styles.module.scss'
 interface IPaginationComponentProps {
   pagination: IPaginationProps
   setPagination: Dispatch<SetStateAction<IPaginationProps>>
-  refreshList: () => void
 }
 
 export const Pagination: React.FC<IPaginationComponentProps> = ({
   pagination,
-  setPagination,
-  refreshList
+  setPagination
 }) => {
   const lastPage = Math.ceil(pagination.total / pagination.perPage)
   let nextsCount = 4;
@@ -56,12 +54,11 @@ export const Pagination: React.FC<IPaginationComponentProps> = ({
           className={styles.arrowButton}
           onClick={() => {
             if (pagination.page > 1) {
+              const page = pagination.page - 1
               setPagination({
                 ...pagination,
-                page: pagination.page - 1
+                page
               })
-
-              refreshList()
             }
           }}
         >&#8249;</div>
@@ -77,8 +74,6 @@ export const Pagination: React.FC<IPaginationComponentProps> = ({
                     ...pagination,
                     page
                   })
-
-                  refreshList()
                 }}
               >
                 {page}
@@ -104,8 +99,6 @@ export const Pagination: React.FC<IPaginationComponentProps> = ({
                     ...pagination,
                     page
                   })
-
-                  refreshList()
                 }}
               >
                 {page}
@@ -118,12 +111,11 @@ export const Pagination: React.FC<IPaginationComponentProps> = ({
           className={styles.arrowButton}
           onClick={() => {
             if (pagination.page < lastPage) {
+              const page = pagination.page + 1
               setPagination({
                 ...pagination,
-                page: pagination.page + 1
+                page
               })
-
-              refreshList()
             }
           }}
         >&#8250;</div>
