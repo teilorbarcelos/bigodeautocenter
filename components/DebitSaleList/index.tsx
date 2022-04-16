@@ -3,9 +3,11 @@ import globals from '../../styles/globals.module.scss'
 import { useForm } from 'react-hook-form'
 import Button1 from '../Button1'
 import { api } from '../../pages/api'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import DebitTable from '../DebitTable'
 import { IIncome } from '../../pages/debit/id/[id]'
+import { Pagination } from '../Pagination'
+import { IPaginationProps } from '../../interfaces'
 
 interface IDebitFormData {
   dueDate: Date
@@ -15,6 +17,8 @@ interface IDebitFormData {
 
 interface IDebitListProps {
   saleId: string
+  debitsPagination: IPaginationProps
+  setDebitsPagination: Dispatch<SetStateAction<IPaginationProps>>
 }
 
 export interface IDebit {
@@ -29,7 +33,15 @@ export interface IDebit {
   error?: string
 }
 
-export default function DebitSaleList({ saleId }: IDebitListProps) {
+interface IDebitResponseProps {
+  debits: IDebit[]
+  page: number
+  perPage: number
+  total: number
+  totalDebitsValue: { _sum: { value: number | null } }
+}
+
+export default function DebitSaleList({ saleId, debitsPagination, setDebitsPagination }: IDebitListProps) {
   const { register, handleSubmit } = useForm()
   const [debitValue, setDebitValue] = useState(0)
   const [debitInfo, setDebitInfo] = useState('')
@@ -46,32 +58,26 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
   )
 
   async function populateDebitsList() {
-    const debits = await api.post<IDebit[]>('/debit/list', {
-      saleId
+    const response = await api.post<IDebitResponseProps>('/debit/list', {
+      saleId,
+      page: debitsPagination.page,
+      perPage: debitsPagination.perPage
     })
 
-    setDebitsList(debits.data)
+    setDebitsList(response.data.debits)
 
-    setTotalValue(
-      () => {
-        let sum = 0
-        debits.data.map(debit => {
-          sum += debit.value
-        })
-        return sum
-      }
-    )
+    setTotalValue(response.data.totalDebitsValue._sum.value)
 
-    if (debits.data.length > 0) {
+    if (response.data.debits.length > 0) {
 
       setDueDate(
         new Date(
           new Date(
-            debits.data[debits.data.length - 1].dueDate
+            response.data.debits[response.data.debits.length - 1].dueDate
           )
             .setMonth(
               new Date(
-                debits.data[debits.data.length - 1].dueDate
+                response.data.debits[response.data.debits.length - 1].dueDate
               ).getMonth() + 1
             )
         ).toISOString()
@@ -95,7 +101,7 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
 
   useEffect(() => {
     populateDebitsList()
-  }, [saleId])
+  }, [saleId, debitsPagination.page])
 
   async function createPendingDebit(data: IDebitFormData) {
 
@@ -147,6 +153,13 @@ export default function DebitSaleList({ saleId }: IDebitListProps) {
             <div className={styles.debitsList}>
 
               <DebitTable debits={debitsList} updateList={populateDebitsList} />
+
+              {debitsPagination.total > debitsPagination.perPage &&
+                <Pagination
+                  pagination={debitsPagination}
+                  setPagination={setDebitsPagination}
+                />
+              }
 
             </div>
             <h6>Valor total dos débitos (R$): {totalValue.toFixed(2)}</h6>

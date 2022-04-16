@@ -85,7 +85,6 @@ const SaleList: NextPage = () => {
   }, [filterType, initialDateConst, finalDateConst])
 
   return (
-
     <BasicPage
       title="Lista de Vendas"
     >

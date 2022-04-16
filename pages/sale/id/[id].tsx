@@ -15,8 +15,18 @@ import { ICost } from '../create'
 import Button2 from '../../../components/Button2'
 import DebitSaleList from '../../../components/DebitSaleList'
 import ButtonDanger from '../../../components/ButtonDanger'
+import { IPaginationProps } from '../../../interfaces'
+import { Pagination } from '../../../components/Pagination'
+import { useAuth } from '../../../hooks/useAuth'
+
+interface ISaleResponseProps {
+  sale: ISale
+  debitsPage: number
+  totalDebits: number
+}
 
 const SaleUpdate: NextPage = () => {
+  const { user } = useAuth()
   const [products, setProducts] = useState<IProduct[]>([])
   const [totalCost, setTotalCost] = useState(0)
   const [totalValue, setTotalValue] = useState(0)
@@ -33,6 +43,11 @@ const SaleUpdate: NextPage = () => {
   const [paid, setPaid] = useState(false)
   const [info, setInfo] = useState('')
   const [cost, setCost] = useState<ICost>({} as ICost)
+  const [debitsPagination, setDebitsPagination] = useState<IPaginationProps>({
+    page: 1,
+    perPage: 12,
+    total: 0
+  })
 
   useEffect(() => {
     let somaCost = 0
@@ -61,36 +76,45 @@ const SaleUpdate: NextPage = () => {
       return
     }
 
-    const saleResponse = await api.post<ISale>('/sale/getData', {
-      id
+    const saleResponse = await api.post<ISaleResponseProps>('/sale/getData', {
+      id,
+      debitsPage: debitsPagination.page,
+      debitsPerPage: debitsPagination.perPage
     })
 
-    const data = saleResponse.data
+    const { data } = saleResponse
 
-    const date = data.createdAt.toString().split('T')[0].split('-')
-    setProducts(JSON.parse(data.products.toString()) as IProduct[])
+    const date = data.sale.createdAt.toString().split('T')[0].split('-')
+
+    setProducts(JSON.parse(data.sale.products.toString()) as IProduct[])
 
     setId(id as string)
-    setClient(data.client)
+    setClient(data.sale.client)
     setDate(`${date[2]}/${date[1]}/${date[0]}`)
-    setCar(data.car)
-    setPlate(data.plate)
-    setKm(data.km)
-    setPaid(data.paid)
-    setInfo(data.info)
-    setCost(data.cost)
+    setCar(data.sale.car)
+    setPlate(data.sale.plate)
+    setKm(data.sale.km)
+    setPaid(data.sale.paid)
+    setInfo(data.sale.info)
+    setCost(data.sale.cost)
+    setDebitsPagination({
+      ...debitsPagination,
+      total: data.totalDebits
+    })
   }
 
   useEffect(() => {
-    try {
-      getSale()
+    if (user) {
+      try {
+        getSale()
 
-    } catch (error) {
-      alert(error)
-    } finally {
-      setLoading(false)
+      } catch (error) {
+        alert(error)
+      } finally {
+        setLoading(false)
+      }
     }
-  }, [router.query])
+  }, [user, router.query])
 
   async function updateSale() {
 
@@ -384,7 +408,11 @@ const SaleUpdate: NextPage = () => {
 
               {/* DEBITS LIST */}
 
-              <DebitSaleList saleId={id} />
+              <DebitSaleList
+                saleId={id}
+                debitsPagination={debitsPagination}
+                setDebitsPagination={setDebitsPagination}
+              />
             </div>
           </>
         }
