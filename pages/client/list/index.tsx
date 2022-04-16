@@ -57,10 +57,10 @@ const ClientList: NextPage = () => {
   }
 
   useEffect(() => {
-    if (!loading) {
+    if (user) {
       getClientList()
     }
-  }, [loading, pagination.page])
+  }, [user, pagination.page])
 
   return (
 
