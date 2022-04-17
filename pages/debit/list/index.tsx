@@ -10,21 +10,44 @@ import { useEffect, useState } from 'react'
 import { api } from '../../api'
 import { IDebit } from '../../../components/DebitSaleList'
 import DebitTable from '../../../components/DebitTable'
+import { IPaginationProps } from '../../../interfaces'
+import { Pagination } from '../../../components/Pagination'
+
+interface IDebitsResponseProps {
+  debits: IDebit[]
+  perPage: number
+  total: number
+}
 
 const DebitList: NextPage = () => {
   const { user, loading } = useAuth()
   const [debits, setDebits] = useState<IDebit[]>([])
+  const [pagination, setPagination] = useState<IPaginationProps>({
+    page: 1,
+    perPage: 30,
+    total: 0
+  })
 
   async function pendingDebitList() {
-    const response = await api.post<IDebit[]>('/debit/report')
-    setDebits(response.data)
+    const response = await api.post<IDebitsResponseProps>('/debit/list', {
+      page: pagination.page,
+      perPage: pagination.perPage,
+      paid: false
+    })
+
+    setDebits(response.data.debits)
+    setPagination({
+      ...pagination,
+      perPage: response.data.perPage,
+      total: response.data.total
+    })
   }
 
   useEffect(() => {
     if (!loading) {
       pendingDebitList()
     }
-  }, [loading])
+  }, [loading, pagination.page])
 
   return (
 
@@ -42,6 +65,13 @@ const DebitList: NextPage = () => {
               deleteOption={false}
               paidSwitchButton={false}
             />
+
+            {pagination.total > pagination.perPage &&
+              <Pagination
+                pagination={pagination}
+                setPagination={setPagination}
+              />
+            }
           </div>
           :
           !loading &&

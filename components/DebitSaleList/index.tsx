@@ -162,7 +162,7 @@ export default function DebitSaleList({ saleId, debitsPagination, setDebitsPagin
               }
 
             </div>
-            <h6>Valor total dos débitos (R$): {totalValue.toFixed(2)}</h6>
+            <h6>Valor total dos débitos (R$): {totalValue && totalValue.toFixed(2)}</h6>
           </>
 
           :
