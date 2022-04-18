@@ -149,6 +149,15 @@ const Client: NextPage = () => {
     }
   }
 
+  useEffect(() => {
+    if (reminders.length < 1 && remindersPagination.page > 1) {
+      setRemindersPagination({
+        ...remindersPagination,
+        page: remindersPagination.page - 1
+      })
+    }
+  }, [reminders])
+
   return (
     <BasicPage
       title="Cadastro de cliente"

@@ -144,6 +144,15 @@ export default function DebitSaleList({ saleId, debitsPagination, setDebitsPagin
     populateDebitsList()
   }
 
+  useEffect(() => {
+    if (debitsList.length < 1 && debitsPagination.page > 1) {
+      setDebitsPagination({
+        ...debitsPagination,
+        page: debitsPagination.page - 1
+      })
+    }
+  }, [debitsList])
+
   return (
     <section className={styles.debitsalelist} id="debitsalelist">
       <h5>Débitos desta venda</h5>
