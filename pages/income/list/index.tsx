@@ -10,10 +10,19 @@ import { useEffect, useState } from 'react'
 import { api } from '../../api'
 import IncomeTable from '../../../components/IncomeTable'
 import { IIncome } from '../../debit/id/[id]'
+import { IPaginationProps } from '../../../interfaces'
+import { Pagination } from '../../../components/Pagination'
 
 interface IInterval {
   initialDate?: Date
   finalDate?: Date
+}
+
+interface IIncomesResponseProps {
+  incomes: IIncome[]
+  page: number
+  perPage: number
+  total: number
 }
 
 const IncomesList: NextPage = () => {
@@ -22,27 +31,56 @@ const IncomesList: NextPage = () => {
   const [filterType, setFilterType] = useState('today')
   const [initialDateConst, setInitialDate] = useState(new Date(Date.now()))
   const [finalDateConst, setFinalDate] = useState(new Date(Date.now()))
+  const [pagination, setPagination] = useState<IPaginationProps>({
+    page: 1,
+    perPage: 30,
+    total: 0
+  })
 
   async function filterIncomeList({ initialDate, finalDate }: IInterval) {
-    const response = await api.post<IIncome[]>('/income/list', {
+    const { data: response } = await api.post<IIncomesResponseProps>('/income/list', {
       initialDate: initialDate ? initialDate.toISOString().split('T')[0] : '',
-      finalDate: finalDate ? finalDate.toISOString().split('T')[0] : ''
+      finalDate: finalDate ? finalDate.toISOString().split('T')[0] : '',
+      page: pagination.page,
+      perPage: pagination.perPage
     })
-    setIncomes(response.data)
+
+    setIncomes(response.incomes)
+    setPagination({
+      ...pagination,
+      perPage: response.perPage,
+      total: response.total
+    })
+  }
+
+  const updateList = () => {
+    if (filterType === 'today') {
+      filterIncomeList({})
+    } else {
+      filterIncomeList({
+        initialDate: new Date(initialDateConst.toISOString().split('T')[0]),
+        finalDate: new Date(finalDateConst.toISOString().split('T')[0])
+      })
+    }
   }
 
   useEffect(() => {
-    if (!loading) {
-      if (filterType === 'today') {
-        filterIncomeList({})
-      } else {
-        filterIncomeList({
-          initialDate: new Date(initialDateConst.toISOString().split('T')[0]),
-          finalDate: new Date(finalDateConst.toISOString().split('T')[0])
-        })
-      }
+    if (user) {
+      updateList()
     }
-  }, [filterType, initialDateConst, finalDateConst, loading])
+  }, [user, pagination.page])
+
+  useEffect(() => {
+    if (pagination.page === 1) {
+      updateList()
+      return
+    }
+
+    setPagination({
+      ...pagination,
+      page: 1
+    })
+  }, [filterType, initialDateConst, finalDateConst])
 
   return (
 
@@ -108,6 +146,13 @@ const IncomesList: NextPage = () => {
               <IncomeTable
                 incomes={incomes}
               />
+
+              {pagination.total > pagination.perPage &&
+                <Pagination
+                  pagination={pagination}
+                  setPagination={setPagination}
+                />
+              }
             </div>
           </>
           :

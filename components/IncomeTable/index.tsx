@@ -21,7 +21,7 @@ export default function IncomeTable({
 
     <div className={styles.incomesList}>
       {
-        incomes.length > 0 ?
+        incomes?.length > 0 ?
           incomes.map((income, index) => {
             const dateSplit = income.createdAt.toString().split('T')[0].split('-')
             const date = `${dateSplit[2]}/${dateSplit[1]}/${dateSplit[0]}`
