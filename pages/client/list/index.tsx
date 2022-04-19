@@ -1,19 +1,16 @@
 import type { NextPage } from 'next'
 import Link from 'next/link'
-import Navbar from '../../../components/Navbar'
 import { useAuth } from '../../../hooks/useAuth'
 import styles from './styles.module.scss'
 import globals from '../../../styles/globals.module.scss'
-import Login from '../../../components/Login'
 import ClientTable, { IClient } from '../../../components/ClientTable'
-import LoadingScreen from '../../../components/LoadingScreen'
-import BasicPage from '../../../components/BasicPage'
 import { useForm } from 'react-hook-form'
 import { api } from '../../api'
 import { useEffect, useState } from 'react'
 import Button1 from '../../../components/Button1'
 import { IPaginationProps } from '../../../interfaces'
 import { Pagination } from '../../../components/Pagination'
+import Layout from '../../../components/Layout'
 
 export interface IUserUpdate {
   user_id?: string
@@ -31,7 +28,7 @@ interface IClientsListProps {
 }
 
 const ClientList: NextPage = () => {
-  const { user, loading } = useAuth()
+  const { user } = useAuth()
   const { handleSubmit } = useForm()
   const [filter, setFilter] = useState('')
   const [clients, setClients] = useState<IClient[]>([])
@@ -63,66 +60,51 @@ const ClientList: NextPage = () => {
   }, [user, pagination.page])
 
   return (
-
-    <BasicPage
-      title="Lista de Clientes"
+    <Layout
+      title='Lista de Clientes'
     >
-      <>
-        <LoadingScreen visible={loading} />
+      <div className={styles.filter}>
 
-        {user ?
-          <>
-            <Navbar />
+        <form
+          className={styles.searchInput}
+          onSubmit={handleSubmit(getClientList)}
+        >
+          <input
+            id="filter"
+            type="text"
+            onChange={e => setFilter(e.target.value)}
+            value={filter}
+            className={globals.input}
+          />
 
-            <div className={styles.filter}>
+          <Button1
+            onClick={() => setPagination({
+              ...pagination,
+              page: 1
+            })}
+            title="Buscar"
+          />
+        </form>
 
-              <form
-                className={styles.searchInput}
-                onSubmit={handleSubmit(getClientList)}
-              >
-                <input
-                  id="filter"
-                  type="text"
-                  onChange={e => setFilter(e.target.value)}
-                  value={filter}
-                  className={globals.input}
-                />
+        <Link href="/client/create">
+          <a>
+            <Button1 title="Cadastrar Cliente" />
+          </a>
+        </Link>
 
-                <Button1
-                  onClick={() => setPagination({
-                    ...pagination,
-                    page: 1
-                  })}
-                  title="Buscar"
-                />
-              </form>
+      </div>
 
-              <Link href="/client/create">
-                <a>
-                  <Button1 title="Cadastrar Cliente" />
-                </a>
-              </Link>
+      <div className={styles.clientList}>
+        <ClientTable clients={clients} />
 
-            </div>
-
-            <div className={styles.clientList}>
-              <ClientTable clients={clients} />
-
-              {pagination.total > pagination.perPage &&
-                <Pagination
-                  pagination={pagination}
-                  setPagination={setPagination}
-                />
-              }
-            </div>
-
-          </>
-          :
-          !loading &&
-          <Login />
+        {pagination.total > pagination.perPage &&
+          <Pagination
+            pagination={pagination}
+            setPagination={setPagination}
+          />
         }
-      </>
-    </BasicPage>
+      </div>
+    </Layout>
   )
 }
 
