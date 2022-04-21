@@ -1,19 +1,15 @@
 import type { NextPage } from 'next'
-import Link from 'next/link'
-import Navbar from '../../../components/Navbar'
 import { useAuth } from '../../../hooks/useAuth'
 import styles from './styles.module.scss'
 import globals from '../../../styles/globals.module.scss'
-import Login from '../../../components/Login'
-import LoadingScreen from '../../../components/LoadingScreen'
-import BasicPage from '../../../components/BasicPage'
 import SaleTable from '../../../components/SaleTable'
 import { useEffect, useState } from 'react'
 import { ISale } from '../../../components/ClientTable'
-import Button1 from '../../../components/Button1'
 import { api } from '../../api'
 import { IPaginationProps } from '../../../interfaces'
 import { Pagination } from '../../../components/Pagination'
+import Layout from '../../../components/Layout'
+import axios from 'axios'
 
 interface IInterval {
   initialDate?: Date
@@ -28,7 +24,8 @@ interface ISalesListResponseProps {
 }
 
 const SaleList: NextPage = () => {
-  const { user, loading } = useAuth()
+  const [loading, setLoading] = useState(true)
+  const { user } = useAuth()
   const [filterType, setFilterType] = useState('today')
   const [initialDateConst, setInitialDate] = useState(new Date(Date.now()))
   const [finalDateConst, setFinalDate] = useState(new Date(Date.now()))
@@ -40,19 +37,28 @@ const SaleList: NextPage = () => {
   })
 
   async function filterSaleList({ initialDate, finalDate }: IInterval) {
-    const response = await api.post<ISalesListResponseProps>('/sale/list', {
-      initialDate: initialDate ? initialDate.toISOString().split('T')[0] : '',
-      finalDate: finalDate ? finalDate.toISOString().split('T')[0] : '',
-      page: pagination.page,
-      perPage: pagination.perPage
-    })
+    try {
+      setLoading(true)
+      const response = await api.post<ISalesListResponseProps>('/sale/list', {
+        initialDate: initialDate ? initialDate.toISOString().split('T')[0] : '',
+        finalDate: finalDate ? finalDate.toISOString().split('T')[0] : '',
+        page: pagination.page,
+        perPage: pagination.perPage
+      })
 
-    setSales(response.data.sales)
-    setPagination({
-      ...pagination,
-      perPage: response.data.perPage,
-      total: response.data.total
-    })
+      setSales(response.data.sales)
+      setPagination({
+        ...pagination,
+        perPage: response.data.perPage,
+        total: response.data.total
+      })
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data.message);
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   const updateList = () => {
@@ -85,87 +91,70 @@ const SaleList: NextPage = () => {
   }, [filterType, initialDateConst, finalDateConst])
 
   return (
-    <BasicPage
+    <Layout
       title="Lista de Vendas"
+      externalLoading={loading}
     >
-      <>
-        <LoadingScreen visible={loading} />
-        <Navbar />
+      <div className={styles.filter}>
+        <form className={styles.filterType}>
+          <div>
+            <label htmlFor="today">Hoje: </label>
+            <input
+              type="radio"
+              id="today"
+              defaultChecked
+              name="period"
+              onChange={() => setFilterType('today')}
+            />
+          </div>
 
-        {user ?
-          <>
-            <div className={styles.filter}>
-              <form className={styles.filterType}>
-                <div>
-                  <label htmlFor="today">Hoje: </label>
-                  <input
-                    type="radio"
-                    id="today"
-                    defaultChecked
-                    name="period"
-                    onChange={() => setFilterType('today')}
-                  />
-                </div>
+          <div>
+            <label htmlFor="interval">Intervalo: </label>
+            <input
+              type="radio"
+              id="interval"
+              name="period"
+              onChange={() => setFilterType('interval')}
+            />
+          </div>
 
-                <div>
-                  <label htmlFor="interval">Intervalo: </label>
-                  <input
-                    type="radio"
-                    id="interval"
-                    name="period"
-                    onChange={() => setFilterType('interval')}
-                  />
-                </div>
+          <div>
+            <label htmlFor="initialDate">Data inicial: </label>
+            <input
+              type="date"
+              name="initialDate"
+              className={globals.input}
+              onChange={(e) => {
+                setInitialDate(new Date(e.target.value))
+              }}
+              value={initialDateConst.toISOString().split('T')[0]}
+            />
+          </div>
 
-                <div>
-                  <label htmlFor="initialDate">Data inicial: </label>
-                  <input
-                    type="date"
-                    name="initialDate"
-                    className={globals.input}
-                    onChange={(e) => {
-                      setInitialDate(new Date(e.target.value))
-                    }}
-                    value={initialDateConst.toISOString().split('T')[0]}
-                  />
-                </div>
+          <div>
+            <label htmlFor="finalDate">Data final: </label>
+            <input
+              type="date"
+              name="finalDate"
+              className={globals.input}
+              onChange={(e) => setFinalDate(new Date(e.target.value))}
+              value={finalDateConst.toISOString().split('T')[0]}
+            />
+          </div>
+        </form>
+      </div>
 
-                <div>
-                  <label htmlFor="finalDate">Data final: </label>
-                  <input
-                    type="date"
-                    name="finalDate"
-                    className={globals.input}
-                    onChange={(e) => setFinalDate(new Date(e.target.value))}
-                    value={finalDateConst.toISOString().split('T')[0]}
-                  />
-                </div>
-              </form>
+      <div className={styles.saleTable}>
+        <SaleTable sales={sales} />
 
-              <Link href="/sale/create">
-                <a>
-                  <Button1 type="button" title="Nova venda" />
-                </a>
-              </Link>
-            </div>
-
-            <div className={styles.saleTable}>
-              <SaleTable sales={sales} />
-
-              {pagination.total > pagination.perPage &&
-                <Pagination
-                  pagination={pagination}
-                  setPagination={setPagination}
-                />
-              }
-            </div>
-          </>
-          :
-          !loading &&
-          <Login />
+        {pagination.total > pagination.perPage &&
+          <Pagination
+            pagination={pagination}
+            setPagination={setPagination}
+          />
         }
-      </>
-    </BasicPage>
+      </div>
+    </Layout>
   )
 }
 

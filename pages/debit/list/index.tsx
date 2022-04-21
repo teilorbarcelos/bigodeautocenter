@@ -1,16 +1,13 @@
 import type { NextPage } from 'next'
-import Navbar from '../../../components/Navbar'
 import { useAuth } from '../../../hooks/useAuth'
 import styles from './styles.module.scss'
-import Login from '../../../components/Login'
-import LoadingScreen from '../../../components/LoadingScreen'
-import BasicPage from '../../../components/BasicPage'
 import { useEffect, useState } from 'react'
 import { api } from '../../api'
 import { IDebit } from '../../../components/DebitSaleList'
 import DebitTable from '../../../components/DebitTable'
 import { IPaginationProps } from '../../../interfaces'
 import { Pagination } from '../../../components/Pagination'
+import Layout from '../../../components/Layout'
 
 interface IDebitsResponseProps {
   debits: IDebit[]
@@ -19,7 +16,7 @@ interface IDebitsResponseProps {
 }
 
 const DebitList: NextPage = () => {
-  const { user, loading } = useAuth()
+  const { user } = useAuth()
   const [debits, setDebits] = useState<IDebit[]>([])
   const [pagination, setPagination] = useState<IPaginationProps>({
     page: 1,
@@ -43,41 +40,29 @@ const DebitList: NextPage = () => {
   }
 
   useEffect(() => {
-    if (!loading) {
+    user &&
       pendingDebitList()
-    }
-  }, [loading, pagination.page])
+  }, [user, pagination.page])
 
   return (
-
-    <BasicPage
+    <Layout
       title="Lista de Débitos"
     >
-      <>
-        <LoadingScreen visible={loading} />
-        <Navbar />
+      <div className={styles.debitTable}>
+        <DebitTable
+          debits={debits}
+          deleteOption={false}
+          paidSwitchButton={false}
+        />
 
-        {user ?
-          <div className={styles.debitTable}>
-            <DebitTable
-              debits={debits}
-              deleteOption={false}
-              paidSwitchButton={false}
-            />
-
-            {pagination.total > pagination.perPage &&
-              <Pagination
-                pagination={pagination}
-                setPagination={setPagination}
-              />
-            }
-          </div>
-          :
-          !loading &&
-          <Login />
+        {pagination.total > pagination.perPage &&
+          <Pagination
+            pagination={pagination}
+            setPagination={setPagination}
+          />
         }
-      </>
-    </BasicPage>
+      </div>
+    </Layout>
   )
 }
 

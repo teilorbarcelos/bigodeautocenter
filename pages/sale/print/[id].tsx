@@ -2,15 +2,23 @@ import type { NextPage } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import styles from './styles.module.scss'
-import globals from '../../../styles/globals.module.scss'
 import { useEffect, useState } from 'react'
 import { IClient, IProduct, ISale } from '../../../components/ClientTable'
 import { api } from '../../api'
 import BasicPage from '../../../components/BasicPage'
 import { IDebit } from '../../../components/DebitSaleList'
 import BigodeImg from '../../../public/bigode-img.jpg'
+import LoadingScreen from '../../../components/LoadingScreen'
+import axios from 'axios'
+
+interface ISaleResponseProps {
+  sale: ISale
+  debitsPage: number
+  totalDebits: number
+}
 
 const SalePrint: NextPage = () => {
+  const [loading, setLoading] = useState(true)
   const [products, setProducts] = useState<IProduct[]>([])
   const [totalValue, setTotalValue] = useState(0)
 
@@ -38,21 +46,22 @@ const SalePrint: NextPage = () => {
   }, [products])
 
   useEffect(() => {
-    try {
-      async function getSale() {
+    async function getSale() {
 
-        const { id } = await router.query // necessary "await" here
+      const { id } = await router.query // necessary "await" here
 
-        if (!id) {
-          return
-        }
+      if (!id) {
+        return
+      }
 
-        const saleResponse = await api.post<ISale>('/sale/getData', {
-          id
+      try {
+        const { data: saleResponse } = await api.post<ISaleResponseProps>('/sale/getData', {
+          id,
+          debitsPage: 1,
+          debitsPerPage: 1000
         })
 
-        const data = saleResponse.data
-        // console.log(data)
+        const data = saleResponse.sale
 
         const date = data.createdAt.toString().split('T')[0].split('-')
         setProducts(JSON.parse(data.products.toString()) as IProduct[])
@@ -66,13 +75,17 @@ const SalePrint: NextPage = () => {
         setInfo(data.info)
         setDebits(data.debits)
         setKm(data.km)
+
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          alert(error.response?.data.message);
+        }
+      } finally {
+        setLoading(false)
       }
-
-      getSale()
-
-    } catch (error) {
-      alert(error)
     }
+
+    getSale()
   }, [router.query])
 
   return (
@@ -80,127 +93,130 @@ const SalePrint: NextPage = () => {
       title="Bigode Internal Sales System"
       content="Sistema interno restrito a funcionários"
     >
-      <div className={styles.ticket}>
-        {id &&
-          <>
-            <header>
-              <Image src={BigodeImg} className={styles.img} />
+      <>
+        <LoadingScreen visible={loading} />
+        <div className={styles.ticket}>
+          {id &&
+            <>
+              <header>
+                <Image src={BigodeImg} className={styles.img} />
 
-              <div className={styles.companyInfo}>
-                <h6>BIGODE AUTO CENTER</h6>
-                <p>Rod Luiz Rosso, 1044 - Bosque do Repouso - São Luiz - Criciúma SC</p>
-                <p>Fone: (48) 99612-8191</p>
-                <p>E-mail: bigodeautocentercriciuma@gmail.com</p>
-                <p>https://bigodeautocenter.vercel.app/</p>
+                <div className={styles.companyInfo}>
+                  <h6>BIGODE AUTO CENTER</h6>
+                  <p>Rod Luiz Rosso, 1044 - Bosque do Repouso - São Luiz - Criciúma SC</p>
+                  <p>Fone: (48) 99612-8191</p>
+                  <p>E-mail: bigodeautocentercriciuma@gmail.com</p>
+                  <p>https://bigodeautocenter.vercel.app/</p>
+                </div>
+              </header>
+
+              <h6>Cliente: {client?.name}</h6>
+              <h6>CPF: {client?.cpf}</h6>
+              <h6>CNPJ: {client?.cnpj}</h6>
+              <h6>Carro: {car}</h6>
+              <h6>Placa: {plate}</h6>
+              <h6>Km: {km}</h6>
+              <h6>Data: {date}</h6>
+              <h6>Produtos e serviços:</h6>
+
+              <table className={styles.productsTable}>
+                <thead>
+                  <tr>
+                    <th>
+                      #
+                    </th>
+                    <th>
+                      Nome do produto
+                    </th>
+                    <th>
+                      Quant.
+                    </th>
+                    <th>
+                      Valor Unit. (R$)
+                    </th>
+                    <th>
+                      Valor total. (R$)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    products.map((product, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>
+                            {index + 1}
+                          </td>
+                          <td>
+                            {product.name}
+                          </td>
+                          <td>
+                            {product.amount || 1}
+                          </td>
+                          <td>
+                            {product.value.toFixed(2)}
+                          </td>
+                          <td>
+                            {((product.amount || 1) * product.value).toFixed(2)}
+                          </td>
+                        </tr>
+                      )
+                    })
+                  }
+                </tbody>
+              </table>
+              <div className={styles.totalValue}>
+                <h6 className={styles.highlight}>Total a pagar (R$): {totalValue.toFixed(2)}</h6>
               </div>
-            </header>
 
-            <h6>Cliente: {client?.name}</h6>
-            <h6>CPF: {client?.cpf}</h6>
-            <h6>CNPJ: {client?.cnpj}</h6>
-            <h6>Carro: {car}</h6>
-            <h6>Placa: {plate}</h6>
-            <h6>Km: {km}</h6>
-            <h6>Data: {date}</h6>
-            <h6>Produtos e serviços:</h6>
-
-            <table className={styles.productsTable}>
-              <thead>
-                <tr>
-                  <th>
-                    #
-                  </th>
-                  <th>
-                    Nome do produto
-                  </th>
-                  <th>
-                    Quant.
-                  </th>
-                  <th>
-                    Valor Unit. (R$)
-                  </th>
-                  <th>
-                    Valor total. (R$)
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  products.map((product, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>
-                          {index + 1}
-                        </td>
-                        <td>
-                          {product.name}
-                        </td>
-                        <td>
-                          {product.amount || 1}
-                        </td>
-                        <td>
-                          {product.value.toFixed(2)}
-                        </td>
-                        <td>
-                          {((product.amount || 1) * product.value).toFixed(2)}
-                        </td>
-                      </tr>
-                    )
-                  })
-                }
-              </tbody>
-            </table>
-            <div className={styles.totalValue}>
-              <h6 className={styles.highlight}>Total a pagar (R$): {totalValue.toFixed(2)}</h6>
-            </div>
-
-            <h6>Info. adicional: </h6>
-            <div className={styles.info}>
-              {info}
-            </div>
-            <h6>Situação: {paid ? 'Pago' : 'Pendente de pagamento'}</h6>
-            <h6>Débitos desta nota: </h6>
-            <table className={styles.debitsTable}>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Vencimento</th>
-                  <th>Valor (R$)</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  debits.map((debit, index) => {
-                    const dueDateSplit = debit.dueDate.toString().split('T')[0].split('-')
-                    const dueDate = `${dueDateSplit[2]}/${dueDateSplit[1]}/${dueDateSplit[0]}`
-
-                    return (
-                      <tr key={debit.id}>
-                        <td>{index + 1}</td>
-                        <td>{dueDate}</td>
-                        <td>{debit.value.toFixed(2)}</td>
-                        <td>{debit.paid ? 'Pago' : 'Pendente'}</td>
-                      </tr>
-                    )
-                  })
-                }
-              </tbody>
-            </table>
-
-            <div className={styles.autographs}>
-              <div>
-                <p>________________________________</p>
-                <p>BIGODE AUTO CENTER</p>
+              <h6>Info. adicional: </h6>
+              <div className={styles.info}>
+                {info}
               </div>
-              <div>
-                <p>________________________________</p>
-                <p>CLIENTE</p>
+              <h6>Situação: {paid ? 'Pago' : 'Pendente de pagamento'}</h6>
+              <h6>Débitos desta nota: </h6>
+              <table className={styles.debitsTable}>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Vencimento</th>
+                    <th>Valor (R$)</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    debits.map((debit, index) => {
+                      const dueDateSplit = debit.dueDate.toString().split('T')[0].split('-')
+                      const dueDate = `${dueDateSplit[2]}/${dueDateSplit[1]}/${dueDateSplit[0]}`
+
+                      return (
+                        <tr key={debit.id}>
+                          <td>{index + 1}</td>
+                          <td>{dueDate}</td>
+                          <td>{debit.value.toFixed(2)}</td>
+                          <td>{debit.paid ? 'Pago' : 'Pendente'}</td>
+                        </tr>
+                      )
+                    })
+                  }
+                </tbody>
+              </table>
+
+              <div className={styles.autographs}>
+                <div>
+                  <p>________________________________</p>
+                  <p>BIGODE AUTO CENTER</p>
+                </div>
+                <div>
+                  <p>________________________________</p>
+                  <p>CLIENTE</p>
+                </div>
               </div>
-            </div>
-          </>
-        }
-      </div>
+            </>
+          }
+        </div>
+      </>
     </BasicPage>
   )
 }

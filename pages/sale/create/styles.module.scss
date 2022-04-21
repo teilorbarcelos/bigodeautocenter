@@ -7,6 +7,10 @@
   min-height: 100vh;
   padding: 6rem 0 2rem;
 
+  .clientName {
+    color: var(--COLOR_PRIMARY_DARK);
+  }
+
   >div {
     display: flex;
     flex-direction: column;

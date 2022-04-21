@@ -6,6 +6,7 @@ import { IDebit } from '../DebitSaleList'
 import { IReminder } from '../ReminderTable'
 
 export interface IProduct {
+  id?: string
   name: string
   amount?: number
   cost: number

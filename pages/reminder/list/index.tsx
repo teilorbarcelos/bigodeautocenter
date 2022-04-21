@@ -1,15 +1,13 @@
 import type { NextPage } from 'next'
 import styles from './styles.module.scss'
-import globals from '../../styles/globals.module.scss'
-import BasicPage from '../../../components/BasicPage'
-import Navbar from '../../../components/Navbar'
-import Login from '../../../components/Login'
 import { useAuth } from '../../../hooks/useAuth'
 import ReminderTable, { IReminder } from '../../../components/ReminderTable'
 import { useEffect, useState } from 'react'
 import { api } from '../../api'
 import { IPaginationProps } from '../../../interfaces'
 import { Pagination } from '../../../components/Pagination'
+import Layout from '../../../components/Layout'
+import axios from 'axios'
 
 interface IRemindersResponseProps {
   reminders: IReminder[]
@@ -19,7 +17,8 @@ interface IRemindersResponseProps {
 }
 
 const Reminders: NextPage = () => {
-  const { user, loading } = useAuth()
+  const [loading, setLoading] = useState(true)
+  const { user } = useAuth()
   const [reminders, setReminders] = useState<IReminder[]>([])
   const [pagination, setPagination] = useState<IPaginationProps>({
     page: 1,
@@ -28,24 +27,33 @@ const Reminders: NextPage = () => {
   })
 
   async function getReminders() {
-    const { data: reminderResponse } = await api.post<IRemindersResponseProps>('/reminder/list', {
-      page: pagination.page,
-      perPage: pagination.perPage
-    })
+    try {
+      setLoading(true)
+      const { data: reminderResponse } = await api.post<IRemindersResponseProps>('/reminder/list', {
+        page: pagination.page,
+        perPage: pagination.perPage
+      })
 
-    setReminders(reminderResponse.reminders)
-    setPagination({
-      ...pagination,
-      perPage: reminderResponse.perPage,
-      total: reminderResponse.total
-    })
+      setReminders(reminderResponse.reminders)
+      setPagination({
+        ...pagination,
+        perPage: reminderResponse.perPage,
+        total: reminderResponse.total
+      })
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data.message);
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
-    if (!loading) {
+    if (user) {
       getReminders()
     }
-  }, [loading, pagination.page])
+  }, [user, pagination.page])
 
   useEffect(() => {
     if (reminders.length < 1 && pagination.page > 1) {
@@ -57,35 +65,24 @@ const Reminders: NextPage = () => {
   }, [reminders])
 
   return (
-
-    <BasicPage
+    <Layout
       title="Lembretes cadastrados"
+      externalLoading={loading}
     >
-      <>
-        <Navbar />
+      <section className={styles.reminders}>
+        <div className={styles.remindersList}>
 
-        {user ?
-          <>
-            <section className={styles.reminders}>
-              <div className={styles.remindersList}>
+          <ReminderTable updateList={() => getReminders()} reminders={reminders} />
 
-                <ReminderTable updateList={() => getReminders()} reminders={reminders} />
-
-                {pagination.total > pagination.perPage &&
-                  <Pagination
-                    pagination={pagination}
-                    setPagination={setPagination}
-                  />
-                }
-              </div>
-            </section>
-          </>
-          :
-          !loading &&
-          <Login />
-        }
-      </>
-    </BasicPage>
+          {pagination.total > pagination.perPage &&
+            <Pagination
+              pagination={pagination}
+              setPagination={setPagination}
+            />
+          }
+        </div>
+      </section>
+    </Layout>
   )
 }
 

@@ -9,36 +9,44 @@ import MyMaskedInput from '../../../components/MyMaskedInput'
 import Button1 from '../../../components/Button1'
 import { useState } from 'react'
 import Layout from '../../../components/Layout'
+import axios from 'axios'
 
 const ClientCreate: NextPage = () => {
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const { register, handleSubmit } = useForm()
   const [cpf, setCpf] = useState('')
   const [cnpj, setCnpj] = useState('')
 
   async function newClient(data: IClient) {
-    const response = await api.post<IClient>('/client/create', {
-      birthday: data.birthday,
-      contact: data.contact,
-      cpf,
-      cnpj,
-      info: data.info,
-      name: data.name
-    })
+    try {
+      setLoading(true)
 
-    if (response.data.error) {
-      alert(response.data.error)
-      return
+      const response = await api.post<IClient>('/client/create', {
+        birthday: data.birthday,
+        contact: data.contact,
+        cpf,
+        cnpj,
+        info: data.info,
+        name: data.name
+      })
+
+      alert('Cliente cadastrado com sucesso!')
+
+      router.push(`/client/id/${response.data.id}`)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data.message);
+      }
+    } finally {
+      setLoading(false)
     }
-
-    alert('Cliente cadastrado com sucesso!')
-
-    router.push(`/client/id/${response.data.id}`)
   }
 
   return (
     <Layout
       title="Cadastro de cliente"
+      externalLoading={loading}
     >
       <form
         className={styles.newclientform}

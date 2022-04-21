@@ -11,6 +11,7 @@ import Button1 from '../../../components/Button1'
 import { IPaginationProps } from '../../../interfaces'
 import { Pagination } from '../../../components/Pagination'
 import Layout from '../../../components/Layout'
+import axios from 'axios'
 
 export interface IUserUpdate {
   user_id?: string
@@ -28,6 +29,7 @@ interface IClientsListProps {
 }
 
 const ClientList: NextPage = () => {
+  const [loading, setLoading] = useState(false)
   const { user } = useAuth()
   const { handleSubmit } = useForm()
   const [filter, setFilter] = useState('')
@@ -39,18 +41,27 @@ const ClientList: NextPage = () => {
   })
 
   async function getClientList() {
-    const response = await api.post<IClientsListProps>('/client/list', {
-      filter,
-      perPage: pagination.perPage,
-      page: pagination.page
-    })
+    try {
+      setLoading(true)
+      const response = await api.post<IClientsListProps>('/client/list', {
+        filter,
+        perPage: pagination.perPage,
+        page: pagination.page
+      })
 
-    setClients(response.data.clients)
-    setPagination({
-      ...pagination,
-      perPage: response.data.perPage,
-      total: response.data.total
-    })
+      setClients(response.data.clients)
+      setPagination({
+        ...pagination,
+        perPage: response.data.perPage,
+        total: response.data.total
+      })
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data.message);
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -62,6 +73,7 @@ const ClientList: NextPage = () => {
   return (
     <Layout
       title='Lista de Clientes'
+      externalLoading={loading}
     >
       <div className={styles.filter}>
 

@@ -3,15 +3,14 @@ import type { NextPage } from 'next'
 import Link from 'next/link'
 import styles from './styles.module.scss'
 import globals from '../../../styles/globals.module.scss'
-import LoadingScreen from '../../../components/LoadingScreen'
 import { api } from '../../api'
-import BasicPage from '../../../components/BasicPage'
-import Navbar from '../../../components/Navbar'
 import { useForm } from 'react-hook-form'
 import Button1 from '../../../components/Button1'
 import { IDebit } from '../../../components/DebitSaleList'
 import { useRouter } from 'next/router'
 import { IIncome } from '../../debit/id/[id]'
+import Layout from '../../../components/Layout'
+import axios from 'axios'
 
 const IncomeUpdate: NextPage = () => {
   const [loading, setLoading] = useState(true)
@@ -34,6 +33,7 @@ const IncomeUpdate: NextPage = () => {
 
   useEffect(() => {
     try {
+      setLoading(true)
       async function getIncome() {
 
         const { id } = await router.query // necessary "await" here
@@ -63,105 +63,101 @@ const IncomeUpdate: NextPage = () => {
       getIncome()
 
     } catch (error) {
-      alert(error)
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data.message);
+      }
     } finally {
       setLoading(false)
     }
   }, [router.query])
 
   async function updateIncome() {
-    const response = await api.post<IIncome>('/income/update', {
-      id: incomeId,
-      value: incomeValue,
-      createdAt: new Date(incomeDate),
-      info: incomeInfo
-    })
+    try {
+      setLoading(true)
+      await api.post<IIncome>('/income/update', {
+        id: incomeId,
+        value: incomeValue,
+        createdAt: new Date(incomeDate),
+        info: incomeInfo
+      })
 
-    if (response.data.error) {
-      alert(response.data.error)
-      return
+      alert('Cadastro atualizado com sucesso!')
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data.message);
+      }
+    } finally {
+      setLoading(false)
     }
-
-    alert('Cadastro atualizado com sucesso!')
   }
 
   return (
-    <BasicPage
+    <Layout
       title="Atualização de débito"
+      externalLoading={loading}
     >
-      <>
-        <LoadingScreen visible={loading} />
+      <form
+        className={styles.form}
+        onSubmit={handleSubmit(updateIncome)}
+      >
+        <h6>Pagamento ID: {incomeId}</h6>
+        <div className={styles.dateValue}>
+          <div className={styles.smallInput}>
+            <label htmlFor="dueDate">Data do pagamento:</label>
+            <input
+              type="date"
+              className={globals.input}
+              onChange={e => setIncomeDate(e.target.value)}
+              value={incomeDate}
+            />
+          </div>
 
-        {!loading &&
-          <>
-            <Navbar />
+          <div className={styles.smallInput}>
+            <label htmlFor="value">Valor pago (R$):</label>
+            <input
+              type="number"
+              step="0.01"
+              min={0}
+              className={globals.input}
+              onChange={e => setIncomeValue(parseFloat(e.target.value))}
+              value={incomeValue}
+            />
+          </div>
+        </div>
 
-            <form
-              className={styles.form}
-              onSubmit={handleSubmit(updateIncome)}
-            >
-              <h6>Pagamento ID: {incomeId}</h6>
-              <div className={styles.dateValue}>
-                <div className={styles.smallInput}>
-                  <label htmlFor="dueDate">Data do pagamento:</label>
-                  <input
-                    type="date"
-                    className={globals.input}
-                    onChange={e => setIncomeDate(e.target.value)}
-                    value={incomeDate}
-                  />
-                </div>
+        <div>
+          <label htmlFor="info">Info. adicional:</label>
+          <textarea
+            id="info"
+            className={globals.textarea}
+            placeholder="Informações adicionais."
+            onChange={e => setIncomeInfo(e.target.value)}
+            value={incomeInfo}
+          />
+        </div>
 
-                <div className={styles.smallInput}>
-                  <label htmlFor="value">Valor pago (R$):</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    min={0}
-                    className={globals.input}
-                    onChange={e => setIncomeValue(parseFloat(e.target.value))}
-                    value={incomeValue}
-                  />
-                </div>
-              </div>
+        <div>
+          <Button1 title="Atualizar registro" />
+        </div>
 
-              <div>
-                <label htmlFor="info">Info. adicional:</label>
-                <textarea
-                  id="info"
-                  className={globals.textarea}
-                  placeholder="Informações adicionais."
-                  onChange={e => setIncomeInfo(e.target.value)}
-                  value={incomeInfo}
-                />
-              </div>
+        <div className={styles.saleLink}>
+          <Link href={`/sale/id/${saleId}`}>
+            <a className={globals.link}>
+              Ir para o registro da venda.
+            </a>
+          </Link>
+        </div>
 
-              <div>
-                <Button1 title="Atualizar registro" />
-              </div>
+        <div className={styles.saleLink}>
+          <Link href={`/debit/id/${debit.id}`}>
+            <a className={globals.link}>
+              Ir para a tela do débito.
+            </a>
+          </Link>
+        </div>
 
-              <div className={styles.saleLink}>
-                <Link href={`/sale/id/${saleId}`}>
-                  <a className={globals.link}>
-                    Ir para o registro da venda.
-                  </a>
-                </Link>
-              </div>
-
-              <div className={styles.saleLink}>
-                <Link href={`/debit/id/${debit.id}`}>
-                  <a className={globals.link}>
-                    Ir para a tela do débito.
-                  </a>
-                </Link>
-              </div>
-
-            </form>
-
-          </>
-        }
-      </>
-    </BasicPage>
+      </form>
+    </Layout>
   )
 }
 

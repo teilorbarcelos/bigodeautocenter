@@ -3,14 +3,13 @@ import type { NextPage } from 'next'
 import Link from 'next/link'
 import styles from './styles.module.scss'
 import globals from '../../../styles/globals.module.scss'
-import LoadingScreen from '../../../components/LoadingScreen'
 import { api } from '../../api'
-import BasicPage from '../../../components/BasicPage'
-import Navbar from '../../../components/Navbar'
 import { useForm } from 'react-hook-form'
 import Button1 from '../../../components/Button1'
 import { IDebit } from '../../../components/DebitSaleList'
 import { useRouter } from 'next/router'
+import Layout from '../../../components/Layout'
+import axios from 'axios'
 
 export interface IIncome {
   id?: string
@@ -74,109 +73,106 @@ const DebitUpdate: NextPage = () => {
       getDebit()
 
     } catch (error) {
-      alert(error)
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data.message);
+      }
     } finally {
       setLoading(false)
     }
   }, [router.query])
 
   async function updateDebit() {
-    const response = await api.post<IDebit>('/debit/update', {
-      id: debitId,
-      value: debitValue,
-      dueDate: new Date(debitDueDate),
-      info: debitInfo
-    })
+    try {
+      setLoading(true)
 
-    if (response.data.error) {
-      alert(response.data.error)
-      return
+      await api.post<IDebit>('/debit/update', {
+        id: debitId,
+        value: debitValue,
+        dueDate: new Date(debitDueDate),
+        info: debitInfo
+      })
+
+      alert('Cadastro atualizado com sucesso!')
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data.message);
+      }
+    } finally {
+      setLoading(false)
     }
-
-    alert('Cadastro atualizado com sucesso!')
   }
 
   return (
-    <BasicPage
+    <Layout
       title="Atualização de débito"
+      externalLoading={loading}
     >
-      <>
-        <LoadingScreen visible={loading} />
+      <form
+        className={styles.form}
+        onSubmit={handleSubmit(updateDebit)}
+      >
+        <h6>Débito ID: {debitId}</h6>
+        <div className={styles.dateValue}>
+          <div className={styles.smallInput}>
+            <label htmlFor="dueDate">Data do vencimento:</label>
+            <input
+              type="date"
+              className={globals.input}
+              onChange={e => setDebitDueDate(e.target.value)}
+              value={debitDueDate}
+            />
+          </div>
 
-        {!loading &&
-          <>
-            <Navbar />
+          <div className={styles.smallInput}>
+            <label htmlFor="value">Valor (R$):</label>
+            <input
+              type="number"
+              step="0.01"
+              min={0}
+              className={globals.input}
+              onChange={e => setDebitValue(parseFloat(e.target.value))}
+              value={debitValue}
+            />
+          </div>
+        </div>
 
-            <form
-              className={styles.form}
-              onSubmit={handleSubmit(updateDebit)}
-            >
-              <h6>Débito ID: {debitId}</h6>
-              <div className={styles.dateValue}>
-                <div className={styles.smallInput}>
-                  <label htmlFor="dueDate">Data do vencimento:</label>
-                  <input
-                    type="date"
-                    className={globals.input}
-                    onChange={e => setDebitDueDate(e.target.value)}
-                    value={debitDueDate}
-                  />
-                </div>
+        <div>
+          <label htmlFor="info">Info. adicional:</label>
+          <textarea
+            id="info"
+            className={globals.textarea}
+            placeholder="Informações adicionais."
+            onChange={e => setDebitInfo(e.target.value)}
+            value={debitInfo}
+          />
+        </div>
 
-                <div className={styles.smallInput}>
-                  <label htmlFor="value">Valor (R$):</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    min={0}
-                    className={globals.input}
-                    onChange={e => setDebitValue(parseFloat(e.target.value))}
-                    value={debitValue}
-                  />
-                </div>
-              </div>
+        <div>
+          <Button1 title="Atualizar registro" />
+        </div>
 
-              <div>
-                <label htmlFor="info">Info. adicional:</label>
-                <textarea
-                  id="info"
-                  className={globals.textarea}
-                  placeholder="Informações adicionais."
-                  onChange={e => setDebitInfo(e.target.value)}
-                  value={debitInfo}
-                />
-              </div>
+        <div className={styles.saleLink}>
+          <Link href={`/sale/id/${saleId}`}>
+            <a className={globals.link}>
+              Ir para o registro da venda.
+            </a>
+          </Link>
+        </div>
 
-              <div>
-                <Button1 title="Atualizar registro" />
-              </div>
+        {
+          paid &&
 
-              <div className={styles.saleLink}>
-                <Link href={`/sale/id/${saleId}`}>
-                  <a className={globals.link}>
-                    Ir para o registro da venda.
-                  </a>
-                </Link>
-              </div>
-
-              {
-                paid &&
-
-                <div className={styles.saleLink}>
-                  <Link href={`/income/id/${income.id}`}>
-                    <a className={globals.link}>
-                      Detalhes do pagamento.
-                    </a>
-                  </Link>
-                </div>
-              }
-
-            </form>
-
-          </>
+          <div className={styles.saleLink}>
+            <Link href={`/income/id/${income.id}`}>
+              <a className={globals.link}>
+                Detalhes do pagamento.
+              </a>
+            </Link>
+          </div>
         }
-      </>
-    </BasicPage>
+
+      </form>
+    </Layout>
   )
 }
 

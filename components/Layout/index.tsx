@@ -8,12 +8,14 @@ import Navbar from "../Navbar"
 interface ILayoutProps {
   title?: string
   content?: string
+  externalLoading?: boolean
 }
 
 const Layout: NextPage<ILayoutProps> = ({
   children,
   title = "Bigode Internal Sales System",
-  content = "Sistema interno restrito a funcionários"
+  content = "Sistema interno restrito a funcionários",
+  externalLoading
 }) => {
   const { user, loading } = useAuth()
 
@@ -23,7 +25,7 @@ const Layout: NextPage<ILayoutProps> = ({
       content={content}
     >
       <>
-        <LoadingScreen visible={loading} />
+        <LoadingScreen visible={loading || externalLoading} />
 
         {
           user ?

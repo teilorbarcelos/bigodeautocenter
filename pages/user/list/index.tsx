@@ -1,11 +1,7 @@
 import type { NextPage } from 'next'
-import Navbar from '../../../components/Navbar'
 import { useAuth } from '../../../hooks/useAuth'
 import styles from './styles.module.scss'
 import globals from '../../../styles/globals.module.scss'
-import Login from '../../../components/Login'
-import LoadingScreen from '../../../components/LoadingScreen'
-import BasicPage from '../../../components/BasicPage'
 import { api } from '../../api'
 import { useEffect, useState } from 'react'
 import { IUser } from '../../../contexts/authContext'
@@ -14,6 +10,8 @@ import { useForm } from 'react-hook-form'
 import Button1 from '../../../components/Button1'
 import { IPaginationProps } from '../../../interfaces'
 import { Pagination } from '../../../components/Pagination'
+import Layout from '../../../components/Layout'
+import axios from 'axios'
 
 interface INewUser {
   name: string
@@ -27,8 +25,9 @@ interface IUserList extends IPaginationProps {
 }
 
 const UserList: NextPage = () => {
+  const [loading, setLoading] = useState(true)
   const { handleSubmit, register } = useForm()
-  const { user, loading } = useAuth()
+  const { user } = useAuth()
   const [users, setUsers] = useState<IUser[]>([])
   const [newUserName, setNewUserName] = useState('')
   const [newUserLogin, setNewUserLogin] = useState('')
@@ -41,23 +40,32 @@ const UserList: NextPage = () => {
   })
 
   async function getUsersList() {
-    const response = await api.post<IUserList>('/user/list', {
-      page: pagination.page
-    })
+    try {
+      setLoading(true)
+      const response = await api.post<IUserList>('/user/list', {
+        page: pagination.page
+      })
 
-    setUsers(response.data.users)
-    setPagination({
-      ...pagination,
-      perPage: response.data.perPage,
-      total: response.data.total
-    })
+      setUsers(response.data.users)
+      setPagination({
+        ...pagination,
+        perPage: response.data.perPage,
+        total: response.data.total
+      })
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data.message);
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
-    if (!loading) {
+    if (user) {
       getUsersList()
     }
-  }, [loading, pagination.page])
+  }, [user, pagination.page])
 
   async function newUser(data: INewUser) {
     const newUser = await api.post<IUser>('/user/create', {
@@ -83,101 +91,86 @@ const UserList: NextPage = () => {
   }
 
   return (
-
-    <BasicPage
+    <Layout
       title="Lista de Usuários"
+      externalLoading={loading}
     >
-      <>
-        <LoadingScreen visible={loading} />
+      <div className={styles.userList}>
+        <UserTable updateList={getUsersList} users={users} />
 
-        {user ?
-          <>
-            <Navbar />
+        {pagination.total > 30 &&
+          <Pagination
+            pagination={pagination}
+            setPagination={setPagination}
+          />
+        }
+      </div>
 
-            <div className={styles.userList}>
-              <UserTable updateList={getUsersList} users={users} />
+      {
+        user?.admin &&
 
-              {pagination.total > 30 &&
-                <Pagination
-                  pagination={pagination}
-                  setPagination={setPagination}
-                />
-              }
+        <div className={styles.newUserForm}>
+          <h5>Criar novo usuário:</h5>
+          <form onSubmit={handleSubmit(newUser)}>
+            <div>
+              <label htmlFor="name">Nome: </label>
+              <input
+                {...register('name')}
+                type="text"
+                id="name"
+                className={globals.input}
+                placeholder="Nome do novo usuário"
+                onChange={(e) => setNewUserName(e.target.value)}
+                value={newUserName}
+              />
             </div>
 
-            {
-              user.admin &&
+            <div>
+              <label htmlFor="name">Login: </label>
+              <input
+                {...register('login')}
+                type="text"
+                id="login"
+                className={globals.input}
+                placeholder="Login do novo usuário"
+                onChange={(e) => setNewUserLogin(e.target.value)}
+                value={newUserLogin}
+              />
+            </div>
 
-              <div className={styles.newUserForm}>
-                <h5>Criar novo usuário:</h5>
-                <form onSubmit={handleSubmit(newUser)}>
-                  <div>
-                    <label htmlFor="name">Nome: </label>
-                    <input
-                      {...register('name')}
-                      type="text"
-                      id="name"
-                      className={globals.input}
-                      placeholder="Nome do novo usuário"
-                      onChange={(e) => setNewUserName(e.target.value)}
-                      value={newUserName}
-                    />
-                  </div>
+            <div>
+              <label htmlFor="password">Senha: </label>
+              <input
+                {...register('password')}
+                type="password"
+                id="password"
+                className={globals.input}
+                onChange={(e) => setNewUserPassword(e.target.value)}
+                value={newUserPassword}
+              />
+            </div>
 
-                  <div>
-                    <label htmlFor="name">Login: </label>
-                    <input
-                      {...register('login')}
-                      type="text"
-                      id="login"
-                      className={globals.input}
-                      placeholder="Login do novo usuário"
-                      onChange={(e) => setNewUserLogin(e.target.value)}
-                      value={newUserLogin}
-                    />
-                  </div>
+            <div>
+              <label htmlFor="password2">Confirme a senha: </label>
+              <input
+                {...register('password2')}
+                type="password"
+                id="password2"
+                className={globals.input}
+                onChange={(e) => setNewUserPassword2(e.target.value)}
+                value={newUserPassword2}
+              />
+            </div>
 
-                  <div>
-                    <label htmlFor="password">Senha: </label>
-                    <input
-                      {...register('password')}
-                      type="password"
-                      id="password"
-                      className={globals.input}
-                      onChange={(e) => setNewUserPassword(e.target.value)}
-                      value={newUserPassword}
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="password2">Confirme a senha: </label>
-                    <input
-                      {...register('password2')}
-                      type="password"
-                      id="password2"
-                      className={globals.input}
-                      onChange={(e) => setNewUserPassword2(e.target.value)}
-                      value={newUserPassword2}
-                    />
-                  </div>
-
-                  <div>
-                    <Button1
-                      title="Criar usuário"
-                    />
-                  </div>
-                </form>
-              </div>
-            }
-
-
-          </>
-          :
-          !loading &&
-          <Login />
-        }
-      </>
-    </BasicPage>
+            <div>
+              <Button1
+                title="Criar usuário"
+              />
+            </div>
+          </form>
+        </div>
+      }
+    </Layout>
   )
 }
 

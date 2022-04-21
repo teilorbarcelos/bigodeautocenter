@@ -15,6 +15,7 @@ import MyMaskedInput from '../../../components/MyMaskedInput'
 import { Pagination } from '../../../components/Pagination'
 import { IPaginationProps } from '../../../interfaces'
 import Layout from '../../../components/Layout'
+import axios from 'axios'
 
 interface IClientListResponseProps {
   client: IClient
@@ -50,7 +51,6 @@ const Client: NextPage = () => {
   })
 
   const getClient = async () => {
-
     const { id } = await router.query // necessary "await" here
 
     if (!id) {
@@ -86,6 +86,7 @@ const Client: NextPage = () => {
 
   useEffect(() => {
     try {
+      setLoading(true)
       getClient()
     } catch (error) {
       alert(error)
@@ -99,51 +100,64 @@ const Client: NextPage = () => {
   ])
 
   async function updateClient() {
-    const response = await api.post<IClient>('/client/update', {
-      id,
-      birthday,
-      contact,
-      cpf,
-      cnpj,
-      info,
-      name
-    })
+    try {
+      setLoading(true)
+      await api.post<IClient>('/client/update', {
+        id,
+        birthday,
+        contact,
+        cpf,
+        cnpj,
+        info,
+        name
+      })
 
-    if (response.data.error) {
-      alert(response.data.error)
-      return
+      alert('Cadastro atualizado com sucesso!')
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data.message);
+      }
+    } finally {
+      setLoading(false)
     }
-
-    alert('Cadastro atualizado com sucesso!')
   }
 
   async function createReminder() {
-    const reminderResponse = await api.post<IReminder>('/reminder/create', {
-      clientId: id,
-      date: new Date(Date.now()),
-      title: '',
-      info: ''
-    })
+    try {
+      setLoading(true)
+      const reminderResponse = await api.post<IReminder>('/reminder/create', {
+        clientId: id,
+        date: new Date(Date.now()),
+        title: '',
+        info: ''
+      })
 
-    if (reminderResponse.data.error) {
-      alert(reminderResponse.data.error)
-      return
+      router.push(`/reminder/id/${reminderResponse.data.id}`)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data.message);
+      }
+    } finally {
+      setLoading(false)
     }
-
-    router.push(`/reminder/id/${reminderResponse.data.id}`)
   }
 
   async function clientDelete() {
     if (window.confirm('Quer mesmo deletar o cadastro do cliente? Esta ação é irreversível!')) {
-      const client = await api.post<IClient>('/client/delete', { id })
+      try {
+        setLoading(true)
 
-      if (client.data.error) {
-        alert(client.data.error)
-        return
+        await api.post<IClient>('/client/delete', { id })
+
+        alert('Cadastro de cliente deletado com sucesso!')
+        router.push('/client/list')
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          alert(error.response?.data.message);
+        }
+      } finally {
+        setLoading(false)
       }
-
-      alert('Cadastro de cliente deletado com sucesso!')
-      router.push('/client/list')
     }
   }
 
@@ -159,6 +173,7 @@ const Client: NextPage = () => {
   return (
     <Layout
       title="Cadastro de cliente"
+      externalLoading={loading}
     >
       <div className={styles.content}>
         <form
@@ -246,7 +261,14 @@ const Client: NextPage = () => {
           </div>
 
           <div className={styles.buttons}>
-            <Button1 title="Salvar" />
+            <div>
+              <Button1 title="Salvar" />
+              <Button1
+                type='button'
+                title="Nova Venda"
+                onClick={() => router.push(`/sale/create?clientId=${id}`)}
+              />
+            </div>
             <ButtonDanger
               type="button"
               title="Deletar cadastro"
