@@ -1,7 +1,6 @@
 import Link from 'next/link'
 
 import styles from './styles.module.scss'
-import globals from '../../styles/globals.module.scss'
 import { IDebit } from '../DebitSaleList'
 import { IReminder } from '../ReminderTable'
 

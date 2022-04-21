@@ -1,0 +1,34 @@
+.newclientform {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  min-height: 100vh;
+
+  >div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 800px;
+  }
+
+  .smallInput {
+    display: flex;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      max-width: fit-content;
+    }
+  }
+
+  .buttons {
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  @media screen and (max-width: 400px) {
+    padding: 6rem 1rem;
+  }
+}

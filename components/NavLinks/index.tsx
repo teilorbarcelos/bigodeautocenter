@@ -25,6 +25,12 @@ export default function NavLinks() {
       </li>
 
       <li>
+        <Link href={"/product/list"}>
+          <a className={globals.link}>Produtos</a>
+        </Link>
+      </li>
+
+      <li>
         <Link href={"/reports"}>
           <a className={globals.link}>Relatórios</a>
         </Link>
