@@ -9,6 +9,7 @@ import Layout from '../../../components/Layout'
 import axios from 'axios'
 import { IProduct } from '../../../components/ProductTable'
 import { useAuth } from '../../../hooks/useAuth'
+import ButtonDanger from '../../../components/ButtonDanger'
 
 const ProductCreate: NextPage = () => {
   const { logOut } = useAuth()
@@ -86,6 +87,35 @@ const ProductCreate: NextPage = () => {
     getProduct()
   }, [router.query])
 
+  async function productDelete() {
+    const { id } = await router.query // necessary "await" here
+
+    if (!id) {
+      return
+    }
+
+    if (window.confirm('Quer mesmo deletar o cadastro do produto? Esta ação é irreversível!')) {
+      try {
+        setLoading(true)
+
+        await api.post<IProduct>('/product/delete', { id })
+
+        alert('Cadastro de produto deletado com sucesso!')
+        router.push('/product/list')
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data.error
+          alert(errorMessage);
+          if (errorMessage === 'Access authorized only for authenticated users!') {
+            logOut()
+          }
+        }
+      } finally {
+        setLoading(false)
+      }
+    }
+  }
+
   return (
     <Layout
       title="Atualização de produto"
@@ -149,6 +179,11 @@ const ProductCreate: NextPage = () => {
 
         <div className={styles.buttons}>
           <Button1 title="Salvar" />
+          <ButtonDanger
+            type="button"
+            title="Deletar cadastro"
+            onClick={productDelete}
+          />
         </div>
 
       </form>
