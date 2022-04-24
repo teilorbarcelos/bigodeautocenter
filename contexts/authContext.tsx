@@ -1,3 +1,4 @@
+import axios from "axios";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { api } from "../pages/api";
 
@@ -39,42 +40,66 @@ export function AuthProvider(props: AuthProvider) {
   const [loading, setLoading] = useState(true)
 
   async function signIn({ login, password }: ICredentials) {
-    const response = await api.post<AuthResponse>('/user/authenticate', {
-      login,
-      password
-    })
+    try {
+      setLoading(true)
+      const response = await api.post<AuthResponse>('/user/authenticate', {
+        login,
+        password
+      })
 
-    if (response.data.error) {
-      alert(response.data.error)
-      return
+      if (response.data.error) {
+        alert(response.data.error)
+        return
+      }
+
+      const { token, user } = response.data
+
+      localStorage.setItem('@bigodeAutoCenter:token', token)
+      localStorage.setItem('@bigodeAutoCenter:user', JSON.stringify(user))
+
+      api.defaults.headers.common.authorization = `Bearer ${token}`
+
+      setUser(user)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response.data.message)
+      }
+    } finally {
+      setLoading(false)
     }
-
-    const { token, user } = response.data
-
-    localStorage.setItem('@bigodeAutoCenter:token', token)
-    localStorage.setItem('@bigodeAutoCenter:user', JSON.stringify(user))
-
-    api.defaults.headers.common.authorization = `Bearer ${token}`
-
-    setUser(user)
   }
 
   async function logOut() {
     setUser(null)
     localStorage.removeItem('@bigodeAutoCenter:token')
+    localStorage.removeItem('@bigodeAutoCenter:user')
+  }
+
+  const verifyUser = async () => {
+    setLoading(true)
+
+    const token = localStorage.getItem('@bigodeAutoCenter:token')
+
+    try {
+      if (token) {
+        api.defaults.headers.common.authorization = `Bearer ${token}`
+        const { data: user } = await api.post<IUser>('/user/profile')
+
+        setUser(user)
+
+        localStorage.setItem('@bigodeAutoCenter:user', JSON.stringify(user))
+      } else {
+        logOut()
+      }
+    } catch (error) {
+      logOut()
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('@bigodeAutoCenter:token')
-    const user = JSON.parse(localStorage.getItem('@bigodeAutoCenter:user')) as IUser
-
-    if (token && user) {
-      api.defaults.headers.common.authorization = `Bearer ${token}`
-      api.post<IUser>('/user/profile', { id: user.id }).then(user => {
-        setUser(user.data)
-      })
-    }
-    setLoading(false)
+    verifyUser()
   }, [])
 
   return (

@@ -29,7 +29,7 @@ interface ISaleResponseProps {
 const SaleUpdate: NextPage = () => {
   const [productsModalOpen, setProductsModalOpen] = useState<number | undefined>(undefined)
   const [loading, setLoading] = useState(true)
-  const { user } = useAuth()
+  const { user, logOut } = useAuth()
   const [products, setProducts] = useState<IProduct[]>([])
   const [totalCost, setTotalCost] = useState(0)
   const [totalValue, setTotalValue] = useState(0)
@@ -107,7 +107,11 @@ const SaleUpdate: NextPage = () => {
       })
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)
@@ -151,7 +155,11 @@ const SaleUpdate: NextPage = () => {
       alert('Venda atualizada com sucesso!')
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)
@@ -168,7 +176,11 @@ const SaleUpdate: NextPage = () => {
         router.push(`/client/id/${client.id}`)
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          alert(error.response?.data.message);
+          const errorMessage = error.response?.data.error
+          alert(errorMessage);
+          if (errorMessage === 'Access authorized only for authenticated users!') {
+            logOut()
+          }
         }
       } finally {
         setLoading(false)

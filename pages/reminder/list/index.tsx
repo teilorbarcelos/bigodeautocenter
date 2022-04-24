@@ -18,7 +18,7 @@ interface IRemindersResponseProps {
 
 const Reminders: NextPage = () => {
   const [loading, setLoading] = useState(true)
-  const { user } = useAuth()
+  const { user, logOut } = useAuth()
   const [reminders, setReminders] = useState<IReminder[]>([])
   const [pagination, setPagination] = useState<IPaginationProps>({
     page: 1,
@@ -42,7 +42,11 @@ const Reminders: NextPage = () => {
       })
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)

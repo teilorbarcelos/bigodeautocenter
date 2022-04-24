@@ -25,7 +25,7 @@ interface ISalesListResponseProps {
 
 const SaleList: NextPage = () => {
   const [loading, setLoading] = useState(true)
-  const { user } = useAuth()
+  const { user, logOut } = useAuth()
   const [filterType, setFilterType] = useState('today')
   const [initialDateConst, setInitialDate] = useState(new Date(Date.now()))
   const [finalDateConst, setFinalDate] = useState(new Date(Date.now()))
@@ -54,7 +54,11 @@ const SaleList: NextPage = () => {
       })
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)

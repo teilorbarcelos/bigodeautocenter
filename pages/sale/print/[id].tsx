@@ -10,6 +10,7 @@ import { IDebit } from '../../../components/DebitSaleList'
 import BigodeImg from '../../../public/bigode-img.jpg'
 import LoadingScreen from '../../../components/LoadingScreen'
 import axios from 'axios'
+import { useAuth } from '../../../hooks/useAuth'
 
 interface ISaleResponseProps {
   sale: ISale
@@ -18,6 +19,7 @@ interface ISaleResponseProps {
 }
 
 const SalePrint: NextPage = () => {
+  const { logOut } = useAuth()
   const [loading, setLoading] = useState(true)
   const [products, setProducts] = useState<IProduct[]>([])
   const [totalValue, setTotalValue] = useState(0)
@@ -78,7 +80,11 @@ const SalePrint: NextPage = () => {
 
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          alert(error.response?.data.message);
+          const errorMessage = error.response?.data.error
+          alert(errorMessage);
+          if (errorMessage === 'Access authorized only for authenticated users!') {
+            logOut()
+          }
         }
       } finally {
         setLoading(false)

@@ -30,7 +30,7 @@ interface IClientsListProps {
 
 const ClientList: NextPage = () => {
   const [loading, setLoading] = useState(false)
-  const { user } = useAuth()
+  const { user, logOut } = useAuth()
   const { handleSubmit } = useForm()
   const [filter, setFilter] = useState('')
   const [clients, setClients] = useState<IClient[]>([])
@@ -57,7 +57,11 @@ const ClientList: NextPage = () => {
       })
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)

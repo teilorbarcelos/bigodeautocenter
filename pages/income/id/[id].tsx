@@ -11,8 +11,10 @@ import { useRouter } from 'next/router'
 import { IIncome } from '../../debit/id/[id]'
 import Layout from '../../../components/Layout'
 import axios from 'axios'
+import { useAuth } from '../../../hooks/useAuth'
 
 const IncomeUpdate: NextPage = () => {
+  const { logOut } = useAuth()
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const { handleSubmit } = useForm()
@@ -64,7 +66,11 @@ const IncomeUpdate: NextPage = () => {
 
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)
@@ -84,7 +90,11 @@ const IncomeUpdate: NextPage = () => {
       alert('Cadastro atualizado com sucesso!')
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)

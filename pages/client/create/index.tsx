@@ -10,9 +10,11 @@ import Button1 from '../../../components/Button1'
 import { useState } from 'react'
 import Layout from '../../../components/Layout'
 import axios from 'axios'
+import { useAuth } from '../../../hooks/useAuth'
 
 const ClientCreate: NextPage = () => {
   const [loading, setLoading] = useState(false)
+  const { logOut } = useAuth()
   const router = useRouter()
   const { register, handleSubmit } = useForm()
   const [cpf, setCpf] = useState('')
@@ -36,7 +38,11 @@ const ClientCreate: NextPage = () => {
       router.push(`/client/id/${response.data.id}`)
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)

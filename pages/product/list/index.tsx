@@ -22,7 +22,7 @@ export interface IProductsListProps {
 
 const ProductList: NextPage = () => {
   const [loading, setLoading] = useState(false)
-  const { user } = useAuth()
+  const { user, logOut } = useAuth()
   const { handleSubmit } = useForm()
   const [filter, setFilter] = useState('')
   const [orderBy, setOrderBy] = useState<'name' | 'amount'>('name')
@@ -51,7 +51,11 @@ const ProductList: NextPage = () => {
       })
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)

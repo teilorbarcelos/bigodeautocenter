@@ -8,8 +8,10 @@ import { FormEvent, useEffect, useState } from 'react'
 import Layout from '../../../components/Layout'
 import axios from 'axios'
 import { IProduct } from '../../../components/ProductTable'
+import { useAuth } from '../../../hooks/useAuth'
 
 const ProductCreate: NextPage = () => {
+  const { logOut } = useAuth()
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState<string>('')
   const [amount, setAmount] = useState<number>(0)
@@ -34,7 +36,11 @@ const ProductCreate: NextPage = () => {
       setValue(response.value)
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)
@@ -65,7 +71,11 @@ const ProductCreate: NextPage = () => {
       alert('Produto atualizado com sucesso!')
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)

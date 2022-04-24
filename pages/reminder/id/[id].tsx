@@ -11,8 +11,10 @@ import { IReminder } from '../../../components/ReminderTable'
 import { IClient } from '../../../components/ClientTable'
 import Layout from '../../../components/Layout'
 import axios from 'axios'
+import { useAuth } from '../../../hooks/useAuth'
 
 const ReminderUpdate: NextPage = () => {
+  const { logOut } = useAuth()
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const { handleSubmit } = useForm()
@@ -64,7 +66,11 @@ const ReminderUpdate: NextPage = () => {
 
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)
@@ -85,7 +91,11 @@ const ReminderUpdate: NextPage = () => {
       alert('Cadastro atualizado com sucesso!')
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)

@@ -9,8 +9,10 @@ import { useState } from 'react'
 import Layout from '../../../components/Layout'
 import axios from 'axios'
 import { IProduct } from '../../../components/ProductTable'
+import { useAuth } from '../../../hooks/useAuth'
 
 const ProductCreate: NextPage = () => {
+  const { logOut } = useAuth()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const { register, handleSubmit } = useForm()
@@ -33,7 +35,11 @@ const ProductCreate: NextPage = () => {
       router.push(`/product/id/${response.data.id}`)
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)

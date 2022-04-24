@@ -19,17 +19,12 @@ export interface IUserUpdate {
 }
 
 const Profile: NextPage = () => {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const { user, logOut } = useAuth()
   const { register, handleSubmit } = useForm()
-  const [userName, setUserName] = useState('')
+  const [userName, setUserName] = useState<string>('')
 
-  useEffect(() => {
-    if (user) {
-      setUserName(user.name)
-      setLoading(false)
-    }
-  }, [user])
+  useEffect(() => { user?.name && setUserName(user.name) }, [user])
 
   async function userUpdate(data: IUserUpdate) {
     try {
@@ -43,7 +38,11 @@ const Profile: NextPage = () => {
       logOut()
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)

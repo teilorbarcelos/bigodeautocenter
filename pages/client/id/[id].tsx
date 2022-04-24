@@ -16,6 +16,7 @@ import { Pagination } from '../../../components/Pagination'
 import { IPaginationProps } from '../../../interfaces'
 import Layout from '../../../components/Layout'
 import axios from 'axios'
+import { useAuth } from '../../../hooks/useAuth'
 
 interface IClientListResponseProps {
   client: IClient
@@ -26,6 +27,7 @@ interface IClientListResponseProps {
 }
 
 const Client: NextPage = () => {
+  const { logOut } = useAuth()
   const { handleSubmit } = useForm()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
@@ -89,7 +91,9 @@ const Client: NextPage = () => {
       setLoading(true)
       getClient()
     } catch (error) {
-      alert(error)
+      if (axios.isAxiosError(error)) {
+        alert(error.response.data.message)
+      }
     } finally {
       setLoading(false)
     }
@@ -115,7 +119,11 @@ const Client: NextPage = () => {
       alert('Cadastro atualizado com sucesso!')
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)
@@ -135,7 +143,11 @@ const Client: NextPage = () => {
       router.push(`/reminder/id/${reminderResponse.data.id}`)
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)
@@ -153,7 +165,11 @@ const Client: NextPage = () => {
         router.push('/client/list')
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          alert(error.response?.data.message);
+          const errorMessage = error.response?.data.error
+          alert(errorMessage);
+          if (errorMessage === 'Access authorized only for authenticated users!') {
+            logOut()
+          }
         }
       } finally {
         setLoading(false)

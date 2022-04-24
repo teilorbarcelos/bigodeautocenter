@@ -43,7 +43,7 @@ const SaleCreate: NextPage = () => {
   const [totalCost, setTotalCost] = useState(0)
   const [totalValue, setTotalValue] = useState(0)
 
-  const { user } = useAuth()
+  const { user, logOut } = useAuth()
   const [client, setClient] = useState('')
   const { register, handleSubmit } = useForm()
   const router = useRouter()
@@ -81,7 +81,11 @@ const SaleCreate: NextPage = () => {
         setClient(response.client.name)
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          alert(error.response?.data.message);
+          const errorMessage = error.response?.data.error
+          alert(errorMessage);
+          if (errorMessage === 'Access authorized only for authenticated users!') {
+            logOut()
+          }
         }
       } finally {
         setLoading(false)
@@ -127,7 +131,11 @@ const SaleCreate: NextPage = () => {
       router.push(`/sale/id/${saleResponse.data.id}`)
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)

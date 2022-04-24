@@ -31,7 +31,7 @@ export interface IIncome {
 
 const Reports: NextPage = () => {
   const [loading, setLoading] = useState(true)
-  const { user } = useAuth()
+  const { user, logOut } = useAuth()
   const [filterType, setFilterType] = useState('today')
   const [initialDateConst, setInitialDate] = useState(new Date(Date.now()))
   const [finalDateConst, setFinalDate] = useState(new Date(Date.now()))
@@ -41,8 +41,9 @@ const Reports: NextPage = () => {
   const [totalDebits, setTotalDebits] = useState(0)
 
   async function filterReportList({ initialDate, finalDate }: IInterval) {
+    setLoading(true)
+
     try {
-      setLoading(true)
       const { data: report } = await api.post<IReportResponseProps>('/report', {
         initialDate: initialDate ? initialDate.toISOString().split('T')[0] : '',
         finalDate: finalDate ? finalDate.toISOString().split('T')[0] : '',
@@ -55,7 +56,11 @@ const Reports: NextPage = () => {
       setTotalDebits(report.totalDebits._sum.value)
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)

@@ -10,6 +10,7 @@ import { IProductsListProps } from "../../../product/list"
 import styles from './styles.module.scss'
 import globals from '../../../../styles/globals.module.scss'
 import LoadingScreen from "../../../../components/LoadingScreen"
+import { useAuth } from "../../../../hooks/useAuth"
 
 interface Props {
   index: number
@@ -22,6 +23,7 @@ export default function ProductsListSelector({
   setProduct,
   onClose
 }: Props) {
+  const { logOut } = useAuth()
   const [loading, setLoading] = useState(false)
   const { handleSubmit } = useForm()
   const [filter, setFilter] = useState('')
@@ -66,7 +68,11 @@ export default function ProductsListSelector({
       })
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)

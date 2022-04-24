@@ -27,7 +27,7 @@ interface IUserList extends IPaginationProps {
 const UserList: NextPage = () => {
   const [loading, setLoading] = useState(true)
   const { handleSubmit, register } = useForm()
-  const { user } = useAuth()
+  const { user, logOut } = useAuth()
   const [users, setUsers] = useState<IUser[]>([])
   const [newUserName, setNewUserName] = useState('')
   const [newUserLogin, setNewUserLogin] = useState('')
@@ -54,7 +54,11 @@ const UserList: NextPage = () => {
       })
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
       }
     } finally {
       setLoading(false)
