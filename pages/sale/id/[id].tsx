@@ -16,6 +16,9 @@ import { IPaginationProps } from '../../../interfaces'
 import { useAuth } from '../../../hooks/useAuth'
 import Layout from '../../../components/Layout'
 import axios from 'axios'
+import SearchIcon from '../../../components/svg/SearchIcon'
+import TransparentModal from '../../../components/TransparentModal'
+import ProductsListSelector from '../create/ProductsListSelector'
 
 interface ISaleResponseProps {
   sale: ISale
@@ -24,6 +27,7 @@ interface ISaleResponseProps {
 }
 
 const SaleUpdate: NextPage = () => {
+  const [productsModalOpen, setProductsModalOpen] = useState<number | undefined>(undefined)
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
   const [products, setProducts] = useState<IProduct[]>([])
@@ -265,6 +269,16 @@ const SaleUpdate: NextPage = () => {
                             />
                           </div>
 
+                          <div
+                            className={styles.search}
+                            onClick={() => setProductsModalOpen(index)}
+                            title='Procurar produto'
+                          >
+                            <SearchIcon
+                              className={styles.svgIcon}
+                            />
+                          </div>
+
                           <div>
                             <label>x</label>
                             <input
@@ -420,6 +434,16 @@ const SaleUpdate: NextPage = () => {
               setDebitsPagination={setDebitsPagination}
             />
           </div>
+
+          {productsModalOpen !== undefined &&
+            <TransparentModal onClose={() => setProductsModalOpen(undefined)}>
+              <ProductsListSelector
+                index={productsModalOpen}
+                setProduct={setProducts}
+                onClose={() => setProductsModalOpen(undefined)}
+              />
+            </TransparentModal>
+          }
         </>
       }
     </Layout>

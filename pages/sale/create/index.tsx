@@ -113,17 +113,14 @@ const SaleCreate: NextPage = () => {
       products,
       info: data.info,
       total: totalValue,
-      paid: false
+      paid: false,
+      totalCost
     }
 
     try {
       setLoading(true)
-      const saleResponse = await api.post<ISale>('/sale/create', newDate)
 
-      await api.post<ICost>('/cost/create', {
-        value: totalCost,
-        saleId: saleResponse.data.id
-      })
+      const saleResponse = await api.post<ISale>('/sale/create', newDate)
 
       alert('Venda registrada com sucesso!')
 
