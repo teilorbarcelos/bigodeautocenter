@@ -7,6 +7,7 @@ interface IAuthContext {
   signIn: ({ login, password }: ICredentials) => Promise<void>
   logOut: () => void
   loading: boolean
+  verifyUser: () => void
 }
 
 export interface ICredentials {
@@ -62,7 +63,7 @@ export function AuthProvider(props: AuthProvider) {
       setUser(user)
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response.data.message)
+        alert(error.response?.data.message)
       }
     } finally {
       setLoading(false)
@@ -92,7 +93,13 @@ export function AuthProvider(props: AuthProvider) {
         logOut()
       }
     } catch (error) {
-      logOut()
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data.error
+        alert(errorMessage);
+        if (errorMessage === 'Access authorized only for authenticated users!') {
+          logOut()
+        }
+      }
     } finally {
       setLoading(false)
     }
@@ -103,7 +110,7 @@ export function AuthProvider(props: AuthProvider) {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, signIn, logOut, loading }}>
+    <AuthContext.Provider value={{ user, signIn, logOut, loading, verifyUser }}>
       {props.children}
     </AuthContext.Provider>
   )

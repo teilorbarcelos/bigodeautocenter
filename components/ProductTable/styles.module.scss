@@ -1,5 +1,4 @@
 .producttable {
-
   .list {
     display: flex;
     flex-direction: column;
@@ -25,10 +24,5 @@
         flex-direction: column;
       }
     }
-
-    @media screen and (max-width: 360px) {
-      padding: 8rem 0;
-    }
   }
-  
 }

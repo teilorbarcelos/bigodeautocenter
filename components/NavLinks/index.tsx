@@ -1,58 +1,49 @@
 import styles from './styles.module.scss'
-import globals from '../../styles/globals.module.scss'
-import Link from 'next/link'
+import LinkItem from './LinkItem'
 
 export default function NavLinks() {
   return (
     <ul className={styles.navlinks} id="navlinks">
 
-      <li>
-        <Link href={"/dashboard"}>
-          <a className={globals.link}>Início</a>
-        </Link>
-      </li>
+      <LinkItem
+        title='Início'
+        href='/dashboard'
+      />
 
-      <li>
-        <Link href={"/sale/list"}>
-          <a className={globals.link}>Vendas</a>
-        </Link>
-      </li>
+      <LinkItem
+        title='Vendas'
+        href='/sale/list'
+      />
 
-      <li>
-        <Link href={"/client/list"}>
-          <a className={globals.link}>Clientes</a>
-        </Link>
-      </li>
+      <LinkItem
+        title='Clientes'
+        href='/client/list'
+      />
 
-      <li>
-        <Link href={"/product/list"}>
-          <a className={globals.link}>Produtos</a>
-        </Link>
-      </li>
+      <LinkItem
+        title='Produtos'
+        href='/product/list'
+      />
 
-      <li>
-        <Link href={"/reports"}>
-          <a className={globals.link}>Relatórios</a>
-        </Link>
-      </li>
+      <LinkItem
+        title='Relatórios'
+        href='/reports'
+      />
 
-      <li>
-        <Link href={"/debit/list"}>
-          <a className={globals.link}>Débitos Pendentes</a>
-        </Link>
-      </li>
+      <LinkItem
+        title='Débitos Pendentes'
+        href='/debit/list'
+      />
 
-      <li>
-        <Link href={"/income/list"}>
-          <a className={globals.link}>Pagamentos</a>
-        </Link>
-      </li>
+      <LinkItem
+        title='Pagamentos'
+        href='/income/list'
+      />
 
-      <li>
-        <Link href={"/reminder/list"}>
-          <a className={globals.link}>Lembretes</a>
-        </Link>
-      </li>
+      <LinkItem
+        title='Lembretes'
+        href='/reminder/list'
+      />
 
     </ul>
   )

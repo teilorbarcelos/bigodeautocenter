@@ -92,7 +92,7 @@ const Client: NextPage = () => {
       getClient()
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response.data.message)
+        alert(error.response.data.error)
       }
     } finally {
       setLoading(false)

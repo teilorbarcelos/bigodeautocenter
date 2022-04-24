@@ -43,6 +43,10 @@
     width: 80%;
     left: 10%;
   }
+
+  &.active {
+    color: var(--COLOR_PRIMARY_NORMAL);
+  }
 }
 
 .container {

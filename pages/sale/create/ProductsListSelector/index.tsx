@@ -86,7 +86,6 @@ export default function ProductsListSelector({
   return (
     <div className={styles.productslistselector}>
       <div className={styles.filter}>
-
         <form
           className={styles.searchInput}
           onSubmit={handleSubmit(getProductList)}
@@ -128,6 +127,13 @@ export default function ProductsListSelector({
             })}
             title="Buscar"
           />
+
+          <div
+            className={styles.close}
+            onClick={onClose}
+          >
+            Fechar (x)
+          </div>
         </form>
       </div>
 

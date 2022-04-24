@@ -1,6 +1,6 @@
 .productslistselector {
   width: 100%;
-  max-width: 700px;
+  max-width: 800px;
   max-height: 600px;
   background: white;
   border-radius: 8px;
@@ -14,7 +14,8 @@
     display: flex;
     width: 100%;
     gap: 1rem;
-    padding: 1rem 0;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
     justify-content: center;
     align-items: center;
     background: var(--COLOR_WHITE_LIGHT);
@@ -29,9 +30,23 @@
       align-items: center;
       gap: 1rem;
       padding: 0 1rem;
+      position: relative;
+
+      .close {
+        position: absolute;
+        top: -100%;
+        right: 0;
+        padding: 4px;
+        cursor: pointer;
+      }
   
       @media screen and (max-width: 400px) {
         flex-direction: column;
+
+        .close {
+          top: -30px;
+          right: 0;
+        }
       }
     }
   
@@ -43,7 +58,7 @@
   .productList {
     margin: 0 auto;
     width: 100%;
-    max-width: 1200px;
+    max-width: 800px;
     padding: 1rem;
   }
 }
