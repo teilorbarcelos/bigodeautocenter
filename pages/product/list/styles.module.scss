@@ -10,11 +10,19 @@
   background: var(--COLOR_WHITE_LIGHT);
   border-bottom: 2px solid var(--COLOR_GRAY_LIGHT);
 
+  @media screen and (max-width: 400px) {
+    flex-direction: column;
+  }
+
   .searchInput {
     display: flex;
     align-items: center;
     gap: 1rem;
     padding: 0 1rem;
+
+    @media screen and (max-width: 400px) {
+      flex-direction: column;
+    }
   }
 
   @media screen and (max-width: 360px) {
@@ -22,13 +30,16 @@
   }
 }
 
-.clientList {
+.productList {
   margin: 0 auto;
   width: 100%;
   max-width: 1200px;
-  padding-top: 1rem;
+  padding-top: 9rem;
+  padding-bottom: 2rem;
 
   @media screen and (max-width: 400px) {
-    padding: 1rem 1rem;
+    padding: 0 1rem;
+    padding-top: 21rem;
+    padding-bottom: 2rem;
   }
 }

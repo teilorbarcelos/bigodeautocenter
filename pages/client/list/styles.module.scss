@@ -10,6 +10,10 @@
   background: var(--COLOR_WHITE_LIGHT);
   border-bottom: 2px solid var(--COLOR_GRAY_LIGHT);
 
+  @media screen and (max-width: 400px) {
+    flex-direction: column;
+  }
+
   .searchInput {
     display: flex;
     gap: 1rem;
@@ -28,6 +32,6 @@
   padding-top: 1rem;
 
   @media screen and (max-width: 400px) {
-    padding: 1rem 1rem;
+    padding: 4rem 1rem;
   }
 }

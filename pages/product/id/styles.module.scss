@@ -1,21 +1,10 @@
-.content {
-  @media screen and (max-width: 400px) {
-    padding: 0 1rem;
-  }
-}
-
-.updateClientForm {
+.newproductform {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  height: 100%;
-  padding: 4rem 0 2rem;
-
-  @media screen and (max-width: 400px) {
-    padding-top: 5rem;
-  }
+  min-height: 100vh;
 
   >div {
     display: flex;
@@ -36,44 +25,10 @@
 
   .buttons {
     flex-direction: row;
-    justify-content: space-between;
     gap: 1rem;
-
-    > div {
-      display: flex;
-      gap: 16px;
-    }
   }
-}
-
-.sales {
-  display: flex;
-  flex-direction: column;
-
-
-  .salesTitle {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .saleTable {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-}
-
-.reminders,
-.reminderCreateButton {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem 0;
 
   @media screen and (max-width: 400px) {
-    padding: 1rem;
+    padding: 6rem 1rem;
   }
 }

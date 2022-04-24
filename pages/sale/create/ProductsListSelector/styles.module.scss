@@ -1,0 +1,49 @@
+.productslistselector {
+  width: 100%;
+  max-width: 700px;
+  max-height: 600px;
+  background: white;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+
+  .filter {
+    position: sticky;
+    top: 0;
+    display: flex;
+    width: 100%;
+    gap: 1rem;
+    padding: 1rem 0;
+    justify-content: center;
+    align-items: center;
+    background: var(--COLOR_WHITE_LIGHT);
+    border-bottom: 2px solid var(--COLOR_GRAY_LIGHT);
+  
+    @media screen and (max-width: 400px) {
+      flex-direction: column;
+    }
+  
+    .searchInput {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0 1rem;
+  
+      @media screen and (max-width: 400px) {
+        flex-direction: column;
+      }
+    }
+  
+    @media screen and (max-width: 360px) {
+      flex-direction: column;
+    }
+  }
+
+  .productList {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1200px;
+    padding: 1rem;
+  }
+}

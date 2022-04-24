@@ -10,6 +10,7 @@ import UserIcon from '../svg/UserIcon'
 import { useAuth } from '../../hooks/useAuth'
 import UsersIcon from '../svg/UsersIcon'
 import IncomeIcon from '../svg/IncomeIcon'
+import ProductIcon from '../svg/ProductIcon'
 
 export default function InitialPage() {
   const { user } = useAuth()
@@ -42,6 +43,18 @@ export default function InitialPage() {
           </div>
           <div>
             <ClientIcon className={styles.svgIcon} />
+          </div>
+        </div>
+
+        <div
+          className={styles.card}
+          onClick={() => router.push('/product/list')}
+        >
+          <div>
+            <h6>Produtos</h6>
+          </div>
+          <div>
+            <ProductIcon className={styles.svgIcon} />
           </div>
         </div>
 

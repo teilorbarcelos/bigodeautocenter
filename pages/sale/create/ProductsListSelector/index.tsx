@@ -1,37 +1,52 @@
-import type { NextPage } from 'next'
-import Link from 'next/link'
-import { useAuth } from '../../../hooks/useAuth'
+import axios from "axios"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import Button1 from "../../../../components/Button1"
+import { Pagination } from '../../../../components/Pagination'
+import ProductTable, { IProduct } from "../../../../components/ProductTable"
+import { IPaginationProps } from "../../../../interfaces"
+import { api } from "../../../api"
+import { IProductsListProps } from "../../../product/list"
 import styles from './styles.module.scss'
-import globals from '../../../styles/globals.module.scss'
-import { useForm } from 'react-hook-form'
-import { api } from '../../api'
-import { useEffect, useState } from 'react'
-import Button1 from '../../../components/Button1'
-import { IPaginationProps } from '../../../interfaces'
-import { Pagination } from '../../../components/Pagination'
-import Layout from '../../../components/Layout'
-import axios from 'axios'
-import ProductTable, { IProduct } from '../../../components/ProductTable'
+import globals from '../../../../styles/globals.module.scss'
+import LoadingScreen from "../../../../components/LoadingScreen"
 
-export interface IProductsListProps {
-  products: IProduct[]
-  page: number
-  perPage: number
-  total: number
+interface Props {
+  index: number
+  setProduct: Dispatch<SetStateAction<IProduct[]>>
+  onClose: () => void
 }
 
-const ProductList: NextPage = () => {
+export default function ProductsListSelector({
+  index,
+  setProduct,
+  onClose
+}: Props) {
   const [loading, setLoading] = useState(false)
-  const { user } = useAuth()
   const { handleSubmit } = useForm()
   const [filter, setFilter] = useState('')
   const [orderBy, setOrderBy] = useState<'name' | 'amount'>('name')
   const [products, setProducts] = useState<IProduct[]>([])
+  const [selectedProduct, setSelectedProduct] = useState<IProduct | undefined>(undefined)
   const [pagination, setPagination] = useState<IPaginationProps>({
     page: 1,
     perPage: 30,
     total: 0
   })
+
+  useEffect(() => {
+    if (selectedProduct) {
+      setProduct((state) => {
+        let newProduct = [...state]
+        newProduct[index] = {
+          ...selectedProduct,
+          amount: 1
+        }
+        return newProduct
+      })
+      onClose()
+    }
+  }, [selectedProduct])
 
   async function getProductList() {
     try {
@@ -59,16 +74,11 @@ const ProductList: NextPage = () => {
   }
 
   useEffect(() => {
-    if (user) {
-      getProductList()
-    }
-  }, [user, pagination.page, orderBy])
+    getProductList()
+  }, [pagination.page, orderBy])
 
   return (
-    <Layout
-      title='Lista de Produtos'
-      externalLoading={loading}
-    >
+    <div className={styles.productslistselector}>
       <div className={styles.filter}>
 
         <form
@@ -113,17 +123,13 @@ const ProductList: NextPage = () => {
             title="Buscar"
           />
         </form>
-
-        <Link href="/product/create">
-          <a>
-            <Button1 title="Cadastrar Produto" />
-          </a>
-        </Link>
-
       </div>
 
       <div className={styles.productList}>
-        <ProductTable products={products} />
+        <ProductTable
+          products={products}
+          setSelectedProduct={setSelectedProduct}
+        />
 
         {pagination.total > pagination.perPage &&
           <Pagination
@@ -132,8 +138,8 @@ const ProductList: NextPage = () => {
           />
         }
       </div>
-    </Layout>
+
+      <LoadingScreen visible={loading} />
+    </div>
   )
 }
-
-export default ProductList

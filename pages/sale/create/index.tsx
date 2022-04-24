@@ -12,6 +12,9 @@ import Button2 from '../../../components/Button2'
 import Layout from '../../../components/Layout'
 import axios from 'axios'
 import Link from 'next/link'
+import SearchIcon from '../../../components/svg/SearchIcon'
+import TransparentModal from '../../../components/TransparentModal'
+import ProductsListSelector from './ProductsListSelector'
 
 export interface ICost {
   id?: string
@@ -34,6 +37,7 @@ interface IClientResponseProps {
 }
 
 const SaleCreate: NextPage = () => {
+  const [productsModalOpen, setProductsModalOpen] = useState<number | undefined>(undefined)
   const [loading, setLoading] = useState(true)
   const [products, setProducts] = useState<IProduct[]>([])
   const [totalCost, setTotalCost] = useState(0)
@@ -101,18 +105,20 @@ const SaleCreate: NextPage = () => {
       return
     }
 
+    const newDate = {
+      clientId,
+      car: data.car,
+      plate: data.plate.toUpperCase(),
+      km: data.km,
+      products,
+      info: data.info,
+      total: totalValue,
+      paid: false
+    }
+
     try {
       setLoading(true)
-      const saleResponse = await api.post<ISale>('/sale/create', {
-        clientId,
-        car: data.car,
-        plate: data.plate.toUpperCase(),
-        km: data.km,
-        products,
-        info: data.info,
-        total: totalValue,
-        paid: false
-      })
+      const saleResponse = await api.post<ISale>('/sale/create', newDate)
 
       await api.post<ICost>('/cost/create', {
         value: totalCost,
@@ -212,6 +218,16 @@ const SaleCreate: NextPage = () => {
                           return newProducts
                         })}
                         value={product.name}
+                      />
+                    </div>
+
+                    <div
+                      className={styles.search}
+                      onClick={() => setProductsModalOpen(index)}
+                      title='Procurar produto'
+                    >
+                      <SearchIcon
+                        className={styles.svgIcon}
                       />
                     </div>
 
@@ -332,6 +348,16 @@ const SaleCreate: NextPage = () => {
           <Button1 title="Salvar" />
         </div>
       </form>
+
+      {productsModalOpen !== undefined &&
+        <TransparentModal onClose={() => setProductsModalOpen(undefined)}>
+          <ProductsListSelector
+            index={productsModalOpen}
+            setProduct={setProducts}
+            onClose={() => setProductsModalOpen(undefined)}
+          />
+        </TransparentModal>
+      }
     </Layout>
   )
 }
