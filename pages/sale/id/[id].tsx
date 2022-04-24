@@ -135,7 +135,7 @@ const SaleUpdate: NextPage = () => {
         return
       }
 
-      const saleResponse = await api.post<ISale>('/sale/update', {
+      await api.post<ISale>('/sale/update', {
         id,
         car,
         plate: plate.toUpperCase(),
@@ -143,13 +143,9 @@ const SaleUpdate: NextPage = () => {
         km,
         info,
         total: totalValue,
-        paid
-      })
-
-      await api.post<ICost>(`/cost/${cost ? 'update' : 'create'}`, {
-        id: cost && cost.id,
-        value: totalCost,
-        saleId: saleResponse.data.id
+        paid,
+        totalCost,
+        costId: cost.id
       })
 
       alert('Venda atualizada com sucesso!')

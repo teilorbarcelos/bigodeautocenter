@@ -267,6 +267,7 @@ const Client: NextPage = () => {
                 type='button'
                 title="Nova Venda"
                 onClick={() => router.push(`/sale/create?clientId=${id}`)}
+                disabled={!id}
               />
             </div>
             <ButtonDanger
