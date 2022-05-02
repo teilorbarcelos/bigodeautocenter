@@ -100,8 +100,7 @@ const Client: NextPage = () => {
   }, [
     router.query,
     remindersPagination.page,
-    salesPagination.page,
-    getClient
+    salesPagination.page
   ])
 
   async function updateClient() {
