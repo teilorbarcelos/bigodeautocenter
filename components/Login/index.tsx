@@ -4,10 +4,12 @@ import styles from './styles.module.scss'
 import globals from '../../styles/globals.module.scss'
 import Button1 from '../../components/Button1'
 import { useAuth } from '../../hooks/useAuth'
+import { useState } from 'react'
 
 export default function Login() {
   const { signIn } = useAuth()
   const { register, handleSubmit } = useForm()
+  const [showPassword, setShowPassword] = useState<boolean>(false)
 
   return (
     <section className={styles.login} id="login">
@@ -25,12 +27,19 @@ export default function Login() {
           </div>
           <div>
             <label htmlFor="password">Senha:</label>
-            <input
-              {...register('password')}
-              id="password"
-              type="password"
-              className={globals.input}
-            />
+            <div className={styles.passwordInputContainer}>
+              <input
+                {...register('password')}
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                className={globals.input}
+              />
+
+              <div
+                className={styles.showPasswordButton}
+                onClick={() => setShowPassword(!showPassword)}
+              >{showPassword ? 'Ocultar' : 'Mostrar'}</div>
+            </div>
           </div>
           <div>
             <Button1 title="Entrar" />

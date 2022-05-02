@@ -23,10 +23,17 @@ const Profile: NextPage = () => {
   const { user, logOut } = useAuth()
   const { register, handleSubmit } = useForm()
   const [userName, setUserName] = useState<string>('')
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showPassword2, setShowPassword2] = useState<boolean>(false)
 
   useEffect(() => { user?.name && setUserName(user.name) }, [user])
 
   async function userUpdate(data: IUserUpdate) {
+    if (data.password !== data.password2) {
+      alert('As senhas devem ser identicas!')
+      return
+    }
+
     try {
       setLoading(true)
       await api.post('/user/update', {
@@ -40,9 +47,6 @@ const Profile: NextPage = () => {
       if (axios.isAxiosError(error)) {
         const errorMessage = error.response?.data.error
         alert(errorMessage);
-        if (errorMessage === 'Access authorized only for authenticated users!') {
-          logOut()
-        }
       }
     } finally {
       setLoading(false)
@@ -69,21 +73,35 @@ const Profile: NextPage = () => {
         </div>
         <div>
           <label htmlFor="password">Senha:</label>
-          <input
-            {...register('password')}
-            id="password"
-            type="password"
-            className={globals.input}
-          />
+          <div className={styles.passwordInputContainer}>
+            <input
+              {...register('password')}
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              className={globals.input}
+            />
+
+            <div
+              className={styles.showPasswordButton}
+              onClick={() => setShowPassword(!showPassword)}
+            >{showPassword ? 'Ocultar' : 'Mostrar'}</div>
+          </div>
         </div>
         <div>
           <label htmlFor="password2">Confirme a senha:</label>
-          <input
-            {...register('password2')}
-            id="password2"
-            type="password"
-            className={globals.input}
-          />
+          <div className={styles.passwordInputContainer}>
+            <input
+              {...register('password2')}
+              id="password2"
+              type={showPassword2 ? 'text' : 'password'}
+              className={globals.input}
+            />
+
+            <div
+              className={styles.showPasswordButton}
+              onClick={() => setShowPassword2(!showPassword2)}
+            >{showPassword2 ? 'Ocultar' : 'Mostrar'}</div>
+          </div>
         </div>
         <div className={styles.buttons}>
           <Button1 title="Salvar" />

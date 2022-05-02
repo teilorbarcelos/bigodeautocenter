@@ -1,6 +1,4 @@
-import Link from 'next/link'
 import styles from './styles.module.scss'
-import globals from '../../../styles/globals.module.scss'
 import Logo from '../../Logo'
 import NavLinks from '../NavLinks'
 import HamburgerIcon from '../../HamburgerIcon'

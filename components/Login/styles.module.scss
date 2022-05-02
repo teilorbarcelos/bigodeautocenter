@@ -27,6 +27,17 @@
         flex-direction: column;
         gap: 0.3rem;
       }
+
+      .passwordInputContainer {
+        position: relative;
+        
+        .showPasswordButton {
+          cursor: pointer;
+          position: absolute;
+          right: 6px;
+          top: 6px;
+        }
+      }
     }
   }
 }
