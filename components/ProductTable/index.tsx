@@ -38,6 +38,7 @@ export default function ProductTable({ products = [], setSelectedProduct }: Prop
               products.map(product => {
                 return (
                   <div
+                    key={product.id}
                     title={setSelectedProduct ? `Selecionar: ${product.name}` : `Visualizar: ${product.name}`}
                     className={styles.product}
                     onClick={() => handleActionOnClick(product)}
